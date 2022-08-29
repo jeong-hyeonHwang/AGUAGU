@@ -31,6 +31,9 @@ class ViewController: UIViewController {
     private var height: CGFloat = 0
     
     private var nameLabel = UILabel()
+    private var scoreLabel = UILabel()
+    
+    private var gameStart = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,9 +63,9 @@ class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "BUBBLIA"
+        nameLabel.text = "B◎BBLIA"
         nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 36)
+        nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
         nameLabel.textColor = .yellow
     }
     
@@ -146,6 +149,15 @@ class ViewController: UIViewController {
         case .possiblePinch, .possibleApart:
             tipsColor = .orange
         case .pinched:
+            if gameStart == false {
+                UIView.transition(with: nameLabel,
+                                  duration: 0.25,
+                               options: .transitionCrossDissolve,
+                            animations: { [weak self] in
+                                self?.nameLabel.alpha = 0
+                         }, completion: nil)
+                gameStart = true
+            }
             if isTouched == false {
                 print(":::PINCH:::")
                 print("(x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y))")
