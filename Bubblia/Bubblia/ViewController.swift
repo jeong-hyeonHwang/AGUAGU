@@ -24,9 +24,8 @@ class ViewController: UIViewController {
     
     private var gestureProcessor = HandGestureProcessor()
     
-    private var layers: [CAShapeLayer] = []
-    private var drawPaths: [UIBezierPath] = [UIBezierPath()]
-//    private var drawPaths: [UIBezierPath] = [UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath()]
+    private var layer = CAShapeLayer()
+    private var drawPath = UIBezierPath()
     
     private var width: CGFloat = 0
     private var height: CGFloat = 0
@@ -44,25 +43,10 @@ class ViewController: UIViewController {
             self?.handleGestureStateChange(state: state)
         }
         
-        for i in 0..<drawPaths.count {
-            let sampleNum = i % 3 == 2 ? 3 : (i+1)%3
-            let x = sampleNum * 100
-            let y = ((i/3) + 1) * 100
-            print("X: \(x) Y:\(y)")
-            drawPaths[i].addArc(withCenter: CGPoint(x: x, y: y), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            layers.append(CAShapeLayer())
-            layers[i].path = drawPaths[i].cgPath
-            layers[i].fillColor = UIColor.yellow.cgColor
-            view.layer.addSublayer(layers[i])
-            
-//            let animation = CABasicAnimation(keyPath: "position")
-//            animation.fromValue = layers[i].position
-//            animation.toValue = CGPoint(x: layers[i].position.x, y: layers[i].position.y + 50)
-//            animation.duration = 5
-//            animation.fillMode = .forwards
-//            animation.isRemovedOnCompletion = false
-//            layers[i].add(animation, forKey: "simple position animation")
-        }
+        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height/2), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        layer.path = drawPath.cgPath
+        layer.fillColor = UIColor.yellow.cgColor
+        view.layer.addSublayer(layer)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,13 +132,11 @@ class ViewController: UIViewController {
             if isTouched == false {
                 print("PINCH")
                 print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
-                for i in 0..<drawPaths.count {
-                    print("HERE")
-                    if drawPaths[i].bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                        print("IN!!!")
-                        layers[i].fillColor = UIColor.blue.cgColor
-                        changePosition(layer: layers[i], path: drawPaths[i])
-                    }
+                if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                    print("IN!!!")
+                    layer.fillColor = UIColor.blue.cgColor
+                    changePosition(layer: layer, path: drawPath)
+                    addAnimation(duration: CGFloat.random(in: 3...5))
                 }
                 isTouched = true
             }
@@ -163,11 +145,6 @@ class ViewController: UIViewController {
             if isTouched == true {
                 print("APART")
                 isTouched = false
-                for i in 0..<drawPaths.count {
-                    if drawPaths[i].bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                        layers[i].fillColor = UIColor.yellow.cgColor
-                    }
-                }
             }
             tipsColor = .red
         }
@@ -187,6 +164,17 @@ class ViewController: UIViewController {
         layer.path = path.cgPath
         layer.fillColor = UIColor.yellow.cgColor
         layer.opacity = 1
+    }
+    
+    func addAnimation(duration: CGFloat) {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = layer.opacity
+        animation.toValue = 0
+        animation.duration = duration
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        layer.add(animation, forKey: "changeOpacity")
+
     }
 }
 
