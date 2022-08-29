@@ -1,2 +1,2 @@
-# Hand-Action-Detector
-iOS Hand Action Detector
+# Bubblia
+Simple Hand Pose Game
