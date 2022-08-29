@@ -71,17 +71,26 @@ class ViewController: UIViewController {
         
         view.addSubview(scoreLabel)
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            scoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+//            scoreLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+//
+//            scoreLabel.heightAnchor.constraint(equalToConstant: 80),
+//            scoreLabel.widthAnchor.constraint(equalToConstant: width)
+//        ])
         NSLayoutConstraint.activate([
-            scoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            scoreLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scoreLabel.heightAnchor.constraint(equalToConstant: 80),
+            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scoreLabel.heightAnchor.constraint(equalToConstant: 150),
             scoreLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
         scoreLabel.text = "\(scoreInt)"
         scoreLabel.textAlignment = .center
-        scoreLabel.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        //scoreLabel.font = UIFont.systemFont(ofSize: 36, weight: .regular)
+        scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
         scoreLabel.textColor = .yellow
+//        scoreLabel.textColor = .white.withAlphaComponent(0.5)
         scoreLabel.alpha = 0
     }
     
@@ -244,7 +253,12 @@ class ViewController: UIViewController {
     
     func updateScore() {
         scoreInt += 1
-        scoreLabel.text = "\(scoreInt)"
+        UIView.transition(with: scoreLabel,
+                          duration: 0.15,
+                          options: .transitionFlipFromLeft,
+                          animations: {
+            self.scoreLabel.text = "\(self.scoreInt)"
+        }, completion: nil)
     }
 }
 
