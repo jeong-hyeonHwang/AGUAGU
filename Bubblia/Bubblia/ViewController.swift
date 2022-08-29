@@ -16,8 +16,14 @@ class ViewController: UIViewController {
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
     private var cameraFeedSession: AVCaptureSession?
     
+    private let opaqueOverlayLayer = CAShapeLayer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        opaqueOverlayLayer.frame = view.bounds
+        opaqueOverlayLayer.backgroundColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        view.layer.addSublayer(opaqueOverlayLayer)
+        
         // Do any additional setup after loading the view.
     }
     
