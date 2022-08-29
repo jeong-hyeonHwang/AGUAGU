@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     
     private var nameLabel = UILabel()
     private var scoreLabel = UILabel()
+    private var scoreInt: Int = 0
     
     private var gameStart = false
     
@@ -67,6 +68,21 @@ class ViewController: UIViewController {
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
         nameLabel.textColor = .yellow
+        
+        view.addSubview(scoreLabel)
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scoreLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scoreLabel.heightAnchor.constraint(equalToConstant: 80),
+            scoreLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+        
+        scoreLabel.text = "\(scoreInt)"
+        scoreLabel.textAlignment = .center
+        scoreLabel.font = UIFont.systemFont(ofSize: 32, weight: .regular)
+        scoreLabel.textColor = .yellow
+        scoreLabel.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -156,6 +172,12 @@ class ViewController: UIViewController {
                             animations: { [weak self] in
                                 self?.nameLabel.alpha = 0
                          }, completion: nil)
+                UIView.transition(with: scoreLabel,
+                                  duration: 0.25,
+                               options: .transitionCrossDissolve,
+                            animations: { [weak self] in
+                                self?.scoreLabel.alpha = 1
+                         }, completion: nil)
                 gameStart = true
             }
             if isTouched == false {
@@ -165,6 +187,7 @@ class ViewController: UIViewController {
                     layer.fillColor = UIColor.blue.cgColor
                     changePosition(layer: layer, path: drawPath)
                     addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
+                    updateScore()
                 }
                 isTouched = true
             }
@@ -217,6 +240,11 @@ class ViewController: UIViewController {
         layer.add(animation, forKey: "changeOpacity")
         
         CATransaction.commit()
+    }
+    
+    func updateScore() {
+        scoreInt += 1
+        scoreLabel.text = "\(scoreInt)"
     }
 }
 
