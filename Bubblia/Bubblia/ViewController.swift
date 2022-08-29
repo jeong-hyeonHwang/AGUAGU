@@ -236,7 +236,6 @@ class ViewController: UIViewController {
         CATransaction.setCompletionBlock({
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
-            print(currentOpacity as! Double)
             if (currentOpacity as! Double) <= 0.0001 {
                 print("-----GAME OVER-----")
                 self.layer.isHidden = true
@@ -248,8 +247,6 @@ class ViewController: UIViewController {
                 }, completion: nil)
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1)
                 self.gameOver = true
-//                self.drawPath.removeAllPoints()
-//                self.drawPath.addArc(withCenter: CGPoint(x: self.width/2, y: self.height/2), radius: 0.1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
@@ -289,7 +286,7 @@ class ViewController: UIViewController {
         UIView.transition(with: target,
                           duration: duration,
                           options: .transitionCrossDissolve,
-                          animations: { [weak self] in
+                          animations: {
             target.alpha = targetOpacity
         }, completion: nil)
     }
