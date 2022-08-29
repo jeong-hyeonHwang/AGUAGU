@@ -185,9 +185,10 @@ class ViewController: UIViewController {
         case .possiblePinch, .possibleApart:
             tipsColor = .orange
         case .pinched:
+            let middle = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
             if gameOver == true {
                 gameRestart()
-            } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+            } else if drawPath.bounds.contains(CGPoint(x: middle.x, y: middle.y)) {
                 if gameStart == false {
                     labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0)
                     labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1)
