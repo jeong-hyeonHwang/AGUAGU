@@ -15,15 +15,19 @@ class ViewController: UIViewController {
     
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
     private var cameraFeedSession: AVCaptureSession?
+    private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
     private let opaqueOverlayLayer = CAShapeLayer()
+    private var evidenceBuffer = [HandGestureProcessor.PointsPair]()
+    private var lastObservationTimestamp = Date()
+    
+    private var gestureProcessor = HandGestureProcessor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         opaqueOverlayLayer.frame = view.bounds
         opaqueOverlayLayer.backgroundColor = UIColor.white.withAlphaComponent(0.5).cgColor
         view.layer.addSublayer(opaqueOverlayLayer)
-        
         // Do any additional setup after loading the view.
     }
     
@@ -80,11 +84,26 @@ class ViewController: UIViewController {
         cameraFeedSession = session
     }
     
+    func processPoints(thumbTip: CGPoint?, indexTip: CGPoint?) {
+        // Check that we have both points.
+        guard let thumbPoint = thumbTip, let indexPoint = indexTip else {
+            // If there were no observations for more than 2 seconds reset gesture processor.
+            if Date().timeIntervalSince(lastObservationTimestamp) > 2 {
+                gestureProcessor.reset()
+            }
+            cameraView.showPoints([], color: .clear)
+            return
+        }
+        
+        // Convert points from AVFoundation coordinates to UIKit coordinates.
+        let previewLayer = cameraView.previewLayer
+        let thumbPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: thumbPoint)
+        let indexPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: indexPoint)
+        
+        // Process new points
+        gestureProcessor.processPointsPair((thumbPointConverted, indexPointConverted))
+    }
 }
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        
-    }
-    
 }
