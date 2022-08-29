@@ -186,38 +186,16 @@ class ViewController: UIViewController {
             tipsColor = .orange
         case .pinched:
             if gameOver == true {
-                UIView.transition(with: gameOverLabel,
-                                  duration: 0.25,
-                                  options: .transitionCrossDissolve,
-                                  animations: { [weak self] in
-                    self?.gameOverLabel.alpha = 0
-                }, completion: nil)
-                returnToDefaultScore()
-                changePosition(layer: layer, path: drawPath)
-                addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
-                layer.isHidden = false
-                gameOver = false
-                isTouched = false
+                gameRestart()
             } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
                 if gameStart == false {
-                    UIView.transition(with: nameLabel,
-                                      duration: 0.25,
-                                      options: .transitionCrossDissolve,
-                                      animations: { [weak self] in
-                        self?.nameLabel.alpha = 0
-                    }, completion: nil)
-                    UIView.transition(with: scoreLabel,
-                                      duration: 0.25,
-                                      options: .transitionCrossDissolve,
-                                      animations: { [weak self] in
-                        self?.scoreLabel.alpha = 1
-                    }, completion: nil)
+                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0)
+                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1)
                     gameStart = true
                 }
                 
                 if isTouched == false && gameOver == false {
                     print(":::PINCH:::")
-                    print("(x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y))")
                     if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
                         layer.fillColor = UIColor.blue.cgColor
                         changePosition(layer: layer, path: drawPath)
@@ -268,15 +246,10 @@ class ViewController: UIViewController {
                                   animations: { [weak self] in
                     self?.scoreLabel.layer.position = CGPoint(x: (self?.scoreLabel.frame.midX)!, y: (self?.scoreLabel.frame.midY)! - 30)
                 }, completion: nil)
-                UIView.transition(with: self.gameOverLabel,
-                                  duration: 0.25,
-                                  options: .transitionCrossDissolve,
-                                  animations: { [weak self] in
-                    self?.gameOverLabel.alpha = 1
-                }, completion: nil)
+                self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1)
                 self.gameOver = true
-                self.drawPath.removeAllPoints()
-                self.drawPath.addArc(withCenter: CGPoint(x: self.width/2, y: self.height/2), radius: 0.1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+//                self.drawPath.removeAllPoints()
+//                self.drawPath.addArc(withCenter: CGPoint(x: self.width/2, y: self.height/2), radius: 0.1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
@@ -295,21 +268,46 @@ class ViewController: UIViewController {
     
     func updateScore() {
         scoreInt += 1
-        scoreLabelAnimation()
+        scoreLabelTextAnimation()
     }
     
     func returnToDefaultScore() {
         scoreInt = 1
-        scoreLabelAnimation()
+        scoreLabelTextAnimation()
     }
     
-    func scoreLabelAnimation() {
+    func scoreLabelTextAnimation() {
         UIView.transition(with: scoreLabel,
                           duration: 0.15,
                           options: .transitionFlipFromLeft,
                           animations: {
             self.scoreLabel.text = "\(self.scoreInt)"
         }, completion: nil)
+    }
+    
+    func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat) {
+        UIView.transition(with: target,
+                          duration: duration,
+                          options: .transitionCrossDissolve,
+                          animations: { [weak self] in
+            target.alpha = targetOpacity
+        }, completion: nil)
+    }
+    
+    func gameRestart() {
+        UIView.transition(with: gameOverLabel,
+                          duration: 0.25,
+                          options: .transitionCrossDissolve,
+                          animations: { [weak self] in
+            self?.gameOverLabel.alpha = 0
+        }, completion: nil)
+        returnToDefaultScore()
+        changePosition(layer: layer, path: drawPath)
+        addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
+        
+        layer.isHidden = false
+        gameOver = false
+        isTouched = false
     }
     
 }
