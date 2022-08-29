@@ -32,9 +32,12 @@ class ViewController: UIViewController {
     
     private var nameLabel = UILabel()
     private var scoreLabel = UILabel()
+    private var gameOverLabel = UILabel()
+    
     private var scoreInt: Int = 0
     
     private var gameStart = false
+    private var gameOver = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +95,22 @@ class ViewController: UIViewController {
         scoreLabel.textColor = .yellow
 //        scoreLabel.textColor = .white.withAlphaComponent(0.5)
         scoreLabel.alpha = 0
+        
+        view.addSubview(gameOverLabel)
+        gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40),
+            gameOverLabel.heightAnchor.constraint(equalToConstant: 80),
+            gameOverLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+        
+        gameOverLabel.text = "GAME OVER"
+        gameOverLabel.textAlignment = .center
+        gameOverLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
+        gameOverLabel.textColor = .yellow
+        gameOverLabel.alpha = 0
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -189,7 +208,7 @@ class ViewController: UIViewController {
                          }, completion: nil)
                 gameStart = true
             }
-            if isTouched == false {
+            if isTouched == false && gameOver == false {
                 print(":::PINCH:::")
                 print("(x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y))")
                 if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
@@ -234,7 +253,20 @@ class ViewController: UIViewController {
             print(currentOpacity as! Double)
             if (currentOpacity as! Double) <= 0.0001 {
                 print("-----GAME OVER-----")
+                UIView.transition(with: self.scoreLabel,
+                                  duration: 0.25,
+                               options: .transitionCrossDissolve,
+                            animations: { [weak self] in
+                    self?.scoreLabel.layer.position = CGPoint(x: (self?.scoreLabel.frame.midX)!, y: (self?.scoreLabel.frame.midY)! - 30)
+                         }, completion: nil)
+                UIView.transition(with: self.gameOverLabel,
+                                  duration: 0.25,
+                               options: .transitionCrossDissolve,
+                            animations: { [weak self] in
+                                self?.gameOverLabel.alpha = 1
+                         }, completion: nil)
                 self.layer.isHidden = true
+                self.gameOver = true
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
