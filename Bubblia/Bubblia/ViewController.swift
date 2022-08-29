@@ -29,6 +29,9 @@ class ViewController: UIViewController {
     
     private var width: CGFloat = 0
     private var height: CGFloat = 0
+    
+    private var nameLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,6 +50,20 @@ class ViewController: UIViewController {
         layer.path = drawPath.cgPath
         layer.fillColor = UIColor.yellow.cgColor
         view.layer.addSublayer(layer)
+        
+        view.addSubview(nameLabel)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            nameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            nameLabel.heightAnchor.constraint(equalToConstant: 80),
+            nameLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+        
+        nameLabel.text = "BUBBLIA"
+        nameLabel.textAlignment = .center
+        nameLabel.font = UIFont.systemFont(ofSize: 36)
+        nameLabel.textColor = .yellow
     }
     
     override func viewDidAppear(_ animated: Bool) {
