@@ -33,6 +33,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         width = view.bounds.maxX
         height = view.bounds.maxY
         
