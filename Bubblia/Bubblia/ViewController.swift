@@ -18,8 +18,13 @@ class ViewController: UIViewController {
     private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
     private let opaqueOverlayLayer = CAShapeLayer()
-    private var evidenceBuffer = [HandGestureProcessor.PointsPair]()
+    //    private var evidenceBuffer = [HandGestureProcessor.PointsPair]()
     private var lastObservationTimestamp = Date()
+    
+    private let drawPath = UIBezierPath()
+    private var lastDrawPoint: CGPoint?
+    private var isTouched = false
+    
     
     private var gestureProcessor = HandGestureProcessor()
     
@@ -28,7 +33,12 @@ class ViewController: UIViewController {
         opaqueOverlayLayer.frame = view.bounds
         opaqueOverlayLayer.backgroundColor = UIColor.white.withAlphaComponent(0.5).cgColor
         view.layer.addSublayer(opaqueOverlayLayer)
-        // Do any additional setup after loading the view.
+        
+        handPoseRequest.maximumHandCount = 1
+        // Add state change handler to hand gesture processor.
+        gestureProcessor.didChangeStateClosure = { [weak self] state in
+            self?.handleGestureStateChange(state: state)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -103,7 +113,72 @@ class ViewController: UIViewController {
         // Process new points
         gestureProcessor.processPointsPair((thumbPointConverted, indexPointConverted))
     }
+    
+    private func handleGestureStateChange(state: HandGestureProcessor.State) {
+        let pointsPair = gestureProcessor.lastProcessedPointsPair
+        var tipsColor: UIColor
+        switch state {
+        case .possiblePinch, .possibleApart:
+            tipsColor = .orange
+        case .pinched:
+            if isTouched == false {
+                print("PINCHED")
+                print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
+                isTouched = true
+            }
+            tipsColor = .green
+        case .apart, .unknown:
+            if isTouched == true {
+                print("APART")
+                isTouched = false
+            }
+            tipsColor = .red
+        }
+        cameraView.showPoints([pointsPair.thumbTip, pointsPair.indexTip], color: tipsColor)
+    }
 }
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        var thumbTip: CGPoint?
+        var indexTip: CGPoint?
+        
+        defer {
+            DispatchQueue.main.sync {
+                self.processPoints(thumbTip: thumbTip, indexTip: indexTip)
+                
+            }
+        }
+        
+        let handler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up, options: [:])
+        do {
+            // Perform VNDetectHumanHandPoseRequest
+            try handler.perform([handPoseRequest])
+            // Continue only when a hand was detected in the frame.
+            // Since we set the maximumHandCount property of the request to 1, there will be at most one observation.
+            guard let observation = handPoseRequest.results?.first else {
+                return
+            }
+            // Get points for thumb and index finger.
+            let thumbPoints = try observation.recognizedPoints(.thumb)
+            let indexFingerPoints = try observation.recognizedPoints(.indexFinger)
+            // Look for tip points.
+            guard let thumbTipPoint = thumbPoints[.thumbTip], let indexTipPoint = indexFingerPoints[.indexTip] else {
+                return
+            }
+            // Ignore low confidence points.
+            guard thumbTipPoint.confidence > 0.3 && indexTipPoint.confidence > 0.3 else {
+                return
+            }
+            // Convert points from Vision coordinates to AVFoundation coordinates.
+            thumbTip = CGPoint(x: thumbTipPoint.location.x, y: 1 - thumbTipPoint.location.y)
+            indexTip = CGPoint(x: indexTipPoint.location.x, y: 1 - indexTipPoint.location.y)
+        } catch {
+            cameraFeedSession?.stopRunning()
+            let error = AppError.visionError(error: error)
+            DispatchQueue.main.async {
+                error.displayInViewController(self)
+            }
+        }
+    }
 }
