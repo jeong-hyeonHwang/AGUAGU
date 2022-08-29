@@ -133,7 +133,9 @@ class ViewController: UIViewController {
                 print("PINCH")
                 print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
                 if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                    print("IN!!!")
+                    // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
+//                    let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
+//                    print(currentOpacity)
                     layer.fillColor = UIColor.blue.cgColor
                     changePosition(layer: layer, path: drawPath)
                     addAnimation(duration: CGFloat.random(in: 3...5))
@@ -167,6 +169,20 @@ class ViewController: UIViewController {
     }
     
     func addAnimation(duration: CGFloat) {
+        // https://ios-development.tistory.com/937
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
+            let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
+            print(currentOpacity as! Double)
+            if (currentOpacity as! Double) <= 0.0001 {
+                print("GAME OVER")
+                self.layer.isHidden = true
+            } else {
+                print("GOGOGO!!!")
+            }
+        })
+        
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = layer.opacity
         animation.toValue = 0
@@ -174,7 +190,8 @@ class ViewController: UIViewController {
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
         layer.add(animation, forKey: "changeOpacity")
-
+        
+        CATransaction.commit()
     }
 }
 
