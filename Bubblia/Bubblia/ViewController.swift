@@ -39,6 +39,7 @@ class ViewController: UIViewController {
     private var gameStart = false
     private var gameOver = false
     
+    private var highScore: Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,7 +83,9 @@ class ViewController: UIViewController {
             scoreLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        scoreLabel.text = "\(scoreInt)"
+        highScore = getHighScore()
+        print("Recorded High Score is \(highScore)")
+        scoreLabel.text = highScore == 0 ? "" : "\(highScore)"
         scoreLabel.textAlignment = .center
         scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
         scoreLabel.textColor = .yellow
@@ -248,6 +251,7 @@ class ViewController: UIViewController {
                 }, completion: nil)
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1)
                 self.gameOver = true
+                self.checkHighScore()
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
@@ -265,6 +269,7 @@ class ViewController: UIViewController {
     }
     
     func updateScore() {
+//        scoreLabel.textColor = .yellow
         scoreInt += 1
         scoreLabelTextAnimation()
     }
@@ -292,6 +297,15 @@ class ViewController: UIViewController {
         }, completion: nil)
     }
     
+    func checkHighScore() {
+        if highScore < scoreInt {
+            setHighScore(value: scoreInt)
+            highScore = scoreInt
+            print("### HIGHSCORE \(highScore) ###")
+        } else {
+            print(">>> SAME HIGHSCORE <<<")
+        }
+    }
     func gameRestart() {
         UIView.transition(with: gameOverLabel,
                           duration: 0.25,
