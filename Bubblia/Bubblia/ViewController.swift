@@ -130,22 +130,19 @@ class ViewController: UIViewController {
             tipsColor = .orange
         case .pinched:
             if isTouched == false {
-                print("PINCH")
-                print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
+                print(":::PINCH:::")
+                print("(x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y))")
                 if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                    // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
-//                    let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
-//                    print(currentOpacity)
                     layer.fillColor = UIColor.blue.cgColor
                     changePosition(layer: layer, path: drawPath)
-                    addAnimation(duration: CGFloat.random(in: 3...5))
+                    addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
                 }
                 isTouched = true
             }
             tipsColor = .green
         case .apart, .unknown:
             if isTouched == true {
-                print("APART")
+                print(":::APART:::")
                 isTouched = false
             }
             tipsColor = .red
@@ -162,13 +159,12 @@ class ViewController: UIViewController {
         path.removeAllPoints()
         path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         
-        //layer.position = CGPoint(x: randomX, y: randomY)
         layer.path = path.cgPath
         layer.fillColor = UIColor.yellow.cgColor
         layer.opacity = 1
     }
     
-    func addAnimation(duration: CGFloat) {
+    func addOpacityChagneAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
         CATransaction.setCompletionBlock({
@@ -176,10 +172,10 @@ class ViewController: UIViewController {
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             print(currentOpacity as! Double)
             if (currentOpacity as! Double) <= 0.0001 {
-                print("GAME OVER")
+                print("-----GAME OVER-----")
                 self.layer.isHidden = true
             } else {
-                print("GOGOGO!!!")
+                print(">>> GOGOGO!!! <<<")
             }
         })
         
