@@ -17,22 +17,24 @@ class ViewController: UIViewController {
     private var cameraFeedSession: AVCaptureSession?
     private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
-    private let opaqueOverlayLayer = CAShapeLayer()
-    //    private var evidenceBuffer = [HandGestureProcessor.PointsPair]()
     private var lastObservationTimestamp = Date()
     
-    private let drawPath = UIBezierPath()
     private var lastDrawPoint: CGPoint?
     private var isTouched = false
     
     private var gestureProcessor = HandGestureProcessor()
     
-    private var layer = CAShapeLayer()
+    private var layers: [CAShapeLayer] = []
+    private var drawPaths: [UIBezierPath] = [UIBezierPath()]
+//    private var drawPaths: [UIBezierPath] = [UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath(), UIBezierPath()]
+    
+    private var width: CGFloat = 0
+    private var height: CGFloat = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        opaqueOverlayLayer.frame = view.bounds
-        opaqueOverlayLayer.backgroundColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        view.layer.addSublayer(opaqueOverlayLayer)
+        
+        width = view.bounds.maxX
+        height = view.bounds.maxY
         
         handPoseRequest.maximumHandCount = 1
         // Add state change handler to hand gesture processor.
@@ -40,10 +42,25 @@ class ViewController: UIViewController {
             self?.handleGestureStateChange(state: state)
         }
         
-        drawPath.addArc(withCenter: CGPoint(x: 150, y: 150), radius: 100, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-        layer.path = drawPath.cgPath
-        layer.fillColor = UIColor.yellow.cgColor
-        view.layer.addSublayer(layer)
+        for i in 0..<drawPaths.count {
+            let sampleNum = i % 3 == 2 ? 3 : (i+1)%3
+            let x = sampleNum * 100
+            let y = ((i/3) + 1) * 100
+            print("X: \(x) Y:\(y)")
+            drawPaths[i].addArc(withCenter: CGPoint(x: x, y: y), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            layers.append(CAShapeLayer())
+            layers[i].path = drawPaths[i].cgPath
+            layers[i].fillColor = UIColor.yellow.cgColor
+            view.layer.addSublayer(layers[i])
+            
+//            let animation = CABasicAnimation(keyPath: "position")
+//            animation.fromValue = layers[i].position
+//            animation.toValue = CGPoint(x: layers[i].position.x, y: layers[i].position.y + 50)
+//            animation.duration = 5
+//            animation.fillMode = .forwards
+//            animation.isRemovedOnCompletion = false
+//            layers[i].add(animation, forKey: "simple position animation")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -129,11 +146,14 @@ class ViewController: UIViewController {
             if isTouched == false {
                 print("PINCH")
                 print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
-                if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                    print("IN!!!")
-                    layer.fillColor = UIColor.blue.cgColor
+                for i in 0..<drawPaths.count {
+                    print("HERE")
+                    if drawPaths[i].bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                        print("IN!!!")
+                        layers[i].fillColor = UIColor.blue.cgColor
+                        changePosition(layer: layers[i], path: drawPaths[i])
+                    }
                 }
-                    
                 isTouched = true
             }
             tipsColor = .green
@@ -141,13 +161,30 @@ class ViewController: UIViewController {
             if isTouched == true {
                 print("APART")
                 isTouched = false
-                if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                    layer.fillColor = UIColor.yellow.cgColor
+                for i in 0..<drawPaths.count {
+                    if drawPaths[i].bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                        layers[i].fillColor = UIColor.yellow.cgColor
+                    }
                 }
             }
             tipsColor = .red
         }
         cameraView.showPoints([pointsPair.thumbTip, pointsPair.indexTip], color: tipsColor)
+    }
+    
+    func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
+        layer.opacity = 0
+        
+        let randomX = CGFloat.random(in: 100...width-100)
+        let randomY = CGFloat.random(in: 100...height-100)
+        
+        path.removeAllPoints()
+        path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        
+        //layer.position = CGPoint(x: randomX, y: randomY)
+        layer.path = path.cgPath
+        layer.fillColor = UIColor.yellow.cgColor
+        layer.opacity = 1
     }
 }
 

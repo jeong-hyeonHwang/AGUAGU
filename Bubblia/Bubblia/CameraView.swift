@@ -10,6 +10,7 @@ import AVFoundation
 
 class CameraView: UIView {
 
+    private var backgroundLayer = CAShapeLayer()
     private var overlayLayer = CAShapeLayer()
     private var pointsPath = UIBezierPath()
 
@@ -33,12 +34,19 @@ class CameraView: UIView {
     
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
+        
+        let temp = UIBezierPath()
+        temp.addArc(withCenter: CGPoint(x: 0, y: 0), radius: 1800, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         if layer == previewLayer {
             overlayLayer.frame = layer.bounds
+            backgroundLayer.frame = layer.bounds
+            backgroundLayer.path = temp.cgPath
+            backgroundLayer.fillColor = UIColor.black.cgColor
         }
     }
 
     private func setupOverlay() {
+        previewLayer.addSublayer(backgroundLayer)
         previewLayer.addSublayer(overlayLayer)
     }
     
