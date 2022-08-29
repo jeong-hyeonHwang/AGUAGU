@@ -298,6 +298,7 @@
 				DEVELOPMENT_TEAM = UAM52RQFW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bubblia/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera View";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -326,6 +327,7 @@
 				DEVELOPMENT_TEAM = UAM52RQFW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bubblia/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera View";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
