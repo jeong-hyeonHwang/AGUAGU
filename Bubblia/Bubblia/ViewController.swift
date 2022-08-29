@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         
         view.addSubview(scoreLabel)
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -186,30 +186,32 @@ class ViewController: UIViewController {
             tipsColor = .orange
         case .pinched:
             if gameOver == true {
-               UIView.transition(with: gameOverLabel,
-                                 duration: 0.25,
-                              options: .transitionCrossDissolve,
-                           animations: { [weak self] in
-                               self?.gameOverLabel.alpha = 0
-                        }, completion: nil)
-               returnToDefaultScore()
-               addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
-               layer.isHidden = false
-               gameOver = false
-           } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                UIView.transition(with: gameOverLabel,
+                                  duration: 0.25,
+                                  options: .transitionCrossDissolve,
+                                  animations: { [weak self] in
+                    self?.gameOverLabel.alpha = 0
+                }, completion: nil)
+                returnToDefaultScore()
+                changePosition(layer: layer, path: drawPath)
+                addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
+                layer.isHidden = false
+                gameOver = false
+                isTouched = false
+            } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
                 if gameStart == false {
                     UIView.transition(with: nameLabel,
                                       duration: 0.25,
-                                   options: .transitionCrossDissolve,
-                                animations: { [weak self] in
-                                    self?.nameLabel.alpha = 0
-                             }, completion: nil)
+                                      options: .transitionCrossDissolve,
+                                      animations: { [weak self] in
+                        self?.nameLabel.alpha = 0
+                    }, completion: nil)
                     UIView.transition(with: scoreLabel,
                                       duration: 0.25,
-                                   options: .transitionCrossDissolve,
-                                animations: { [weak self] in
-                                    self?.scoreLabel.alpha = 1
-                             }, completion: nil)
+                                      options: .transitionCrossDissolve,
+                                      animations: { [weak self] in
+                        self?.scoreLabel.alpha = 1
+                    }, completion: nil)
                     gameStart = true
                 }
                 
@@ -263,16 +265,18 @@ class ViewController: UIViewController {
                 UIView.transition(with: self.scoreLabel,
                                   duration: 0.25,
                                   options: .curveEaseIn,
-                            animations: { [weak self] in
+                                  animations: { [weak self] in
                     self?.scoreLabel.layer.position = CGPoint(x: (self?.scoreLabel.frame.midX)!, y: (self?.scoreLabel.frame.midY)! - 30)
                 }, completion: nil)
                 UIView.transition(with: self.gameOverLabel,
                                   duration: 0.25,
-                               options: .transitionCrossDissolve,
-                            animations: { [weak self] in
-                                self?.gameOverLabel.alpha = 1
-                         }, completion: nil)
+                                  options: .transitionCrossDissolve,
+                                  animations: { [weak self] in
+                    self?.gameOverLabel.alpha = 1
+                }, completion: nil)
                 self.gameOver = true
+                self.drawPath.removeAllPoints()
+                self.drawPath.addArc(withCenter: CGPoint(x: self.width/2, y: self.height/2), radius: 0.1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
