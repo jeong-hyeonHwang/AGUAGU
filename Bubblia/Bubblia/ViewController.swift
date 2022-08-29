@@ -25,9 +25,9 @@ class ViewController: UIViewController {
     private var lastDrawPoint: CGPoint?
     private var isTouched = false
     
-    
     private var gestureProcessor = HandGestureProcessor()
     
+    private var layer = CAShapeLayer()
     override func viewDidLoad() {
         super.viewDidLoad()
         opaqueOverlayLayer.frame = view.bounds
@@ -39,6 +39,11 @@ class ViewController: UIViewController {
         gestureProcessor.didChangeStateClosure = { [weak self] state in
             self?.handleGestureStateChange(state: state)
         }
+        
+        drawPath.addArc(withCenter: CGPoint(x: 150, y: 150), radius: 100, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        layer.path = drawPath.cgPath
+        layer.fillColor = UIColor.yellow.cgColor
+        view.layer.addSublayer(layer)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -122,8 +127,13 @@ class ViewController: UIViewController {
             tipsColor = .orange
         case .pinched:
             if isTouched == false {
-                print("PINCHED")
+                print("PINCH")
                 print("x:\(pointsPair.thumbTip.x), y:\(pointsPair.thumbTip.y)")
+                if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                    print("IN!!!")
+                    layer.fillColor = UIColor.blue.cgColor
+                }
+                    
                 isTouched = true
             }
             tipsColor = .green
@@ -131,6 +141,9 @@ class ViewController: UIViewController {
             if isTouched == true {
                 print("APART")
                 isTouched = false
+                if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                    layer.fillColor = UIColor.yellow.cgColor
+                }
             }
             tipsColor = .red
         }
