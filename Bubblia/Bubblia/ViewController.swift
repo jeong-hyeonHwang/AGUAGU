@@ -241,7 +241,6 @@ class ViewController: UIViewController {
         case .possiblePinch, .possibleApart:
             tipsColor = middleColor
         case .pinched:
-            let middle = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
             if gameOver == true {
                 gameRestart()
             } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
