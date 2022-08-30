@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     
     private var nameLabel = UILabel()
     private var scoreLabel = UILabel()
+    private var highScoreLabel = UILabel()
     private var gameOverLabel = UILabel()
     
     private var scoreInt: Int = 0
@@ -40,6 +41,11 @@ class ViewController: UIViewController {
     private var gameOver = false
     
     private var highScore: Int = 0
+    
+    private let accentColor: UIColor = UIColor(named: "AccentColor") ?? .yellow
+    
+    private var testConstant = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,48 +60,56 @@ class ViewController: UIViewController {
             self?.handleGestureStateChange(state: state)
         }
         
-        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height/2), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.36), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         layer.path = drawPath.cgPath
-        layer.fillColor = UIColor.yellow.cgColor
+        layer.fillColor = accentColor.cgColor
         view.layer.addSublayer(layer)
         
-        view.addSubview(nameLabel)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            nameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            nameLabel.heightAnchor.constraint(equalToConstant: 80),
-            nameLabel.widthAnchor.constraint(equalToConstant: width)
-        ])
-        
-        nameLabel.text = "B◎BBLIA"
-        nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
-        nameLabel.textColor = .yellow
-        
         view.addSubview(scoreLabel)
-        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scoreLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scoreLabel.heightAnchor.constraint(equalToConstant: 150),
-            scoreLabel.widthAnchor.constraint(equalToConstant: width)
-        ])
+        scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
+        scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
         highScore = getHighScore()
         print("Recorded High Score is \(highScore)")
         scoreLabel.text = highScore == 0 ? "" : "\(highScore)"
         scoreLabel.textAlignment = .center
         scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
-        scoreLabel.textColor = .yellow
+        scoreLabel.textColor = accentColor
         scoreLabel.alpha = 0
+        
+        view.addSubview(highScoreLabel)
+        highScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            highScoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            highScoreLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -height * 0.12),
+            highScoreLabel.heightAnchor.constraint(equalToConstant: 32),
+            highScoreLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+
+        highScoreLabel.text = highScore == 0 ? "" : "\(highScore)"
+        highScoreLabel.textAlignment = .center
+        highScoreLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
+        highScoreLabel.textColor = accentColor
+        
+        view.addSubview(nameLabel)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            nameLabel.bottomAnchor.constraint(equalTo: highScoreLabel.topAnchor, constant: 0),
+            nameLabel.heightAnchor.constraint(equalToConstant: 88),
+            nameLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+        
+        nameLabel.text = "B◎BBLIA"
+        nameLabel.textAlignment = .center
+        nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
+        nameLabel.textColor = accentColor
         
         view.addSubview(gameOverLabel)
         gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40),
+            gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 60),
             gameOverLabel.heightAnchor.constraint(equalToConstant: 80),
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
@@ -103,7 +117,7 @@ class ViewController: UIViewController {
         gameOverLabel.text = "GAME OVER"
         gameOverLabel.textAlignment = .center
         gameOverLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
-        gameOverLabel.textColor = .yellow
+        gameOverLabel.textColor = accentColor
         gameOverLabel.alpha = 0
         
     }
@@ -193,7 +207,9 @@ class ViewController: UIViewController {
                 gameRestart()
             } else if drawPath.bounds.contains(CGPoint(x: middle.x, y: middle.y)) {
                 if gameStart == false {
+                    returnToDefaultScore()
                     labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0)
+                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0)
                     labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1)
                     gameStart = true
                 }
@@ -209,7 +225,7 @@ class ViewController: UIViewController {
                     isTouched = true
                 }
             }
-            tipsColor = .green
+            tipsColor = .blue//.green
         case .apart, .unknown:
             if isTouched == true {
                 print(":::APART:::")
@@ -230,7 +246,7 @@ class ViewController: UIViewController {
         path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         
         layer.path = path.cgPath
-        layer.fillColor = UIColor.yellow.cgColor
+        layer.fillColor = accentColor.cgColor
         layer.opacity = 1
     }
     
@@ -243,12 +259,7 @@ class ViewController: UIViewController {
             if (currentOpacity as! Double) <= 0.0001 {
                 print("-----GAME OVER-----")
                 self.layer.isHidden = true
-                UIView.transition(with: self.scoreLabel,
-                                  duration: 0.25,
-                                  options: .curveEaseIn,
-                                  animations: { [weak self] in
-                    self?.scoreLabel.layer.position = CGPoint(x: (self?.scoreLabel.frame.midX)!, y: (self?.scoreLabel.frame.midY)! - 30)
-                }, completion: nil)
+                
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1)
                 self.gameOver = true
                 self.checkHighScore()
@@ -306,6 +317,7 @@ class ViewController: UIViewController {
             print(">>> SAME HIGHSCORE <<<")
         }
     }
+    
     func gameRestart() {
         UIView.transition(with: gameOverLabel,
                           duration: 0.25,
