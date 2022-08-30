@@ -319,6 +319,7 @@ class ViewController: UIViewController {
                         self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in})
                     }
                     
+                    self.drawPath.removeAllPoints()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                         self.gameOver = true
                     })
