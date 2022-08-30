@@ -48,7 +48,19 @@ class ViewController: UIViewController {
     private let middleColor: UIColor = .activeColor ?? .orange
     private let disactiveColor: UIColor = .disactiveColor ?? .red
     
-    private var testConstant = 0
+    private var duration: CGFloat = 3
+    private var patienceCount: Int = 0
+    private let durationMinusValue: CGFloat = 0.025
+    private let durationMinLimitNum: CGFloat = 0.75
+    private let durationMaxLimitNum: CGFloat = 3
+    private let patientLimitNum = 50
+    
+//    private var duration: CGFloat = 3
+//    private var patienceCount: Int = 0
+//    private let durationMinusValue: CGFloat = 0.5
+//    private let durationMinLimitNum: CGFloat = 1.5
+//    private let durationMaxLimitNum: CGFloat = 3
+//    private let patientLimitNum = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -223,8 +235,9 @@ class ViewController: UIViewController {
                     if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
                         layer.fillColor = UIColor.blue.cgColor
                         changePosition(layer: layer, path: drawPath)
-                        addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
+                        addOpacityChagneAnimation(duration: duration)
                         updateScore()
+                        updateDuration()
                     }
                     isTouched = true
                 }
@@ -294,6 +307,26 @@ class ViewController: UIViewController {
         scoreLabelTextAnimation()
     }
     
+    func updateDuration() {
+        if duration != durationMinLimitNum {
+            duration -= durationMinusValue
+            print("CURRENT DURATION IS \(duration)")
+        } else {
+            patienceCount += 1
+            print("BE PATIENT \(patienceCount)")
+            if patienceCount == patientLimitNum {
+                patienceCount = 0
+                duration = durationMaxLimitNum
+                print("PATIENT IS OVER")
+            }
+        }
+    }
+    
+    func returnToDefaultDuration() {
+        duration = durationMaxLimitNum
+        patienceCount = 0
+    }
+    
     func scoreLabelTextAnimation() {
         UIView.transition(with: scoreLabel,
                           duration: 0.15,
@@ -330,8 +363,9 @@ class ViewController: UIViewController {
             self?.gameOverLabel.alpha = 0
         }, completion: nil)
         returnToDefaultScore()
+        returnToDefaultDuration()
         changePosition(layer: layer, path: drawPath)
-        addOpacityChagneAnimation(duration: CGFloat.random(in: 3...5))
+        addOpacityChagneAnimation(duration: duration)
         
         layer.isHidden = false
         gameOver = false
