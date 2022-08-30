@@ -53,7 +53,8 @@ class ViewController: UIViewController {
     private let durationMinusValue: CGFloat = 0.025
     private let durationMinLimitNum: CGFloat = 0.75
     private let durationMaxLimitNum: CGFloat = 3
-    private let patientLimitNum = 50
+    private var patientLimitNum = 10
+    private let patientPlusValue: Int = 10
     
 //    private var duration: CGFloat = 3
 //    private var patienceCount: Int = 0
@@ -316,6 +317,9 @@ class ViewController: UIViewController {
             print("BE PATIENT \(patienceCount)")
             if patienceCount == patientLimitNum {
                 patienceCount = 0
+                if patientLimitNum != 50 {
+                    patientLimitNum += patientPlusValue
+                }
                 duration = durationMaxLimitNum
                 print("PATIENT IS OVER")
             }
@@ -325,6 +329,7 @@ class ViewController: UIViewController {
     func returnToDefaultDuration() {
         duration = durationMaxLimitNum
         patienceCount = 0
+        patientLimitNum = patientPlusValue
     }
     
     func scoreLabelTextAnimation() {
