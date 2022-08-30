@@ -66,6 +66,7 @@ class ViewController: UIViewController {
     private var patientLimitNum = 10
     private let patientPlusValue: Int = 10
     
+    private var circleRadius: CGFloat = 60
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,13 +79,15 @@ class ViewController: UIViewController {
         width = view.bounds.maxX
         height = view.bounds.maxY
         
+        circleRadius = height * 30 / 844
+        
         handPoseRequest.maximumHandCount = 1
         // Add state change handler to hand gesture processor.
         gestureProcessor.didChangeStateClosure = { [weak self] state in
             self?.handleGestureStateChange(state: state)
         }
         
-        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         layer.path = drawPath.cgPath
         layer.fillColor = accentColor.cgColor
         view.layer.addSublayer(layer)
@@ -282,7 +285,7 @@ class ViewController: UIViewController {
         let randomY = CGFloat.random(in: 200...height-200)
         
         path.removeAllPoints()
-        path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         
         layer.path = path.cgPath
         layer.fillColor = accentColor.cgColor
@@ -301,7 +304,7 @@ class ViewController: UIViewController {
                 
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
                     
-                    if self.highScore > 10 {
+                    if self.highScore < self.scoreInt {
                         self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in})
                     }
                     
