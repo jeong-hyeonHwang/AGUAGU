@@ -67,6 +67,11 @@ class ViewController: UIViewController {
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
+    
+    private let sfxSequence: [String] = ["E", "A", "B", "D", "C", "A", "C", "F"]
+    
+    private var sequenceInt: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -142,7 +147,7 @@ class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "B◎BBLIA"
+        nameLabel.text = "KR◎KR◎N" //"KR◎◎RK"//"B◎BBLIA"
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
         nameLabel.textColor = accentColor
@@ -263,6 +268,12 @@ class ViewController: UIViewController {
                         addOpacityChagneAnimation(duration: duration)
                         updateScore()
                         updateDuration()
+//                        playSound(tone: sfxSequence[sequenceInt])
+//                        if sequenceInt < sfxSequence.count-1 {
+//                            sequenceInt += 1
+//                        } else {
+//                            sequenceInt = 0
+//                        }
                     }
                     isTouched = true
                 }
@@ -308,8 +319,11 @@ class ViewController: UIViewController {
                         self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in})
                     }
                     
-                    self.gameOver = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                        self.gameOver = true
+                    })
                 })
+                
                 self.checkHighScore()
             } else {
                 print(">>> GOGOGO!!! <<<")
@@ -401,6 +415,7 @@ class ViewController: UIViewController {
         layer.isHidden = false
         gameOver = false
         isTouched = false
+        sequenceInt = 0
     }
     
 }
@@ -428,9 +443,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
             // Get points for thumb and index finger.
             let thumbPoints = try observation.recognizedPoints(.thumb)
-            let indexFingerPoints = try observation.recognizedPoints(.indexFinger)
+            let indexFingerPoints = try observation.recognizedPoints(.middleFinger)
             // Look for tip points.
-            guard let thumbTipPoint = thumbPoints[.thumbTip], let indexTipPoint = indexFingerPoints[.indexTip] else {
+            guard let thumbTipPoint = thumbPoints[.thumbTip], let indexTipPoint = indexFingerPoints[.middleTip] else {
                 return
             }
             // Ignore low confidence points.
