@@ -42,7 +42,11 @@ class ViewController: UIViewController {
     
     private var highScore: Int = 0
     
-    private let accentColor: UIColor = UIColor(named: "AccentColor") ?? .yellow
+    private let accentColor: UIColor = .accentColor
+    ?? .yellow
+    private let activeColor: UIColor = .activeColor ?? .green
+    private let middleColor: UIColor = .activeColor ?? .orange
+    private let disactiveColor: UIColor = .disactiveColor ?? .red
     
     private var testConstant = 0
     
@@ -60,7 +64,7 @@ class ViewController: UIViewController {
             self?.handleGestureStateChange(state: state)
         }
         
-        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.36), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         layer.path = drawPath.cgPath
         layer.fillColor = accentColor.cgColor
         view.layer.addSublayer(layer)
@@ -82,7 +86,7 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             highScoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             highScoreLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -height * 0.12),
-            highScoreLabel.heightAnchor.constraint(equalToConstant: 32),
+            highScoreLabel.heightAnchor.constraint(equalToConstant: 36),
             highScoreLabel.widthAnchor.constraint(equalToConstant: width)
         ])
 
@@ -200,7 +204,7 @@ class ViewController: UIViewController {
         var tipsColor: UIColor
         switch state {
         case .possiblePinch, .possibleApart:
-            tipsColor = .orange
+            tipsColor = middleColor
         case .pinched:
             let middle = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
             if gameOver == true {
@@ -225,13 +229,13 @@ class ViewController: UIViewController {
                     isTouched = true
                 }
             }
-            tipsColor = .blue//.green
+            tipsColor = activeColor
         case .apart, .unknown:
             if isTouched == true {
                 print(":::APART:::")
                 isTouched = false
             }
-            tipsColor = .red
+            tipsColor = disactiveColor
         }
         cameraView.showPoints([pointsPair.thumbTip, pointsPair.indexTip], color: tipsColor)
     }
