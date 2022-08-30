@@ -48,23 +48,30 @@ class ViewController: UIViewController {
     private let middleColor: UIColor = .activeColor ?? .orange
     private let disactiveColor: UIColor = .disactiveColor ?? .red
     
+//    private var duration: CGFloat = 3
+//    private var patienceCount: Int = 0
+//    private let durationMinusValue: CGFloat = 0.025
+//    private let durationMinLimitNum: CGFloat = 0.75
+//    private let durationMaxLimitNum: CGFloat = 3
+//    private var patientLimitNum = 10
+//    private let patientPlusValue: Int = 10
+    
+    private let highScoreNoticeLabel = UILabel()
+    
     private var duration: CGFloat = 3
     private var patienceCount: Int = 0
-    private let durationMinusValue: CGFloat = 0.025
-    private let durationMinLimitNum: CGFloat = 0.75
+    private let durationMinusValue: CGFloat = 0.5
+    private let durationMinLimitNum: CGFloat = 1.5
     private let durationMaxLimitNum: CGFloat = 3
     private var patientLimitNum = 10
     private let patientPlusValue: Int = 10
     
-//    private var duration: CGFloat = 3
-//    private var patienceCount: Int = 0
-//    private let durationMinusValue: CGFloat = 0.5
-//    private let durationMinLimitNum: CGFloat = 1.5
-//    private let durationMaxLimitNum: CGFloat = 3
-//    private let patientLimitNum = 10
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                AppDelegate.orientationLock = .portrait
         
         UIApplication.shared.isIdleTimerDisabled = true
         
@@ -81,6 +88,21 @@ class ViewController: UIViewController {
         layer.path = drawPath.cgPath
         layer.fillColor = accentColor.cgColor
         view.layer.addSublayer(layer)
+        
+        view.addSubview(highScoreNoticeLabel)
+        highScoreNoticeLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            highScoreNoticeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            highScoreNoticeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
+            highScoreNoticeLabel.heightAnchor.constraint(equalToConstant: 80),
+            highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
+        ])
+        
+        highScoreNoticeLabel.text = "HIGHSCORE"
+        highScoreNoticeLabel.textAlignment = .center
+        highScoreNoticeLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        highScoreNoticeLabel.textColor = accentColor
+        highScoreNoticeLabel.alpha = 0
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
@@ -222,19 +244,19 @@ class ViewController: UIViewController {
             let middle = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
             if gameOver == true {
                 gameRestart()
-            } else if drawPath.bounds.contains(CGPoint(x: middle.x, y: middle.y)) {
+            } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
                 if gameStart == false {
-                    returnToDefaultScore()
-                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0)
-                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0)
-                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1)
+                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+                    changePosition(layer: layer, path: drawPath)
+                    addOpacityChagneAnimation(duration: duration)
+                    updateScore()
+                    updateDuration()
                     gameStart = true
-                }
-                
-                if isTouched == false && gameOver == false {
+                } else if isTouched == false && gameOver == false {
                     print(":::PINCH:::")
                     if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
-                        layer.fillColor = UIColor.blue.cgColor
                         changePosition(layer: layer, path: drawPath)
                         addOpacityChagneAnimation(duration: duration)
                         updateScore()
@@ -258,7 +280,7 @@ class ViewController: UIViewController {
         layer.opacity = 0
         
         let randomX = CGFloat.random(in: 100...width-100)
-        let randomY = CGFloat.random(in: 100...height-100)
+        let randomY = CGFloat.random(in: 200...height-200)
         
         path.removeAllPoints()
         path.addArc(withCenter: CGPoint(x: randomX, y: randomY), radius: 30, startAngle: 0, endAngle: .pi * 2, clockwise: false)
@@ -274,12 +296,18 @@ class ViewController: UIViewController {
         CATransaction.setCompletionBlock({
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
-            if (currentOpacity as! Double) <= 0.0001 {
+            if (currentOpacity as! Double) <= 0.01 {
                 print("-----GAME OVER-----")
                 self.layer.isHidden = true
                 
-                self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1)
-                self.gameOver = true
+                self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+                    
+                    if self.highScore > 10 {
+                        self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in})
+                    }
+                    
+                    self.gameOver = true
+                })
                 self.checkHighScore()
             } else {
                 print(">>> GOGOGO!!! <<<")
@@ -341,13 +369,13 @@ class ViewController: UIViewController {
         }, completion: nil)
     }
     
-    func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat) {
+    func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: @escaping (Bool) -> Void) {
         UIView.transition(with: target,
                           duration: duration,
                           options: .transitionCrossDissolve,
                           animations: {
             target.alpha = targetOpacity
-        }, completion: nil)
+        }, completion: completion)
     }
     
     func checkHighScore() {
@@ -361,12 +389,8 @@ class ViewController: UIViewController {
     }
     
     func gameRestart() {
-        UIView.transition(with: gameOverLabel,
-                          duration: 0.25,
-                          options: .transitionCrossDissolve,
-                          animations: { [weak self] in
-            self?.gameOverLabel.alpha = 0
-        }, completion: nil)
+        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+        labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
         returnToDefaultScore()
         returnToDefaultDuration()
         changePosition(layer: layer, path: drawPath)
