@@ -80,6 +80,9 @@ class ViewController: UIViewController {
     
     private var sequenceInt: Int = 0
     
+    private var particleLayer = CAShapeLayer()
+    private var particlePath = UIBezierPath()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -189,7 +192,10 @@ class ViewController: UIViewController {
                 default:
                     isAuth = .notAuthorized
                 }
-        
+        view.layer.addSublayer(particleLayer)
+        drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
+        particleLayer.fillColor = UIColor.accentColor?.cgColor
+        particleLayer.opacity = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -311,6 +317,8 @@ class ViewController: UIViewController {
     
     private func handleGestureStateChange(state: HandGestureProcessor.State) {
         let pointsPair = gestureProcessor.lastProcessedPointsPair
+        let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
+        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
         var tipsColor: UIColor
         switch state {
         case .possiblePinch, .possibleApart:
@@ -318,23 +326,27 @@ class ViewController: UIViewController {
         case .pinched:
             if gameOver == true {
                 gameRestart()
-            } else if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                
+            } else if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
                 if gameStart == false {
                     labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
                     labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
                     labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
                     changePosition(layer: layer, path: drawPath)
-                    addOpacityChagneAnimation(duration: duration)
+                    addOpacityChangeAnimation(duration: duration)
                     updateScore()
                     updateDuration()
                     gameStart = true
                 } else if isTouched == false && gameOver == false {
                     print(":::PINCH:::")
-                    if drawPath.bounds.contains(CGPoint(x: pointsPair.thumbTip.x, y: pointsPair.thumbTip.y)) {
+                    if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
+                        drawParticle(centerPoint: middlePoint)
                         changePosition(layer: layer, path: drawPath)
-                        addOpacityChagneAnimation(duration: duration)
+                        addOpacityChangeAnimation(duration: duration)
                         updateScore()
                         updateDuration()
+                        drawParticle(centerPoint: middlePoint)
+                        addParticleFadeInOutAnimation()
 //                        playSound(tone: sfxSequence[sequenceInt])
 //                        if sequenceInt < sfxSequence.count-1 {
 //                            sequenceInt += 1
@@ -368,6 +380,40 @@ class ViewController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
         }
     
+    func drawParticle(centerPoint: CGPoint) {
+        let startXDistance: CGFloat = 55
+        let startYDistance: CGFloat = 18
+//        let centerPoint = CGPoint(x: 300, y: 300)
+
+//        let xValue: CGFloat = 18
+//        let yValue: CGFloat = 8
+//        let radius: CGFloat = 5
+        let xValue: CGFloat = 12
+        let yValue: CGFloat = 5
+        let radius: CGFloat = 3
+        
+        particlePath.removeAllPoints()
+
+        for i in 0..<6 {
+            var xDistance: CGFloat = 0
+            var yDistance: CGFloat = 0
+            if i < 3 {
+                xDistance = startXDistance + xValue * CGFloat(i)
+                yDistance = startYDistance + yValue * CGFloat(i)
+            } else {
+                xDistance = -startXDistance - xValue * CGFloat(i%3)
+                yDistance = -startYDistance - yValue * CGFloat(i%3)
+            }
+            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance))
+            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y))
+            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance))
+            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+        }
+        particleLayer.path = particlePath.cgPath
+    }
+    
     func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
         layer.opacity = 0
         
@@ -382,7 +428,7 @@ class ViewController: UIViewController {
         layer.opacity = 1
     }
     
-    func addOpacityChagneAnimation(duration: CGFloat) {
+    func addOpacityChangeAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
         CATransaction.setCompletionBlock({
@@ -394,8 +440,12 @@ class ViewController: UIViewController {
                 
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
                     
+                    print(self.highScore)
+                    print(self.scoreInt)
                     if self.highScore < self.scoreInt {
-                        self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in})
+                        self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+                            self.checkHighScore()
+                        })
                     }
                     
                     self.drawPath.removeAllPoints()
@@ -403,8 +453,6 @@ class ViewController: UIViewController {
                         self.gameOver = true
                     })
                 })
-                
-                self.checkHighScore()
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
@@ -421,6 +469,30 @@ class ViewController: UIViewController {
         CATransaction.commit()
     }
     
+    func addParticleFadeInOutAnimation() {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = self.particleLayer.opacity
+            animation.toValue = 0
+            animation.duration = 3
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.particleLayer.add(animation, forKey: "ParticleFadeIn")
+        })
+        
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = particleLayer.opacity
+        animation.toValue = 1
+        animation.duration = 0.1
+        animation.autoreverses = true
+        animation.repeatCount = 2
+//        animation.fillMode = .forwards
+//        animation.isRemovedOnCompletion = true
+        self.particleLayer.add(animation, forKey: "ParticleFadeOut")
+        
+        CATransaction.commit()
+    }
     func updateScore() {
 //        scoreLabel.textColor = .yellow
         scoreInt += 1
@@ -490,7 +562,7 @@ class ViewController: UIViewController {
         returnToDefaultScore()
         returnToDefaultDuration()
         changePosition(layer: layer, path: drawPath)
-        addOpacityChagneAnimation(duration: duration)
+        addOpacityChangeAnimation(duration: duration)
         
         layer.isHidden = false
         gameOver = false
