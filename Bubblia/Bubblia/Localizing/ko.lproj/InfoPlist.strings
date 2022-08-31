@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Bubblia
+
+  Created by 황정현 on 2022/08/31.
+  
+*/
+
+"NSCameraUsageDescription" = "손 탐지를 위한 카메라 사용 권한이 필요합니다.";

@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Bubblia
+
+  Created by 황정현 on 2022/08/31.
+  
+*/
+
+"NSCameraUsageDescription" = "Permissions are required to use the camera for hand detection.";

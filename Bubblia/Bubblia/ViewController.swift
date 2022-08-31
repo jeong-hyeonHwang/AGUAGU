@@ -201,13 +201,13 @@ class ViewController: UIViewController {
                     // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
                     case .notAuthorized:
                         DispatchQueue.main.async {
-                            let message = NSLocalizedString("손가락 탐지를 위한 카메라 사용을 위한 권한이 필요합니다.\n[설정] > [개인 정보 보호] > [카메라]에서 권한 설정이 가능합니다.",
+                            let message = NSLocalizedString("Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera].",
                                                             comment: "Alert message when the user has denied access to the camera")
                             let actions = [
-                                UIAlertAction(title: NSLocalizedString("확인", comment: "Alert OK button"),
+                                UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
                                               style: .cancel,
                                               handler: nil),
-                                UIAlertAction(title: NSLocalizedString("설정", comment: "Alert button to open Settings"),
+                                UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
                                               style: .`default`,
                                               handler: { _ in
                                                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
@@ -221,12 +221,12 @@ class ViewController: UIViewController {
                     case .configurationFailed:
                         DispatchQueue.main.async {
                             
-                            let message = NSLocalizedString("카메라를 사용할 수 없습니다.",
+                            let message = NSLocalizedString("Can't use camera.",
                                                             comment: "Alert message when something goes wrong during capture session configuration")
                             
-                            self.alert(title: "DANSAEK",
+                            self.alert(title: "KROKRON",
                                        message: message,
-                                       actions: [UIAlertAction(title: NSLocalizedString("확인", comment: "Alert OK button"),
+                                       actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
                                                                style: .cancel,
                                                                handler: nil)])
                         }

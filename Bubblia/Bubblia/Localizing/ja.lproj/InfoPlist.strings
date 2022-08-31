@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Bubblia
+
+  Created by 황정현 on 2022/08/31.
+  
+*/
+
+"NSCameraUsageDescription" = "手を検出するためにカメラを使用する権限が必要です";

@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  Bubblia
+
+  Created by 황정현 on 2022/08/31.
+  
+*/
+
+"Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera]." = "Permissions are required to use the camera. You can set permissions in [Settings] > [Privacy] > [Camera].";
+"Can't use camera." = "Can't use camera.";
+"OK" = "OK";
+"Settings" = "Settings";
