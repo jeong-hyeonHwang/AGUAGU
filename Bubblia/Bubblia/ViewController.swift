@@ -9,7 +9,15 @@ import UIKit
 import AVFoundation
 import Vision
 
+private enum SessionSetupResult {
+    case success
+    case notAuthorized
+    case configurationFailed
+}
+
 class ViewController: UIViewController {
+    
+    private var isAuth: SessionSetupResult! = .success
     
     private var cameraView: CameraView { view as! CameraView }
     
@@ -167,6 +175,65 @@ class ViewController: UIViewController {
         gameOverLabel.textColor = accentColor
         gameOverLabel.alpha = 0
         
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+                case .authorized:
+                    break
+                case .notDetermined:
+                    videoDataOutputQueue.suspend()
+                    AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+                        if !granted {
+                            self.isAuth = .notAuthorized
+                        }
+                        self.videoDataOutputQueue.resume()
+                    })
+                default:
+                    isAuth = .notAuthorized
+                }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        videoDataOutputQueue.async {
+                    switch self.isAuth {
+                    case .success:
+                        //self.session.startRunning()
+                        break
+                    // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
+                    case .notAuthorized:
+                        DispatchQueue.main.async {
+                            let message = NSLocalizedString("손가락 탐지를 위한 카메라 사용을 위한 권한이 필요합니다.\n[설정] > [개인 정보 보호] > [카메라]에서 권한 설정이 가능합니다.",
+                                                            comment: "Alert message when the user has denied access to the camera")
+                            let actions = [
+                                UIAlertAction(title: NSLocalizedString("확인", comment: "Alert OK button"),
+                                              style: .cancel,
+                                              handler: nil),
+                                UIAlertAction(title: NSLocalizedString("설정", comment: "Alert button to open Settings"),
+                                              style: .`default`,
+                                              handler: { _ in
+                                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                                                          options: [:],
+                                                                          completionHandler: nil)
+                                })
+                            ]
+                            
+                            self.alert(title: "KROKRON", message: message, actions: actions)
+                            }
+                    case .configurationFailed:
+                        DispatchQueue.main.async {
+                            
+                            let message = NSLocalizedString("카메라를 사용할 수 없습니다.",
+                                                            comment: "Alert message when something goes wrong during capture session configuration")
+                            
+                            self.alert(title: "DANSAEK",
+                                       message: message,
+                                       actions: [UIAlertAction(title: NSLocalizedString("확인", comment: "Alert OK button"),
+                                                               style: .cancel,
+                                                               handler: nil)])
+                        }
+                    case .none:
+                        return
+                    }
+                }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -288,6 +355,18 @@ class ViewController: UIViewController {
         }
         cameraView.showPoints([pointsPair.thumbTip, pointsPair.indexTip], color: tipsColor)
     }
+    
+    func alert(title: String, message: String, actions: [UIAlertAction]) {
+            let alertController = UIAlertController(title: title,
+                                                    message: message,
+                                                    preferredStyle: .alert)
+            
+            actions.forEach {
+                alertController.addAction($0)
+            }
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
     
     func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
         layer.opacity = 0
