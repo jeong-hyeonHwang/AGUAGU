@@ -394,7 +394,7 @@
 				DEVELOPMENT_TEAM = UAM52RQFW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bubblia/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KROKRON;
+				INFOPLIST_KEY_CFBundleDisplayName = AGUAGU;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera View";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -427,7 +427,7 @@
 				DEVELOPMENT_TEAM = UAM52RQFW9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Bubblia/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KROKRON;
+				INFOPLIST_KEY_CFBundleDisplayName = AGUAGU;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera View";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
