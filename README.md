@@ -1,2 +1,2 @@
-# Bubblia
+# AGUAGU
 Simple Hand Pose Game
