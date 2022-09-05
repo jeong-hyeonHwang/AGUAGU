@@ -16,7 +16,7 @@ class HandGestureProcessor {
         case unknown
     }
     
-    typealias PointsPair = (thumbTip: CGPoint, indexTip: CGPoint)
+    typealias PointsPair = (thumbTip: CGPoint, middleTip: CGPoint)
     
     private var state = State.unknown {
         didSet {
@@ -44,7 +44,7 @@ class HandGestureProcessor {
     
     func processPointsPair(_ pointsPair: PointsPair) {
         lastProcessedPointsPair = pointsPair
-        let distance = pointsPair.indexTip.distance(from: pointsPair.thumbTip)
+        let distance = pointsPair.middleTip.distance(from: pointsPair.thumbTip)
         if distance < pinchMaxDistance {
             // Keep accumulating evidence for pinch state.
             pinchEvidenceCounter += 1

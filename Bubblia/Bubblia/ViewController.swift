@@ -158,7 +158,7 @@ class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "KR◎KR◎N" //"KR◎◎RK"//"B◎BBLIA"
+        nameLabel.text = "AGUAGU"//"KR◎KR◎N" //"KR◎◎RK"//"B◎BBLIA"
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
         nameLabel.textColor = accentColor
@@ -222,7 +222,7 @@ class ViewController: UIViewController {
                                 })
                             ]
                             
-                            self.alert(title: "KROKRON", message: message, actions: actions)
+                            self.alert(title: "AGUAGU", message: message, actions: actions)
                             }
                     case .configurationFailed:
                         DispatchQueue.main.async {
@@ -230,7 +230,7 @@ class ViewController: UIViewController {
                             let message = NSLocalizedString("Can't use camera.",
                                                             comment: "Alert message when something goes wrong during capture session configuration")
                             
-                            self.alert(title: "KROKRON",
+                            self.alert(title: "AGUAGU",
                                        message: message,
                                        actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
                                                                style: .cancel,
@@ -295,9 +295,9 @@ class ViewController: UIViewController {
         cameraFeedSession = session
     }
     
-    func processPoints(thumbTip: CGPoint?, indexTip: CGPoint?) {
+    func processPoints(thumbTip: CGPoint?, middleTip: CGPoint?) {
         // Check that we have both points.
-        guard let thumbPoint = thumbTip, let indexPoint = indexTip else {
+        guard let thumbPoint = thumbTip, let middlePoint = middleTip else {
             // If there were no observations for more than 2 seconds reset gesture processor.
             if Date().timeIntervalSince(lastObservationTimestamp) > 2 {
                 gestureProcessor.reset()
@@ -309,16 +309,16 @@ class ViewController: UIViewController {
         // Convert points from AVFoundation coordinates to UIKit coordinates.
         let previewLayer = cameraView.previewLayer
         let thumbPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: thumbPoint)
-        let indexPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: indexPoint)
+        let middlePointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: middlePoint)
         
         // Process new points
-        gestureProcessor.processPointsPair((thumbPointConverted, indexPointConverted))
+        gestureProcessor.processPointsPair((thumbPointConverted, middlePointConverted))
     }
     
     private func handleGestureStateChange(state: HandGestureProcessor.State) {
         let pointsPair = gestureProcessor.lastProcessedPointsPair
         let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
-        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.indexTip)
+        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.middleTip)
         var tipsColor: UIColor
         switch state {
         case .possiblePinch, .possibleApart:
@@ -365,7 +365,7 @@ class ViewController: UIViewController {
             }
             tipsColor = disactiveColor
         }
-        cameraView.showPoints([pointsPair.thumbTip, pointsPair.indexTip], color: tipsColor)
+        cameraView.showPoints([pointsPair.thumbTip, pointsPair.middleTip], color: tipsColor)
     }
     
     func alert(title: String, message: String, actions: [UIAlertAction]) {
@@ -575,11 +575,11 @@ class ViewController: UIViewController {
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         var thumbTip: CGPoint?
-        var indexTip: CGPoint?
+        var middleTip: CGPoint?
         
         defer {
             DispatchQueue.main.sync {
-                self.processPoints(thumbTip: thumbTip, indexTip: indexTip)
+                self.processPoints(thumbTip: thumbTip, middleTip: middleTip)
                 
             }
         }
@@ -593,20 +593,20 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             guard let observation = handPoseRequest.results?.first else {
                 return
             }
-            // Get points for thumb and index finger.
+            // Get points for thumb and middle finger.
             let thumbPoints = try observation.recognizedPoints(.thumb)
-            let indexFingerPoints = try observation.recognizedPoints(.middleFinger)
+            let middleFingerPoints = try observation.recognizedPoints(.middleFinger)
             // Look for tip points.
-            guard let thumbTipPoint = thumbPoints[.thumbTip], let indexTipPoint = indexFingerPoints[.middleTip] else {
+            guard let thumbTipPoint = thumbPoints[.thumbTip], let middleTipPoint = middleFingerPoints[.middleTip] else {
                 return
             }
             // Ignore low confidence points.
-            guard thumbTipPoint.confidence > 0.3 && indexTipPoint.confidence > 0.3 else {
+            guard thumbTipPoint.confidence > 0.3 && middleTipPoint.confidence > 0.3 else {
                 return
             }
             // Convert points from Vision coordinates to AVFoundation coordinates.
             thumbTip = CGPoint(x: thumbTipPoint.location.x, y: 1 - thumbTipPoint.location.y)
-            indexTip = CGPoint(x: indexTipPoint.location.x, y: 1 - indexTipPoint.location.y)
+            middleTip = CGPoint(x: middleTipPoint.location.x, y: 1 - middleTipPoint.location.y)
         } catch {
             cameraFeedSession?.stopRunning()
             let error = AppError.visionError(error: error)
