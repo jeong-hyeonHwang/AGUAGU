@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class CameraView: UIView {
+class CameraView: UIImageView {
 
     private var backgroundLayer = CAShapeLayer()
     private var overlayLayer = CAShapeLayer()
