@@ -23,8 +23,6 @@ class ViewController: UIViewController {
     
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
     
-    private var isTouched = false
-    
     private var layer = CAShapeLayer()
     private var drawPath = UIBezierPath()
     
@@ -40,6 +38,7 @@ class ViewController: UIViewController {
     
     private var gameStart = false
     private var gameOver = false
+    private var isTouched = false
     
     private var highScore: Int = 0
     
@@ -68,10 +67,6 @@ class ViewController: UIViewController {
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
-    
-    private let sfxSequence: [String] = ["E", "A", "B", "D", "C", "A", "C", "F"]
-    
-    private var sequenceInt: Int = 0
     
     private var particleLayer = CAShapeLayer()
     private var particlePath = UIBezierPath()
@@ -321,14 +316,11 @@ class ViewController: UIViewController {
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
-//        animation.fillMode = .forwards
-//        animation.isRemovedOnCompletion = true
         self.particleLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
     }
     func updateScore() {
-//        scoreLabel.textColor = .yellow
         scoreInt += 1
         scoreLabelTextAnimation()
     }
