@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     
     private var isAuth: SessionSetupResult! = .success
     
-    private var cameraView: CameraView { view as! CameraView }
+    private var cameraView = UIImageView()
     
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
     
@@ -84,6 +84,16 @@ class ViewController: UIViewController {
                 AppDelegate.orientationLock = .portrait
         
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        view.addSubview(cameraView)
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            cameraView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+        ])
+        cameraView.backgroundColor = .black
         
         width = view.bounds.maxX
         height = view.bounds.maxY
