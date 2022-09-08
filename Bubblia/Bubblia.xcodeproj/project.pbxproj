@@ -20,6 +20,7 @@
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
 		3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC73328BF2BB100FBD13E /* InfoPlist.strings */; };
 		3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */; };
+		3A7CC7A528CA25BD00FBD13E /* CodeArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A428CA25BD00FBD13E /* CodeArchive.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		3A7CC73428BF2BB400FBD13E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3A7CC73528BF2BB500FBD13E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+.swift"; sourceTree = "<group>"; };
+		3A7CC7A428CA25BD00FBD13E /* CodeArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeArchive.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				3A4A54DF28BD031C00FFE870 /* Constants.swift */,
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
 				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
+				3A7CC7A428CA25BD00FBD13E /* CodeArchive.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
 				3A4A54CA28BC902A00FFE870 /* Main.storyboard */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
@@ -183,6 +186,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7CC7A528CA25BD00FBD13E /* CodeArchive.swift in Sources */,
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
 				3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */,
 				3A4A54C528BC902A00FFE870 /* AppDelegate.swift in Sources */,
