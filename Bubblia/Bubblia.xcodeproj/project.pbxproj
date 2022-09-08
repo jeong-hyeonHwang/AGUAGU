@@ -23,6 +23,7 @@
 		3A7CC7A528CA25BD00FBD13E /* CodeArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A428CA25BD00FBD13E /* CodeArchive.swift */; };
 		3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A728CA28B400FBD13E /* HandPose.swift */; };
 		3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */; };
+		3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		3A7CC7A428CA25BD00FBD13E /* CodeArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeArchive.swift; sourceTree = "<group>"; };
 		3A7CC7A728CA28B400FBD13E /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
 		3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HandPose+Landmark.swift"; sourceTree = "<group>"; };
+		3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 		3A4A54C328BC902A00FFE870 /* Bubblia */ = {
 			isa = PBXGroup;
 			children = (
+				3A7CC7AB28CA2B5A00FBD13E /* Camera */,
 				3A7CC7A628CA28A500FBD13E /* HandPose */,
 				3A4A54C428BC902A00FFE870 /* AppDelegate.swift */,
 				3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */,
@@ -123,6 +126,14 @@
 				3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */,
 			);
 			path = HandPose;
+			sourceTree = "<group>";
+		};
+		3A7CC7AB28CA2B5A00FBD13E /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,6 +215,7 @@
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
 				3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */,
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
+				3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */,
 				3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */,
 				3A4A54C528BC902A00FFE870 /* AppDelegate.swift in Sources */,
 				3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */,
