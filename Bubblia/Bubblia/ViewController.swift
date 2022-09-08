@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 import Vision
 
-private enum SessionSetupResult {
+enum SessionSetupResult {
     case success
     case notAuthorized
     case configurationFailed
@@ -17,7 +17,7 @@ private enum SessionSetupResult {
 
 class ViewController: UIViewController {
     
-    private var isAuth: SessionSetupResult! = .success
+    var isAuth: SessionSetupResult! = .success
     
     private var cameraView = UIImageView()
     
@@ -204,6 +204,7 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        videoCapture.cameraPermissionCheck(vc: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
