@@ -15,7 +15,6 @@
 		3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54CD28BC902A00FFE870 /* Bubblia.xcdatamodeld */; };
 		3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D028BC902C00FFE870 /* Assets.xcassets */; };
 		3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */; };
-		3A4A54DC28BC926600FFE870 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54DB28BC926600FFE870 /* CameraView.swift */; };
 		3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54DF28BD031C00FFE870 /* Constants.swift */; };
 		3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */; };
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
@@ -34,7 +33,6 @@
 		3A4A54D028BC902C00FFE870 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A4A54D328BC902C00FFE870 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3A4A54D528BC902C00FFE870 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3A4A54DB28BC926600FFE870 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		3A4A54DF28BD031C00FFE870 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultSetting.swift; sourceTree = "<group>"; };
 		3A7CC72B28BF28FF00FBD13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 				3A4A54C428BC902A00FFE870 /* AppDelegate.swift */,
 				3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */,
 				3A4A54DF28BD031C00FFE870 /* Constants.swift */,
-				3A4A54DB28BC926600FFE870 /* CameraView.swift */,
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
 				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
@@ -192,7 +189,6 @@
 				3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */,
 				3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */,
 				3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */,
-				3A4A54DC28BC926600FFE870 /* CameraView.swift in Sources */,
 				3A4A54C728BC902A00FFE870 /* SceneDelegate.swift in Sources */,
 				3A144B3528BDFE78001DB6F0 /* UIColor+.swift in Sources */,
 			);
