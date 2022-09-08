@@ -14,7 +14,9 @@ extension AVCaptureDeviceInput {
                                                    position: .front) else {
             return nil
         }
-        
+
+        guard camera.configureFrameRate(frameRate) else { return nil }
+
         do {
             let cameraInput = try AVCaptureDeviceInput(device: camera)
 
@@ -25,4 +27,3 @@ extension AVCaptureDeviceInput {
         }
     }
 }
-
