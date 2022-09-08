@@ -25,6 +25,7 @@
 		3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */; };
 		3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */; };
 		3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */; };
+		3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HandPose+Landmark.swift"; sourceTree = "<group>"; };
 		3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDeviceInput+Camera.swift"; sourceTree = "<group>"; };
+		3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDeviceOutput+PixelFormat.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 			children = (
 				3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */,
 				3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */,
+				3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */,
 				3A7CC7A528CA25BD00FBD13E /* CodeArchive.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
 				3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */,
