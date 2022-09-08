@@ -52,6 +52,51 @@ class VideoCapture: NSObject {
     private func disableCaptureSession() {
         if captureSession.isRunning { captureSession.stopRunning() }
     }
+    
+    func cameraPermissionCheck(vc: ViewController) {
+        videoCaptureQueue.async {
+                            switch vc.isAuth {
+                            case .success:
+                                //self.session.startRunning()
+                                break
+                            // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
+                            case .notAuthorized:
+                                DispatchQueue.main.async {
+                                    let message = NSLocalizedString("Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera].",
+                                                                    comment: "Alert message when the user has denied access to the camera")
+                                    let actions = [
+                                        UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
+                                                      style: .cancel,
+                                                      handler: nil),
+                                        UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
+                                                      style: .`default`,
+                                                      handler: { _ in
+                                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                                                                  options: [:],
+                                                                                  completionHandler: nil)
+                                        })
+                                    ]
+        
+                                    vc.alert(title: "AGUAGU", message: message, actions: actions)
+                                    }
+                            case .configurationFailed:
+                                DispatchQueue.main.async {
+        
+                                    let message = NSLocalizedString("Can't use camera.",
+                                                                    comment: "Alert message when something goes wrong during capture session configuration")
+        
+                                    vc.alert(title: "AGUAGU",
+                                               message: message,
+                                               actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
+                                                                       style: .cancel,
+                                                                       handler: nil)])
+                                }
+                            case .none:
+                                return
+                            }
+                        }
+
+    }
 }
 
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
