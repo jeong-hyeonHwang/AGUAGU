@@ -393,7 +393,6 @@ class ViewController: UIViewController {
         layer.isHidden = false
         gameOver = false
         isTouched = false
-        sequenceInt = 0
     }
     
 }
