@@ -24,6 +24,7 @@
 		3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A728CA28B400FBD13E /* HandPose.swift */; };
 		3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */; };
 		3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */; };
+		3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		3A7CC7A728CA28B400FBD13E /* HandPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPose.swift; sourceTree = "<group>"; };
 		3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HandPose+Landmark.swift"; sourceTree = "<group>"; };
 		3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
+		3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDeviceInput+Camera.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */,
+				3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
 				3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */,
 				3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */,
+				3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */,
 				3A4A54C528BC902A00FFE870 /* AppDelegate.swift in Sources */,
 				3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */,
 				3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */,
