@@ -21,8 +21,6 @@ class ViewController: UIViewController {
     
     private var cameraView = UIImageView()
     
-    private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
-    
     private var layer = CAShapeLayer()
     private var drawPath = UIBezierPath()
     
@@ -38,12 +36,10 @@ class ViewController: UIViewController {
     
     private var gameStart = false
     private var gameOver = false
-    private var isTouched = false
     
     private var highScore: Int = 0
     
-    private let accentColor: UIColor = .accentColor
-    ?? .yellow
+    private let accentColor: UIColor = .accentColor ?? .yellow
     private let activeColor: UIColor = .activeColor ?? .green
     private let middleColor: UIColor = .activeColor ?? .orange
     private let disactiveColor: UIColor = .disactiveColor ?? .red
@@ -67,18 +63,23 @@ class ViewController: UIViewController {
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
+
+    static var counter: Int = 0
     
     private var particleLayer = CAShapeLayer()
     private var particlePath = UIBezierPath()
     
+    var videoCapture: VideoCapture!
+
+    var videoProcessingChain: VideoProcessingChain!
+    
+    private var pastHandStatus: HandStatus = .possible
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-        //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
-                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-                AppDelegate.orientationLock = .portrait
-        
-        UIApplication.shared.isIdleTimerDisabled = true
+        view.backgroundColor = .black
         
         view.addSubview(cameraView)
         cameraView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +89,18 @@ class ViewController: UIViewController {
             cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
             cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
         ])
-        cameraView.backgroundColor = .black
+        
+        videoProcessingChain = VideoProcessingChain()
+        videoProcessingChain.delegate = self
+
+        videoCapture = VideoCapture()
+        videoCapture.delegate = self
+        
+        //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                AppDelegate.orientationLock = .portrait
+        
+        UIApplication.shared.isIdleTimerDisabled = true
         
         width = view.bounds.maxX
         height = view.bounds.maxY
@@ -174,31 +186,28 @@ class ViewController: UIViewController {
                 case .authorized:
                     break
                 case .notDetermined:
-                    videoDataOutputQueue.suspend()
                     AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                         if !granted {
                             self.isAuth = .notAuthorized
                         }
-                        self.videoDataOutputQueue.resume()
                     })
                 default:
                     isAuth = .notAuthorized
                 }
-        view.layer.addSublayer(particleLayer)
+        
+        cameraView.layer.addSublayer(particleLayer)
         drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
         particleLayer.fillColor = UIColor.accentColor?.cgColor
         particleLayer.opacity = 0
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+//        cameraFeedSession?.stopRunning()
         super.viewWillDisappear(animated)
     }
         
@@ -316,6 +325,8 @@ class ViewController: UIViewController {
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
+//        animation.fillMode = .forwards
+//        animation.isRemovedOnCompletion = true
         self.particleLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
@@ -392,7 +403,96 @@ class ViewController: UIViewController {
         
         layer.isHidden = false
         gameOver = false
-        isTouched = false
     }
     
 }
+
+extension ViewController: VideoCaptureDelegate {
+    func videoCapture(_ videoCapture: VideoCapture,
+                      didCreate framePublisher: FramePublisher) {
+        videoProcessingChain.upstreamFramePublisher = framePublisher
+    }
+}
+
+extension ViewController: VideoProcessingChainDelegate {
+    func videoProcessingChain(_ chain: VideoProcessingChain,
+                              didDetect poses: [HandPose]?,
+                              in frame: CGImage) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.drawPoses(poses, onto: frame)
+        }
+    }
+}
+
+extension ViewController {
+    private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
+        let renderFormat = UIGraphicsImageRendererFormat()
+        renderFormat.scale = 1.0
+
+        let frameSize = CGSize(width: frame.width, height: frame.height)
+        let poseRenderer = UIGraphicsImageRenderer(size: frameSize,
+                                                   format: renderFormat)
+
+        let frameWithPosesRendering = poseRenderer.image { rendererContext in
+            let cgContext = rendererContext.cgContext
+            let inverse = cgContext.ctm.inverted()
+
+            cgContext.concatenate(inverse)
+
+            let pointTransform = CGAffineTransform(scaleX: frameSize.width,
+                                                   y: frameSize.height)
+
+            
+            guard let poses = poses else { return }
+
+            let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
+            
+            for pose in poses {
+                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint)
+                switch handStatus {
+                case .possible:
+                    break
+                case .pinched:
+                    if gameOver == false && pastHandStatus == .possible {
+                        DispatchQueue.main.async {
+                                self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
+                            }
+                    }
+                case .invalid:
+                    if gameOver == true && pastHandStatus == .possible {
+                        DispatchQueue.main.async {
+                            
+                            self.gameRestart()
+                        }
+                    }
+                }
+                pastHandStatus = handStatus
+            }
+        }
+        
+        DispatchQueue.main.async { self.cameraView.image = frameWithPosesRendering }
+    }
+    
+    func gameStatusUpdateFunction(middlePoint: CGPoint) {
+        if gameStart == false {
+            labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+            labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+            labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+            changePosition(layer: layer, path: drawPath)
+            addOpacityChangeAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            gameStart = true
+        } else if gameOver == false {
+            print(":::PINCH:::")
+            drawParticle(centerPoint: middlePoint)
+            changePosition(layer: layer, path: drawPath)
+            addOpacityChangeAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            drawParticle(centerPoint: middlePoint)
+            addParticleFadeInOutAnimation()
+        }
+    }
+}
+
