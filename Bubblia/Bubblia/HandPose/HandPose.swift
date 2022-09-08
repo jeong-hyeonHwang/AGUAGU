@@ -53,18 +53,20 @@ struct HandPose {
             let middlePoint = landmarks[1].location
             let distance = CGPointDistance(from: thumbPoint, to: middlePoint)
             
-            let thumbCGPoint = CGPoint(x: thumbPoint.x, y: 1 - thumbPoint.y)
+            let thumbMiddleCenterPoint = CGPoint.midPoint(p1: thumbPoint, p2: middlePoint)
+
+            let centerCGPoint = CGPoint(x: thumbMiddleCenterPoint.x, y: 1 - thumbMiddleCenterPoint.y)
             
             let width = UIScreen.main.bounds.width
             let height = UIScreen.main.bounds.height
             
-            let thumbLayerPoint = CGPoint(x: width * thumbCGPoint.x, y: height * thumbCGPoint.y)
+            let centerLayerPoint = CGPoint(x: width * centerCGPoint.x, y: height * centerCGPoint.y)
             
             if distance < 0.06 {
                 ViewController.counter += 1
                 context.setFillColor(UIColor.green.cgColor)
                 context.setStrokeColor(UIColor.green.cgColor)
-                if thumbLayerPoint.distance(from: point) < 50
+                if centerLayerPoint.distance(from: point) < 50
                 {
                     returnValue = .pinched
                 } else {
