@@ -19,18 +19,7 @@ class ViewController: UIViewController {
     
     private var isAuth: SessionSetupResult! = .success
     
-    private var cameraView: CameraView { view as! CameraView }
-    
-    private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
-    private var cameraFeedSession: AVCaptureSession?
-    private var handPoseRequest = VNDetectHumanHandPoseRequest()
-    
-    private var lastObservationTimestamp = Date()
-    
-    private var lastDrawPoint: CGPoint?
-    private var isTouched = false
-    
-    private var gestureProcessor = HandGestureProcessor()
+    private var cameraView = UIImageView()
     
     private var layer = CAShapeLayer()
     private var drawPath = UIBezierPath()
@@ -50,8 +39,7 @@ class ViewController: UIViewController {
     
     private var highScore: Int = 0
     
-    private let accentColor: UIColor = .accentColor
-    ?? .yellow
+    private let accentColor: UIColor = .accentColor ?? .yellow
     private let activeColor: UIColor = .activeColor ?? .green
     private let middleColor: UIColor = .activeColor ?? .orange
     private let disactiveColor: UIColor = .disactiveColor ?? .red
@@ -75,16 +63,38 @@ class ViewController: UIViewController {
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
-    
-    private let sfxSequence: [String] = ["E", "A", "B", "D", "C", "A", "C", "F"]
-    
-    private var sequenceInt: Int = 0
+
+    static var counter: Int = 0
     
     private var particleLayer = CAShapeLayer()
     private var particlePath = UIBezierPath()
     
+    var videoCapture: VideoCapture!
+
+    var videoProcessingChain: VideoProcessingChain!
+    
+    private var pastHandStatus: HandStatus = .possible
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        
+        view.backgroundColor = .black
+        
+        view.addSubview(cameraView)
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            cameraView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+        ])
+        
+        videoProcessingChain = VideoProcessingChain()
+        videoProcessingChain.delegate = self
+
+        videoCapture = VideoCapture()
+        videoCapture.delegate = self
         
         //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
                 UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
@@ -96,12 +106,6 @@ class ViewController: UIViewController {
         height = view.bounds.maxY
         
         circleRadius = height * 30 / 844
-        
-        handPoseRequest.maximumHandCount = 1
-        // Add state change handler to hand gesture processor.
-        gestureProcessor.didChangeStateClosure = { [weak self] state in
-            self?.handleGestureStateChange(state: state)
-        }
         
         drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         layer.path = drawPath.cgPath
@@ -182,192 +186,31 @@ class ViewController: UIViewController {
                 case .authorized:
                     break
                 case .notDetermined:
-                    videoDataOutputQueue.suspend()
                     AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                         if !granted {
                             self.isAuth = .notAuthorized
                         }
-                        self.videoDataOutputQueue.resume()
                     })
                 default:
                     isAuth = .notAuthorized
                 }
-        view.layer.addSublayer(particleLayer)
+        
+        cameraView.layer.addSublayer(particleLayer)
         drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
         particleLayer.fillColor = UIColor.accentColor?.cgColor
         particleLayer.opacity = 0
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        videoDataOutputQueue.async {
-                    switch self.isAuth {
-                    case .success:
-                        //self.session.startRunning()
-                        break
-                    // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
-                    case .notAuthorized:
-                        DispatchQueue.main.async {
-                            let message = NSLocalizedString("Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera].",
-                                                            comment: "Alert message when the user has denied access to the camera")
-                            let actions = [
-                                UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                              style: .cancel,
-                                              handler: nil),
-                                UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
-                                              style: .`default`,
-                                              handler: { _ in
-                                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                                                          options: [:],
-                                                                          completionHandler: nil)
-                                })
-                            ]
-                            
-                            self.alert(title: "AGUAGU", message: message, actions: actions)
-                            }
-                    case .configurationFailed:
-                        DispatchQueue.main.async {
-                            
-                            let message = NSLocalizedString("Can't use camera.",
-                                                            comment: "Alert message when something goes wrong during capture session configuration")
-                            
-                            self.alert(title: "AGUAGU",
-                                       message: message,
-                                       actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                                               style: .cancel,
-                                                               handler: nil)])
-                        }
-                    case .none:
-                        return
-                    }
-                }
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        do {
-            if cameraFeedSession == nil {
-                cameraView.previewLayer.videoGravity = .resizeAspectFill
-                try setupAVSession()
-                cameraView.previewLayer.session = cameraFeedSession
-            }
-            cameraFeedSession?.startRunning()
-        } catch {
-            AppError.display(error, inViewController: self)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        cameraFeedSession?.stopRunning()
+//        cameraFeedSession?.stopRunning()
         super.viewWillDisappear(animated)
     }
-    
-    func setupAVSession() throws {
-        // Select a front facing camera, make an input.
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
-            throw AppError.captureSessionSetup(reason: "Could not find a front facing camera.")
-        }
         
-        guard let deviceInput = try? AVCaptureDeviceInput(device: videoDevice) else {
-            throw AppError.captureSessionSetup(reason: "Could not create video device input.")
-        }
-        
-        let session = AVCaptureSession()
-        session.beginConfiguration()
-        session.sessionPreset = AVCaptureSession.Preset.high
-        
-        // Add a video input.
-        guard session.canAddInput(deviceInput) else {
-            throw AppError.captureSessionSetup(reason: "Could not add video device input to the session")
-        }
-        session.addInput(deviceInput)
-        
-        let dataOutput = AVCaptureVideoDataOutput()
-        if session.canAddOutput(dataOutput) {
-            session.addOutput(dataOutput)
-            // Add a video data output.
-            dataOutput.alwaysDiscardsLateVideoFrames = true
-            dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-            dataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
-        } else {
-            throw AppError.captureSessionSetup(reason: "Could not add video data output to the session")
-        }
-        session.commitConfiguration()
-        cameraFeedSession = session
-    }
-    
-    func processPoints(thumbTip: CGPoint?, middleTip: CGPoint?) {
-        // Check that we have both points.
-        guard let thumbPoint = thumbTip, let middlePoint = middleTip else {
-            // If there were no observations for more than 2 seconds reset gesture processor.
-            if Date().timeIntervalSince(lastObservationTimestamp) > 2 {
-                gestureProcessor.reset()
-            }
-            cameraView.showPoints([], color: .clear)
-            return
-        }
-        
-        // Convert points from AVFoundation coordinates to UIKit coordinates.
-        let previewLayer = cameraView.previewLayer
-        let thumbPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: thumbPoint)
-        let middlePointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: middlePoint)
-        
-        // Process new points
-        gestureProcessor.processPointsPair((thumbPointConverted, middlePointConverted))
-    }
-    
-    private func handleGestureStateChange(state: HandGestureProcessor.State) {
-        let pointsPair = gestureProcessor.lastProcessedPointsPair
-        let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
-        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.middleTip)
-        var tipsColor: UIColor
-        switch state {
-        case .possiblePinch, .possibleApart:
-            tipsColor = middleColor
-        case .pinched:
-            if gameOver == true {
-                gameRestart()
-                
-            } else if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
-                if gameStart == false {
-                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
-                    changePosition(layer: layer, path: drawPath)
-                    addOpacityChangeAnimation(duration: duration)
-                    updateScore()
-                    updateDuration()
-                    gameStart = true
-                } else if isTouched == false && gameOver == false {
-                    print(":::PINCH:::")
-                    if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
-                        drawParticle(centerPoint: middlePoint)
-                        changePosition(layer: layer, path: drawPath)
-                        addOpacityChangeAnimation(duration: duration)
-                        updateScore()
-                        updateDuration()
-                        drawParticle(centerPoint: middlePoint)
-                        addParticleFadeInOutAnimation()
-//                        playSound(tone: sfxSequence[sequenceInt])
-//                        if sequenceInt < sfxSequence.count-1 {
-//                            sequenceInt += 1
-//                        } else {
-//                            sequenceInt = 0
-//                        }
-                    }
-                    isTouched = true
-                }
-            }
-            tipsColor = activeColor
-        case .apart, .unknown:
-            if isTouched == true {
-                print(":::APART:::")
-                isTouched = false
-            }
-            tipsColor = disactiveColor
-        }
-        cameraView.showPoints([pointsPair.thumbTip, pointsPair.middleTip], color: tipsColor)
-    }
-    
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
                                                     message: message,
@@ -383,11 +226,6 @@ class ViewController: UIViewController {
     func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
         let startYDistance: CGFloat = 18
-//        let centerPoint = CGPoint(x: 300, y: 300)
-
-//        let xValue: CGFloat = 18
-//        let yValue: CGFloat = 8
-//        let radius: CGFloat = 5
         let xValue: CGFloat = 12
         let yValue: CGFloat = 5
         let radius: CGFloat = 3
@@ -494,7 +332,6 @@ class ViewController: UIViewController {
         CATransaction.commit()
     }
     func updateScore() {
-//        scoreLabel.textColor = .yellow
         scoreInt += 1
         scoreLabelTextAnimation()
     }
@@ -566,53 +403,96 @@ class ViewController: UIViewController {
         
         layer.isHidden = false
         gameOver = false
-        isTouched = false
-        sequenceInt = 0
     }
     
 }
 
-extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        var thumbTip: CGPoint?
-        var middleTip: CGPoint?
-        
-        defer {
-            DispatchQueue.main.sync {
-                self.processPoints(thumbTip: thumbTip, middleTip: middleTip)
-                
-            }
-        }
-        
-        let handler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up, options: [:])
-        do {
-            // Perform VNDetectHumanHandPoseRequest
-            try handler.perform([handPoseRequest])
-            // Continue only when a hand was detected in the frame.
-            // Since we set the maximumHandCount property of the request to 1, there will be at most one observation.
-            guard let observation = handPoseRequest.results?.first else {
-                return
-            }
-            // Get points for thumb and middle finger.
-            let thumbPoints = try observation.recognizedPoints(.thumb)
-            let middleFingerPoints = try observation.recognizedPoints(.middleFinger)
-            // Look for tip points.
-            guard let thumbTipPoint = thumbPoints[.thumbTip], let middleTipPoint = middleFingerPoints[.middleTip] else {
-                return
-            }
-            // Ignore low confidence points.
-            guard thumbTipPoint.confidence > 0.3 && middleTipPoint.confidence > 0.3 else {
-                return
-            }
-            // Convert points from Vision coordinates to AVFoundation coordinates.
-            thumbTip = CGPoint(x: thumbTipPoint.location.x, y: 1 - thumbTipPoint.location.y)
-            middleTip = CGPoint(x: middleTipPoint.location.x, y: 1 - middleTipPoint.location.y)
-        } catch {
-            cameraFeedSession?.stopRunning()
-            let error = AppError.visionError(error: error)
-            DispatchQueue.main.async {
-                error.displayInViewController(self)
-            }
+extension ViewController: VideoCaptureDelegate {
+    func videoCapture(_ videoCapture: VideoCapture,
+                      didCreate framePublisher: FramePublisher) {
+        videoProcessingChain.upstreamFramePublisher = framePublisher
+    }
+}
+
+extension ViewController: VideoProcessingChainDelegate {
+    func videoProcessingChain(_ chain: VideoProcessingChain,
+                              didDetect poses: [HandPose]?,
+                              in frame: CGImage) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.drawPoses(poses, onto: frame)
         }
     }
 }
+
+extension ViewController {
+    private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
+        let renderFormat = UIGraphicsImageRendererFormat()
+        renderFormat.scale = 1.0
+
+        let frameSize = CGSize(width: frame.width, height: frame.height)
+        let poseRenderer = UIGraphicsImageRenderer(size: frameSize,
+                                                   format: renderFormat)
+
+        let frameWithPosesRendering = poseRenderer.image { rendererContext in
+            let cgContext = rendererContext.cgContext
+            let inverse = cgContext.ctm.inverted()
+
+            cgContext.concatenate(inverse)
+
+            let pointTransform = CGAffineTransform(scaleX: frameSize.width,
+                                                   y: frameSize.height)
+
+            
+            guard let poses = poses else { return }
+
+            let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
+            
+            for pose in poses {
+                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint)
+                switch handStatus {
+                case .possible:
+                    break
+                case .pinched:
+                    if gameOver == false && pastHandStatus == .possible {
+                        DispatchQueue.main.async {
+                                self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
+                            }
+                    }
+                case .invalid:
+                    if gameOver == true && pastHandStatus == .possible {
+                        DispatchQueue.main.async {
+                            
+                            self.gameRestart()
+                        }
+                    }
+                }
+                pastHandStatus = handStatus
+            }
+        }
+        
+        DispatchQueue.main.async { self.cameraView.image = frameWithPosesRendering }
+    }
+    
+    func gameStatusUpdateFunction(middlePoint: CGPoint) {
+        if gameStart == false {
+            labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+            labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+            labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+            changePosition(layer: layer, path: drawPath)
+            addOpacityChangeAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            gameStart = true
+        } else if gameOver == false {
+            print(":::PINCH:::")
+            drawParticle(centerPoint: middlePoint)
+            changePosition(layer: layer, path: drawPath)
+            addOpacityChangeAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            drawParticle(centerPoint: middlePoint)
+            addParticleFadeInOutAnimation()
+        }
+    }
+}
+
