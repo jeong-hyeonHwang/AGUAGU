@@ -22,14 +22,8 @@ class ViewController: UIViewController {
     private var cameraView: CameraView { view as! CameraView }
     
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
-    private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
-    private var lastObservationTimestamp = Date()
-    
-    private var lastDrawPoint: CGPoint?
     private var isTouched = false
-    
-    private var gestureProcessor = HandGestureProcessor()
     
     private var layer = CAShapeLayer()
     private var drawPath = UIBezierPath()
@@ -95,12 +89,6 @@ class ViewController: UIViewController {
         height = view.bounds.maxY
         
         circleRadius = height * 30 / 844
-        
-        handPoseRequest.maximumHandCount = 1
-        // Add state change handler to hand gesture processor.
-        gestureProcessor.didChangeStateClosure = { [weak self] state in
-            self?.handleGestureStateChange(state: state)
-        }
         
         drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         layer.path = drawPath.cgPath
@@ -249,78 +237,58 @@ class ViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
     
-    func processPoints(thumbTip: CGPoint?, middleTip: CGPoint?) {
-        // Check that we have both points.
-        guard let thumbPoint = thumbTip, let middlePoint = middleTip else {
-            // If there were no observations for more than 2 seconds reset gesture processor.
-            if Date().timeIntervalSince(lastObservationTimestamp) > 2 {
-                gestureProcessor.reset()
-            }
-            cameraView.showPoints([], color: .clear)
-            return
-        }
-        
-        // Convert points from AVFoundation coordinates to UIKit coordinates.
-        let previewLayer = cameraView.previewLayer
-        let thumbPointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: thumbPoint)
-        let middlePointConverted = previewLayer.layerPointConverted(fromCaptureDevicePoint: middlePoint)
-        
-        // Process new points
-        gestureProcessor.processPointsPair((thumbPointConverted, middlePointConverted))
-    }
-    
-    private func handleGestureStateChange(state: HandGestureProcessor.State) {
-        let pointsPair = gestureProcessor.lastProcessedPointsPair
-        let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
-        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.middleTip)
-        var tipsColor: UIColor
-        switch state {
-        case .possiblePinch, .possibleApart:
-            tipsColor = middleColor
-        case .pinched:
-            if gameOver == true {
-                gameRestart()
-                
-            } else if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
-                if gameStart == false {
-                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
-                    changePosition(layer: layer, path: drawPath)
-                    addOpacityChangeAnimation(duration: duration)
-                    updateScore()
-                    updateDuration()
-                    gameStart = true
-                } else if isTouched == false && gameOver == false {
-                    print(":::PINCH:::")
-                    if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
-                        drawParticle(centerPoint: middlePoint)
-                        changePosition(layer: layer, path: drawPath)
-                        addOpacityChangeAnimation(duration: duration)
-                        updateScore()
-                        updateDuration()
-                        drawParticle(centerPoint: middlePoint)
-                        addParticleFadeInOutAnimation()
-//                        playSound(tone: sfxSequence[sequenceInt])
-//                        if sequenceInt < sfxSequence.count-1 {
-//                            sequenceInt += 1
-//                        } else {
-//                            sequenceInt = 0
-//                        }
-                    }
-                    isTouched = true
-                }
-            }
-            tipsColor = activeColor
-        case .apart, .unknown:
-            if isTouched == true {
-                print(":::APART:::")
-                isTouched = false
-            }
-            tipsColor = disactiveColor
-        }
-        cameraView.showPoints([pointsPair.thumbTip, pointsPair.middleTip], color: tipsColor)
-    }
+//    private func handleGestureStateChange(state: HandGestureProcessor.State) {
+//        let pointsPair = gestureProcessor.lastProcessedPointsPair
+//        let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
+//        let middlePoint = CGPoint.midPoint(p1: pointsPair.thumbTip, p2: pointsPair.middleTip)
+//        var tipsColor: UIColor
+//        switch state {
+//        case .possiblePinch, .possibleApart:
+//            tipsColor = middleColor
+//        case .pinched:
+//            if gameOver == true {
+//                gameRestart()
+//                
+//            } else if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
+//                if gameStart == false {
+//                    labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+//                    labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+//                    labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+//                    changePosition(layer: layer, path: drawPath)
+//                    addOpacityChangeAnimation(duration: duration)
+//                    updateScore()
+//                    updateDuration()
+//                    gameStart = true
+//                } else if isTouched == false && gameOver == false {
+//                    print(":::PINCH:::")
+//                    if drawPathMiddlePoint.distance(from: middlePoint) < 45 {
+//                        drawParticle(centerPoint: middlePoint)
+//                        changePosition(layer: layer, path: drawPath)
+//                        addOpacityChangeAnimation(duration: duration)
+//                        updateScore()
+//                        updateDuration()
+//                        drawParticle(centerPoint: middlePoint)
+//                        addParticleFadeInOutAnimation()
+////                        playSound(tone: sfxSequence[sequenceInt])
+////                        if sequenceInt < sfxSequence.count-1 {
+////                            sequenceInt += 1
+////                        } else {
+////                            sequenceInt = 0
+////                        }
+//                    }
+//                    isTouched = true
+//                }
+//            }
+//            tipsColor = activeColor
+//        case .apart, .unknown:
+//            if isTouched == true {
+//                print(":::APART:::")
+//                isTouched = false
+//            }
+//            tipsColor = disactiveColor
+//        }
+//        cameraView.showPoints([pointsPair.thumbTip, pointsPair.middleTip], color: tipsColor)
+//    }
     
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
