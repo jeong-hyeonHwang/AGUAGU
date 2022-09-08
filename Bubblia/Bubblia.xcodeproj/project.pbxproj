@@ -26,6 +26,9 @@
 		3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */; };
 		3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */; };
 		3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */; };
+		3A7CC7B528CA31AB00FBD13E /* VideoProcessingChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */; };
+		3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */; };
+		3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +57,9 @@
 		3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDeviceInput+Camera.swift"; sourceTree = "<group>"; };
 		3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDeviceOutput+PixelFormat.swift"; sourceTree = "<group>"; };
+		3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcessingChain.swift; sourceTree = "<group>"; };
+		3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseStatus.swift; sourceTree = "<group>"; };
+		3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+FrameRate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +134,7 @@
 			children = (
 				3A7CC7A728CA28B400FBD13E /* HandPose.swift */,
 				3A7CC7A928CA298600FBD13E /* HandPose+Landmark.swift */,
+				3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */,
 			);
 			path = HandPose;
 			sourceTree = "<group>";
@@ -138,6 +145,8 @@
 				3A7CC7AE28CA2B7900FBD13E /* VideoCapture.swift */,
 				3A7CC7B028CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift */,
 				3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */,
+				3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */,
+				3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -219,9 +228,11 @@
 			files = (
 				3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */,
 				3A7CC7A528CA25BD00FBD13E /* CodeArchive.swift in Sources */,
+				3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
 				3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */,
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
+				3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */,
 				3A7CC7AF28CA2B7900FBD13E /* VideoCapture.swift in Sources */,
 				3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */,
 				3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */,
@@ -230,6 +241,7 @@
 				3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */,
 				3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */,
 				3A4A54C728BC902A00FFE870 /* SceneDelegate.swift in Sources */,
+				3A7CC7B528CA31AB00FBD13E /* VideoProcessingChain.swift in Sources */,
 				3A144B3528BDFE78001DB6F0 /* UIColor+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
