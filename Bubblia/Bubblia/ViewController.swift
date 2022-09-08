@@ -22,7 +22,6 @@ class ViewController: UIViewController {
     private var cameraView: CameraView { view as! CameraView }
     
     private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
-    private var cameraFeedSession: AVCaptureSession?
     private var handPoseRequest = VNDetectHumanHandPoseRequest()
     
     private var lastObservationTimestamp = Date()
@@ -199,100 +198,55 @@ class ViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        videoDataOutputQueue.async {
-                    switch self.isAuth {
-                    case .success:
-                        //self.session.startRunning()
-                        break
-                    // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
-                    case .notAuthorized:
-                        DispatchQueue.main.async {
-                            let message = NSLocalizedString("Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera].",
-                                                            comment: "Alert message when the user has denied access to the camera")
-                            let actions = [
-                                UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                              style: .cancel,
-                                              handler: nil),
-                                UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
-                                              style: .`default`,
-                                              handler: { _ in
-                                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                                                          options: [:],
-                                                                          completionHandler: nil)
-                                })
-                            ]
-                            
-                            self.alert(title: "AGUAGU", message: message, actions: actions)
-                            }
-                    case .configurationFailed:
-                        DispatchQueue.main.async {
-                            
-                            let message = NSLocalizedString("Can't use camera.",
-                                                            comment: "Alert message when something goes wrong during capture session configuration")
-                            
-                            self.alert(title: "AGUAGU",
-                                       message: message,
-                                       actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
-                                                               style: .cancel,
-                                                               handler: nil)])
-                        }
-                    case .none:
-                        return
-                    }
-                }
+//        videoDataOutputQueue.async {
+//                    switch self.isAuth {
+//                    case .success:
+//                        //self.session.startRunning()
+//                        break
+//                    // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
+//                    case .notAuthorized:
+//                        DispatchQueue.main.async {
+//                            let message = NSLocalizedString("Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera].",
+//                                                            comment: "Alert message when the user has denied access to the camera")
+//                            let actions = [
+//                                UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
+//                                              style: .cancel,
+//                                              handler: nil),
+//                                UIAlertAction(title: NSLocalizedString("Settings", comment: "Alert button to open Settings"),
+//                                              style: .`default`,
+//                                              handler: { _ in
+//                                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+//                                                                          options: [:],
+//                                                                          completionHandler: nil)
+//                                })
+//                            ]
+//
+//                            self.alert(title: "AGUAGU", message: message, actions: actions)
+//                            }
+//                    case .configurationFailed:
+//                        DispatchQueue.main.async {
+//
+//                            let message = NSLocalizedString("Can't use camera.",
+//                                                            comment: "Alert message when something goes wrong during capture session configuration")
+//
+//                            self.alert(title: "AGUAGU",
+//                                       message: message,
+//                                       actions: [UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"),
+//                                                               style: .cancel,
+//                                                               handler: nil)])
+//                        }
+//                    case .none:
+//                        return
+//                    }
+//                }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        do {
-            if cameraFeedSession == nil {
-                cameraView.previewLayer.videoGravity = .resizeAspectFill
-                try setupAVSession()
-                cameraView.previewLayer.session = cameraFeedSession
-            }
-            cameraFeedSession?.startRunning()
-        } catch {
-            AppError.display(error, inViewController: self)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        cameraFeedSession?.stopRunning()
         super.viewWillDisappear(animated)
-    }
-    
-    func setupAVSession() throws {
-        // Select a front facing camera, make an input.
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
-            throw AppError.captureSessionSetup(reason: "Could not find a front facing camera.")
-        }
-        
-        guard let deviceInput = try? AVCaptureDeviceInput(device: videoDevice) else {
-            throw AppError.captureSessionSetup(reason: "Could not create video device input.")
-        }
-        
-        let session = AVCaptureSession()
-        session.beginConfiguration()
-        session.sessionPreset = AVCaptureSession.Preset.high
-        
-        // Add a video input.
-        guard session.canAddInput(deviceInput) else {
-            throw AppError.captureSessionSetup(reason: "Could not add video device input to the session")
-        }
-        session.addInput(deviceInput)
-        
-        let dataOutput = AVCaptureVideoDataOutput()
-        if session.canAddOutput(dataOutput) {
-            session.addOutput(dataOutput)
-            // Add a video data output.
-            dataOutput.alwaysDiscardsLateVideoFrames = true
-            dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-            dataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
-        } else {
-            throw AppError.captureSessionSetup(reason: "Could not add video data output to the session")
-        }
-        session.commitConfiguration()
-        cameraFeedSession = session
     }
     
     func processPoints(thumbTip: CGPoint?, middleTip: CGPoint?) {
@@ -570,49 +524,4 @@ class ViewController: UIViewController {
         sequenceInt = 0
     }
     
-}
-
-extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        var thumbTip: CGPoint?
-        var middleTip: CGPoint?
-        
-        defer {
-            DispatchQueue.main.sync {
-                self.processPoints(thumbTip: thumbTip, middleTip: middleTip)
-                
-            }
-        }
-        
-        let handler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up, options: [:])
-        do {
-            // Perform VNDetectHumanHandPoseRequest
-            try handler.perform([handPoseRequest])
-            // Continue only when a hand was detected in the frame.
-            // Since we set the maximumHandCount property of the request to 1, there will be at most one observation.
-            guard let observation = handPoseRequest.results?.first else {
-                return
-            }
-            // Get points for thumb and middle finger.
-            let thumbPoints = try observation.recognizedPoints(.thumb)
-            let middleFingerPoints = try observation.recognizedPoints(.middleFinger)
-            // Look for tip points.
-            guard let thumbTipPoint = thumbPoints[.thumbTip], let middleTipPoint = middleFingerPoints[.middleTip] else {
-                return
-            }
-            // Ignore low confidence points.
-            guard thumbTipPoint.confidence > 0.3 && middleTipPoint.confidence > 0.3 else {
-                return
-            }
-            // Convert points from Vision coordinates to AVFoundation coordinates.
-            thumbTip = CGPoint(x: thumbTipPoint.location.x, y: 1 - thumbTipPoint.location.y)
-            middleTip = CGPoint(x: middleTipPoint.location.x, y: 1 - middleTipPoint.location.y)
-        } catch {
-            cameraFeedSession?.stopRunning()
-            let error = AppError.visionError(error: error)
-            DispatchQueue.main.async {
-                error.displayInViewController(self)
-            }
-        }
-    }
 }
