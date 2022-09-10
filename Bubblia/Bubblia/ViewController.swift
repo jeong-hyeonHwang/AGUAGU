@@ -449,7 +449,7 @@ extension ViewController {
             let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
             
             for pose in poses {
-                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint)
+                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint, pastStatus: pastHandStatus)
                 switch handStatus {
                 case .possible:
                     break

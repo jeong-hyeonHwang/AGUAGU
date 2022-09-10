@@ -43,7 +43,7 @@ struct HandPose {
     }
     
     func drawWireframeToContext(_ context: CGContext,
-                                applying transform: CGAffineTransform? = nil, point: CGPoint) -> HandStatus {
+                                applying transform: CGAffineTransform? = nil, point: CGPoint, pastStatus: HandStatus) -> HandStatus {
         var returnValue: HandStatus = HandStatus.possible
         
         let scale = drawingScale
@@ -52,6 +52,7 @@ struct HandPose {
             let thumbPoint = landmarks[0].location
             let middlePoint = landmarks[1].location
             let distance = CGPointDistance(from: thumbPoint, to: middlePoint)
+            
             
             let thumbMiddleCenterPoint = CGPoint.midPoint(p1: thumbPoint, p2: middlePoint)
 
@@ -66,20 +67,18 @@ struct HandPose {
                 ViewController.counter += 1
                 context.setFillColor(UIColor.green.cgColor)
                 context.setStrokeColor(UIColor.green.cgColor)
-                if centerLayerPoint.distance(from: point) < 50
+                if centerLayerPoint.distance(from: point) < 45 && pastStatus == .possible
                 {
                     returnValue = .pinched
                 } else {
                     returnValue = .invalid
                 }
-            } else if distance < 0.08 {
-                context.setFillColor(UIColor.yellow.cgColor)
-                context.setStrokeColor(UIColor.yellow.cgColor)
-                returnValue = .possible
             } else {
                 context.setFillColor(UIColor.red.cgColor)
                 context.setStrokeColor(UIColor.red.cgColor)
-                returnValue = .possible
+                if distance > 0.15 {
+                    returnValue = .possible
+                }
             }
         }
         // Draw the landmarks on top of the lines' endpoints.
