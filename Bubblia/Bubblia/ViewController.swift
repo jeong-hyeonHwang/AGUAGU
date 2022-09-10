@@ -36,6 +36,7 @@ class ViewController: UIViewController {
     
     private var gameStart = false
     private var gameOver = false
+    private var gameCanRestart = false
     
     private var highScore: Int = 0
     
@@ -73,7 +74,7 @@ class ViewController: UIViewController {
 
     var videoProcessingChain: VideoProcessingChain!
     
-    private var pastHandStatus: HandStatus = .possible
+    private var pastHandStatus: HandPoseStatus = .possible
     
     override func viewDidLoad() {
         
@@ -273,8 +274,9 @@ class ViewController: UIViewController {
         CATransaction.setCompletionBlock({
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
-            if (currentOpacity as! Double) <= 0.01 {
+            if (currentOpacity as! Double) <= 0.001 {
                 print("-----GAME OVER-----")
+                self.gameOver = true
                 self.layer.isHidden = true
                 
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
@@ -289,7 +291,7 @@ class ViewController: UIViewController {
                     
                     self.drawPath.removeAllPoints()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                        self.gameOver = true
+                        self.gameCanRestart = true
                     })
                 })
             } else {
@@ -404,6 +406,7 @@ class ViewController: UIViewController {
         
         layer.isHidden = false
         gameOver = false
+        gameCanRestart = false
     }
     
 }
@@ -449,7 +452,7 @@ extension ViewController {
             let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
             
             for pose in poses {
-                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint)
+                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint, pastStatus: pastHandStatus)
                 switch handStatus {
                 case .possible:
                     break
@@ -460,7 +463,7 @@ extension ViewController {
                             }
                     }
                 case .invalid:
-                    if gameOver == true && pastHandStatus == .possible {
+                    if gameCanRestart == true && pastHandStatus == .possible {
                         DispatchQueue.main.async {
                             
                             self.gameRestart()
