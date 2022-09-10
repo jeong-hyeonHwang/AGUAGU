@@ -92,6 +92,7 @@ class ViewController: UIViewController {
         ])
         
         videoProcessingChain = VideoProcessingChain()
+        videoProcessingChain.setOneHandDetection()
         videoProcessingChain.delegate = self
 
         videoCapture = VideoCapture()
