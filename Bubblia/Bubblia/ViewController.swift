@@ -274,8 +274,9 @@ class ViewController: UIViewController {
         CATransaction.setCompletionBlock({
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
-            if (currentOpacity as! Double) <= 0.01 {
+            if (currentOpacity as! Double) <= 0.001 {
                 print("-----GAME OVER-----")
+                self.gameOver = true
                 self.layer.isHidden = true
                 
                 self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
@@ -289,7 +290,6 @@ class ViewController: UIViewController {
                     }
                     
                     self.drawPath.removeAllPoints()
-                    self.gameOver = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                         self.gameCanRestart = true
                     })
