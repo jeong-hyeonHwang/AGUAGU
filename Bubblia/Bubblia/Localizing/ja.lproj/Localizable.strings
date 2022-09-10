@@ -6,7 +6,7 @@
   
 */
 
-"Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera]." = "手を検出するためにカメラを使用する権限が必要です。[設定]> [個人情報保護]> [カメラ]で権限を設定できます。";
+"Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera]." = "手を認識するためにカメラを使用する権限が必要です。[設定]> [個人情報保護]> [カメラ]で権限を設定できます。";
 "Can't use camera." = "カメラを使用できません";
 "OK" = "確認";
 "Settings" = "設定";

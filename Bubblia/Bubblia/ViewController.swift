@@ -45,23 +45,15 @@ class ViewController: UIViewController {
     private let middleColor: UIColor = .activeColor ?? .orange
     private let disactiveColor: UIColor = .disactiveColor ?? .red
     
-//    private var duration: CGFloat = 3
-//    private var patienceCount: Int = 0
-//    private let durationMinusValue: CGFloat = 0.025
-//    private let durationMinLimitNum: CGFloat = 0.75
-//    private let durationMaxLimitNum: CGFloat = 3
-//    private var patientLimitNum = 10
-//    private let patientPlusValue: Int = 10
-    
-    private let highScoreNoticeLabel = UILabel()
-    
     private var duration: CGFloat = 3
     private var patienceCount: Int = 0
-    private let durationMinusValue: CGFloat = 0.5
-    private let durationMinLimitNum: CGFloat = 1.5
+    private let durationMinusValue: CGFloat = 0.025
+    private let durationMinLimitNum: CGFloat = 0.75
     private let durationMaxLimitNum: CGFloat = 3
     private var patientLimitNum = 10
     private let patientPlusValue: Int = 10
+    
+    private let highScoreNoticeLabel = UILabel()
     
     private var circleRadius: CGFloat = 60
 
