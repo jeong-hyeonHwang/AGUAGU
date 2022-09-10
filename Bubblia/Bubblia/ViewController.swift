@@ -36,6 +36,7 @@ class ViewController: UIViewController {
     
     private var gameStart = false
     private var gameOver = false
+    private var gameCanRestart = false
     
     private var highScore: Int = 0
     
@@ -288,8 +289,9 @@ class ViewController: UIViewController {
                     }
                     
                     self.drawPath.removeAllPoints()
+                    self.gameOver = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                        self.gameOver = true
+                        self.gameCanRestart = true
                     })
                 })
             } else {
@@ -404,6 +406,7 @@ class ViewController: UIViewController {
         
         layer.isHidden = false
         gameOver = false
+        gameCanRestart = false
     }
     
 }
@@ -460,7 +463,7 @@ extension ViewController {
                             }
                     }
                 case .invalid:
-                    if gameOver == true && pastHandStatus == .possible {
+                    if gameCanRestart == true && pastHandStatus == .possible {
                         DispatchQueue.main.async {
                             
                             self.gameRestart()
