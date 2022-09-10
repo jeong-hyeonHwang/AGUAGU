@@ -6,4 +6,4 @@
   
 */
 
-"NSCameraUsageDescription" = "手を検出するためにカメラを使用する権限が必要です";
+"NSCameraUsageDescription" = "手を認識するためにカメラを使用する権限が必要です";

@@ -6,7 +6,7 @@
   
 */
 
-"Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera]." = "Permissions are required to use the camera. You can set permissions in [Settings] > [Privacy] > [Camera].";
+"Permissions are required to use the camera for hand detection. You can set permissions in [Settings] > [Privacy] > [Camera]." = "Permissions are required to use the camera for find hand. You can set permissions in [Settings] > [Privacy] > [Camera].";
 "Can't use camera." = "Can't use camera.";
 "OK" = "OK";
 "Settings" = "Settings";
