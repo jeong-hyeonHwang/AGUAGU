@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 
     var videoProcessingChain: VideoProcessingChain!
     
-    private var pastHandStatus: HandStatus = .possible
+    private var pastHandStatus: HandPoseStatus = .possible
     
     override func viewDidLoad() {
         

@@ -43,8 +43,8 @@ struct HandPose {
     }
     
     func drawWireframeToContext(_ context: CGContext,
-                                applying transform: CGAffineTransform? = nil, point: CGPoint, pastStatus: HandStatus) -> HandStatus {
-        var returnValue: HandStatus = HandStatus.possible
+                                applying transform: CGAffineTransform? = nil, point: CGPoint, pastStatus: HandPoseStatus) -> HandPoseStatus {
+        var returnValue: HandPoseStatus = HandPoseStatus.possible
         
         let scale = drawingScale
 
