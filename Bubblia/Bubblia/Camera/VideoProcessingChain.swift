@@ -30,10 +30,17 @@ struct VideoProcessingChain {
 extension VideoProcessingChain {
     private mutating func buildProcessingChain() {
         guard upstreamFramePublisher != nil else { return }
-        
+
         frameProcessingChain = upstreamFramePublisher
             .compactMap(imageFromFrame)
             .sink(receiveValue: findPosesInFrame(_:))
+
+    }
+}
+
+extension VideoProcessingChain {
+    func setOneHandDetection() {
+        humanHandPoseRequest.maximumHandCount = 1
     }
 }
 
