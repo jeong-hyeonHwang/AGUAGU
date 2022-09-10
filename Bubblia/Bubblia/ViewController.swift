@@ -68,6 +68,10 @@ class ViewController: UIViewController {
     
     private var pastHandStatus: HandPoseStatus = .possible
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
