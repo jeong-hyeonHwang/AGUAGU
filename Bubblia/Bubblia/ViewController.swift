@@ -197,8 +197,9 @@ class ViewController: UIViewController {
         drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
         particleLayer.fillColor = UIColor.accentColor?.cgColor
         particleLayer.opacity = 0
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -206,10 +207,16 @@ class ViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-//        cameraFeedSession?.stopRunning()
         super.viewWillDisappear(animated)
     }
-        
+     
+    @objc func gameIsOver() {
+        if gameStart == true {
+            gameOver = true
+            setUIGameOver()
+        }
+    }
+    
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
                                                     message: message,
@@ -272,25 +279,7 @@ class ViewController: UIViewController {
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
-                print("-----GAME OVER-----")
-                self.gameOver = true
-                self.layer.isHidden = true
-                
-                self.labelOpacityAnimation(target: self.gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
-                    
-                    print(self.highScore)
-                    print(self.scoreInt)
-                    if self.highScore < self.scoreInt {
-                        self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
-                            self.checkHighScore()
-                        })
-                    }
-                    
-                    self.drawPath.removeAllPoints()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                        self.gameCanRestart = true
-                    })
-                })
+                self.setUIGameOver()
             } else {
                 print(">>> GOGOGO!!! <<<")
             }
@@ -305,6 +294,28 @@ class ViewController: UIViewController {
         layer.add(animation, forKey: "changeOpacity")
         
         CATransaction.commit()
+    }
+    
+    func setUIGameOver() {
+        print("-----GAME OVER-----")
+        gameOver = true
+        layer.isHidden = true
+        
+        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+            
+            print(self.highScore)
+            print(self.scoreInt)
+            if self.highScore < self.scoreInt {
+                self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+                    self.checkHighScore()
+                })
+            }
+            
+            self.drawPath.removeAllPoints()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.gameCanRestart = true
+            })
+        })
     }
     
     func addParticleFadeInOutAnimation() {
