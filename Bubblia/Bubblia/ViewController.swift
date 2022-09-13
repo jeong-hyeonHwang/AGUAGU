@@ -156,7 +156,7 @@ class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "AGUAGU"//"KR◎KR◎N" //"KR◎◎RK"//"B◎BBLIA"
+        nameLabel.text = "AGUAGU"
         nameLabel.textAlignment = .center
         nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
         nameLabel.textColor = accentColor
@@ -196,7 +196,7 @@ class ViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        SoundManager.shared.playBGM()
+//        SoundManager.shared.playBGM()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -328,8 +328,6 @@ class ViewController: UIViewController {
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
-//        animation.fillMode = .forwards
-//        animation.isRemovedOnCompletion = true
         self.particleLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
@@ -452,7 +450,7 @@ extension ViewController {
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
-                            SoundManager.shared.playSFX()
+//                            SoundManager.shared.playSFX()
                                 self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
                             }
                     }
