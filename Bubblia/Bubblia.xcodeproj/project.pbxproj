@@ -19,6 +19,7 @@
 		3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */; };
 		3A7104B728D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A7104B528D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 */; };
 		3A7104B828D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A7104B628D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 */; };
+		3A7104BA28D0B7BE00D84C9F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104B928D0B7BE00D84C9F /* SoundManager.swift */; };
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
 		3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC73328BF2BB100FBD13E /* InfoPlist.strings */; };
 		3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */; };
@@ -47,6 +48,7 @@
 		3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultSetting.swift; sourceTree = "<group>"; };
 		3A7104B528D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_AGUAGUBGM.mp3; sourceTree = "<group>"; };
 		3A7104B628D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_AGUAGUSFX.mp3; sourceTree = "<group>"; };
+		3A7104B928D0B7BE00D84C9F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		3A7CC72B28BF28FF00FBD13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72D28BF2A4F00FBD13E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72E28BF2A5600FBD13E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				3A4A54DF28BD031C00FFE870 /* Constants.swift */,
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
 				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
+				3A7104B928D0B7BE00D84C9F /* SoundManager.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
 				3A4A54CA28BC902A00FFE870 /* Main.storyboard */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
@@ -255,6 +258,7 @@
 				3A4A54C728BC902A00FFE870 /* SceneDelegate.swift in Sources */,
 				3A7CC7B528CA31AB00FBD13E /* VideoProcessingChain.swift in Sources */,
 				3A144B3528BDFE78001DB6F0 /* UIColor+.swift in Sources */,
+				3A7104BA28D0B7BE00D84C9F /* SoundManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

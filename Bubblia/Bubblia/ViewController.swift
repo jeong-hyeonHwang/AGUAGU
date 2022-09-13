@@ -202,24 +202,7 @@ class ViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        do {
-            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().setCategory(
-                AVAudioSession.Category.playback,
-                options: AVAudioSession.CategoryOptions.mixWithOthers)
-        } catch let error {
-            print(error)
-        }
-        
-        let bgmSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "UGAUGA_AGUAGUBGM", ofType: "mp3")!)
-        do {
-            bgmPlayer = try AVAudioPlayer(contentsOf:bgmSource as URL)
-            bgmPlayer.numberOfLoops = -1
-            bgmPlayer.prepareToPlay()
-            bgmPlayer.play()
-        } catch {
-            print("BGM CAN'T PLAY")
-        }
+        SoundManager.shared.playBGM()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -487,6 +470,7 @@ extension ViewController {
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
+                            SoundManager.shared.playSFX()
                                 self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
                             }
                     }
