@@ -15,51 +15,44 @@ class ViewController: UIViewController {
     
     private var cameraView = UIImageView()
     
+    private var videoCapture: VideoCapture!
+    private var videoProcessingChain: VideoProcessingChain!
+    
     private var yellowFruitShape = UIBezierPath()
     private var yellowFruitShapeLayer = CAShapeLayer()
+    
+    private var particleShapeLayer = CAShapeLayer()
+    private var particleShape = UIBezierPath()
     
     private var width: CGFloat = 0
     private var height: CGFloat = 0
     
     private var nameLabel = UILabel()
     private var scoreLabel = UILabel()
-    private var highScoreLabel = UILabel()
+    private let highScoreNoticeLabel = UILabel()
+    private var highScoreValueLabel = UILabel()
     private var gameOverLabel = UILabel()
     
+    private let accentColor: UIColor = .accentColor ?? .yellow
+    
     private var scoreInt: Int = 0
+    private var highScore: Int = 0
+    
+    private var duration: CGFloat = 3
+    private let durationMinusValue: CGFloat = 0.025
+    private let durationMinLimitNum: CGFloat = 0.75
+    private let durationMaxLimitNum: CGFloat = 3
+    private var patienceCount: Int = 0
+    private var patientLimitNum = 10
+    private let patientPlusValue: Int = 10
+    
+    private var circleRadius: CGFloat = 60
     
     private var gameStart = false
     private var gameOver = false
     private var gameCanRestart = false
     
-    private var highScore: Int = 0
-    
-    private let accentColor: UIColor = .accentColor ?? .yellow
-    
-    private var duration: CGFloat = 3
-    private var patienceCount: Int = 0
-    private let durationMinusValue: CGFloat = 0.025
-    private let durationMinLimitNum: CGFloat = 0.75
-    private let durationMaxLimitNum: CGFloat = 3
-    private var patientLimitNum = 10
-    private let patientPlusValue: Int = 10
-    
-    private let highScoreNoticeLabel = UILabel()
-    
-    private var circleRadius: CGFloat = 60
-
-    static var counter: Int = 0
-    
-    private var particleLayer = CAShapeLayer()
-    private var particlePath = UIBezierPath()
-    
-    var videoCapture: VideoCapture!
-
-    var videoProcessingChain: VideoProcessingChain!
-    
     private var pastHandStatus: HandPoseStatus = .possible
-    
-    private var bgmPlayer = AVAudioPlayer()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -130,25 +123,25 @@ class ViewController: UIViewController {
         scoreLabel.textColor = accentColor
         scoreLabel.alpha = 0
         
-        view.addSubview(highScoreLabel)
-        highScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(highScoreValueLabel)
+        highScoreValueLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            highScoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            highScoreLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -height * 0.12),
-            highScoreLabel.heightAnchor.constraint(equalToConstant: 36),
-            highScoreLabel.widthAnchor.constraint(equalToConstant: width)
+            highScoreValueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            highScoreValueLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -height * 0.12),
+            highScoreValueLabel.heightAnchor.constraint(equalToConstant: 36),
+            highScoreValueLabel.widthAnchor.constraint(equalToConstant: width)
         ])
 
-        highScoreLabel.text = highScore == 0 ? "" : "\(highScore)"
-        highScoreLabel.textAlignment = .center
-        highScoreLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        highScoreLabel.textColor = accentColor
+        highScoreValueLabel.text = highScore == 0 ? "" : "\(highScore)"
+        highScoreValueLabel.textAlignment = .center
+        highScoreValueLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
+        highScoreValueLabel.textColor = accentColor
         
         view.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            nameLabel.bottomAnchor.constraint(equalTo: highScoreLabel.topAnchor, constant: 0),
+            nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor, constant: 0),
             nameLabel.heightAnchor.constraint(equalToConstant: 88),
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
@@ -186,10 +179,10 @@ class ViewController: UIViewController {
                     isAuth = .notAuthorized
                 }
         
-        cameraView.layer.addSublayer(particleLayer)
+        cameraView.layer.addSublayer(particleShapeLayer)
         drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
-        particleLayer.fillColor = UIColor.accentColor?.cgColor
-        particleLayer.opacity = 0
+        particleShapeLayer.fillColor = UIColor.accentColor?.cgColor
+        particleShapeLayer.opacity = 0
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
@@ -231,7 +224,7 @@ class ViewController: UIViewController {
         let yValue: CGFloat = 5
         let radius: CGFloat = 3
         
-        particlePath.removeAllPoints()
+        particleShape.removeAllPoints()
 
         for i in 0..<6 {
             var xDistance: CGFloat = 0
@@ -243,14 +236,14 @@ class ViewController: UIViewController {
                 xDistance = -startXDistance - xValue * CGFloat(i%3)
                 yDistance = -startYDistance - yValue * CGFloat(i%3)
             }
-            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance))
-            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y))
-            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-            particlePath.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance))
-            particlePath.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance))
+            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y))
+            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance))
+            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
         }
-        particleLayer.path = particlePath.cgPath
+        particleShapeLayer.path = particleShape.cgPath
     }
     
     func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
@@ -311,21 +304,21 @@ class ViewController: UIViewController {
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             let animation = CABasicAnimation(keyPath: "opacity")
-            animation.fromValue = self.particleLayer.opacity
+            animation.fromValue = self.particleShapeLayer.opacity
             animation.toValue = 0
             animation.duration = 3
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
-            self.particleLayer.add(animation, forKey: "ParticleFadeIn")
+            self.particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
         })
         
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fromValue = particleLayer.opacity
+        animation.fromValue = particleShapeLayer.opacity
         animation.toValue = 1
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
-        self.particleLayer.add(animation, forKey: "ParticleFadeOut")
+        self.particleShapeLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
     }
@@ -469,7 +462,7 @@ extension ViewController {
     private func gameStatusUpdateFunction(middlePoint: CGPoint) {
         if gameStart == false {
             labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-            labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+            labelOpacityAnimation(target: highScoreValueLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
             changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addOpacityChangeAnimation(duration: duration)
