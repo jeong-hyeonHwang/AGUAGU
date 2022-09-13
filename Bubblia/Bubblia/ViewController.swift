@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 import Vision
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     var isAuth: SessionSetupResult! = .success
     
