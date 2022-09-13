@@ -9,12 +9,6 @@ import UIKit
 import AVFoundation
 import Vision
 
-enum SessionSetupResult {
-    case success
-    case notAuthorized
-    case configurationFailed
-}
-
 class ViewController: UIViewController {
     
     var isAuth: SessionSetupResult! = .success
