@@ -68,6 +68,8 @@ class ViewController: UIViewController {
     
     private var pastHandStatus: HandPoseStatus = .possible
     
+    private var bgmPlayer = AVAudioPlayer()
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -199,6 +201,8 @@ class ViewController: UIViewController {
         particleLayer.opacity = 0
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
+        SoundManager.shared.playBGM()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -416,7 +420,6 @@ class ViewController: UIViewController {
         gameOver = false
         gameCanRestart = false
     }
-    
 }
 
 extension ViewController: VideoCaptureDelegate {
@@ -467,6 +470,7 @@ extension ViewController {
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
+                            SoundManager.shared.playSFX()
                                 self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
                             }
                     }
