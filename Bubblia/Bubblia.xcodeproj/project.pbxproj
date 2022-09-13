@@ -98,8 +98,9 @@
 				3A4A54C428BC902A00FFE870 /* AppDelegate.swift */,
 				3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */,
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
-				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
 				3A7104B928D0B7BE00D84C9F /* SoundManager.swift */,
+				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
+				3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
 				3A4A54CA28BC902A00FFE870 /* Main.storyboard */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
@@ -107,7 +108,6 @@
 				3A4A54CD28BC902A00FFE870 /* Bubblia.xcdatamodeld */,
 				3A4A54D028BC902C00FFE870 /* Assets.xcassets */,
 				3A7CC72728BF28B000FBD13E /* Localizing */,
-				3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */,
 			);
 			path = Bubblia;
 			sourceTree = "<group>";

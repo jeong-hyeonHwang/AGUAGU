@@ -62,6 +62,42 @@ class ViewController: UIViewController {
         
         super.viewDidLoad()
         
+        //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
+                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                AppDelegate.orientationLock = .portrait
+        UIApplication.shared.isIdleTimerDisabled = true
+        
+        setCameraViewLayout()
+        setVideoDelegate()
+        
+        initializeProperties()
+        setUILabel()
+        setShapeLayer()
+        
+        checkCaptureDeviceAuthorization()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
+//        SoundManager.shared.playBGM()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        videoCapture.cameraPermissionCheck(vc: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+     
+    @objc func gameIsOver() {
+        if gameStart == true {
+            gameOver = true
+            setUIGameOver()
+        }
+    }
+    
+    private func setCameraViewLayout() {
         view.backgroundColor = .black
         
         view.addSubview(cameraView)
@@ -72,30 +108,24 @@ class ViewController: UIViewController {
             cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
             cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
         ])
-        
+    }
+    
+    private func setVideoDelegate() {
         videoProcessingChain = VideoProcessingChain()
         videoProcessingChain.setOneHandDetection()
         videoProcessingChain.delegate = self
 
         videoCapture = VideoCapture()
         videoCapture.delegate = self
-        
-        //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
-                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-                AppDelegate.orientationLock = .portrait
-        
-        UIApplication.shared.isIdleTimerDisabled = true
-        
+    }
+    
+    private func initializeProperties() {
         width = view.bounds.maxX
         height = view.bounds.maxY
-        
         circleRadius = height * 30 / 844
-        
-        yellowFruitShape.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-        yellowFruitShapeLayer.path = yellowFruitShape.cgPath
-        yellowFruitShapeLayer.fillColor = accentColor.cgColor
-        view.layer.addSublayer(yellowFruitShapeLayer)
-        
+    }
+    
+    private func setUILabel() {
         view.addSubview(highScoreNoticeLabel)
         highScoreNoticeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -116,7 +146,6 @@ class ViewController: UIViewController {
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
         highScore = getHighScore()
-        print("Recorded High Score is \(highScore)")
         scoreLabel.text = highScore == 0 ? "" : "\(highScore)"
         scoreLabel.textAlignment = .center
         scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
@@ -165,7 +194,21 @@ class ViewController: UIViewController {
         gameOverLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
         gameOverLabel.textColor = accentColor
         gameOverLabel.alpha = 0
+    }
+    
+    private func setShapeLayer() {
+        yellowFruitShape.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        yellowFruitShapeLayer.path = yellowFruitShape.cgPath
+        yellowFruitShapeLayer.fillColor = accentColor.cgColor
+        view.layer.addSublayer(yellowFruitShapeLayer)
         
+        cameraView.layer.addSublayer(particleShapeLayer)
+        drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
+        particleShapeLayer.fillColor = UIColor.accentColor?.cgColor
+        particleShapeLayer.opacity = 0
+    }
+    
+    private func checkCaptureDeviceAuthorization() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
                 case .authorized:
                     break
@@ -177,31 +220,6 @@ class ViewController: UIViewController {
                     })
                 default:
                     isAuth = .notAuthorized
-                }
-        
-        cameraView.layer.addSublayer(particleShapeLayer)
-        drawParticle(centerPoint: CGPoint(x: width/2, y: height/2))
-        particleShapeLayer.fillColor = UIColor.accentColor?.cgColor
-        particleShapeLayer.opacity = 0
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        
-//        SoundManager.shared.playBGM()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        videoCapture.cameraPermissionCheck(vc: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-     
-    @objc func gameIsOver() {
-        if gameStart == true {
-            gameOver = true
-            setUIGameOver()
         }
     }
     
@@ -215,9 +233,9 @@ class ViewController: UIViewController {
             }
             
             self.present(alertController, animated: true, completion: nil)
-        }
+    }
     
-    func drawParticle(centerPoint: CGPoint) {
+    private func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
         let startYDistance: CGFloat = 18
         let xValue: CGFloat = 12
@@ -246,7 +264,7 @@ class ViewController: UIViewController {
         particleShapeLayer.path = particleShape.cgPath
     }
     
-    func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
+    private func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
         layer.opacity = 0
         
         let randomX = CGFloat.random(in: 100...width-100)
