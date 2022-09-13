@@ -15,8 +15,8 @@ class ViewController: UIViewController {
     
     private var cameraView = UIImageView()
     
-    private var layer = CAShapeLayer()
-    private var drawPath = UIBezierPath()
+    private var yellowFruitShape = UIBezierPath()
+    private var yellowFruitShapeLayer = CAShapeLayer()
     
     private var width: CGFloat = 0
     private var height: CGFloat = 0
@@ -35,9 +35,6 @@ class ViewController: UIViewController {
     private var highScore: Int = 0
     
     private let accentColor: UIColor = .accentColor ?? .yellow
-    private let activeColor: UIColor = .activeColor ?? .green
-    private let middleColor: UIColor = .activeColor ?? .orange
-    private let disactiveColor: UIColor = .disactiveColor ?? .red
     
     private var duration: CGFloat = 3
     private var patienceCount: Int = 0
@@ -101,10 +98,10 @@ class ViewController: UIViewController {
         
         circleRadius = height * 30 / 844
         
-        drawPath.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-        layer.path = drawPath.cgPath
-        layer.fillColor = accentColor.cgColor
-        view.layer.addSublayer(layer)
+        yellowFruitShape.addArc(withCenter: CGPoint(x: width/2, y: height * 0.38), radius: circleRadius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        yellowFruitShapeLayer.path = yellowFruitShape.cgPath
+        yellowFruitShapeLayer.fillColor = accentColor.cgColor
+        view.layer.addSublayer(yellowFruitShapeLayer)
         
         view.addSubview(highScoreNoticeLabel)
         highScoreNoticeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -275,26 +272,26 @@ class ViewController: UIViewController {
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
-            let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
+            let currentOpacity = self.yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
                 self.setUIGameOver()
             }
         })
         
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fromValue = layer.opacity
+        animation.fromValue = yellowFruitShapeLayer.opacity
         animation.toValue = 0
         animation.duration = duration
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
-        layer.add(animation, forKey: "changeOpacity")
+        yellowFruitShapeLayer.add(animation, forKey: "changeOpacity")
         
         CATransaction.commit()
     }
     
     private func setUIGameOver() {
         gameOver = true
-        layer.isHidden = true
+        yellowFruitShapeLayer.isHidden = true
         
         labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
             if self.highScore < self.scoreInt {
@@ -303,7 +300,7 @@ class ViewController: UIViewController {
                 })
             }
             
-            self.drawPath.removeAllPoints()
+            self.yellowFruitShape.removeAllPoints()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 self.gameCanRestart = true
             })
@@ -394,10 +391,10 @@ class ViewController: UIViewController {
         labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
         returnToDefaultScore()
         returnToDefaultDuration()
-        changePosition(layer: layer, path: drawPath)
+        changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
         addOpacityChangeAnimation(duration: duration)
         
-        layer.isHidden = false
+        yellowFruitShapeLayer.isHidden = false
         gameOver = false
         gameCanRestart = false
     }
@@ -440,10 +437,10 @@ extension ViewController {
             
             guard let poses = poses else { return }
 
-            let drawPathMiddlePoint = CGPoint(x: drawPath.bounds.midX, y: drawPath.bounds.midY)
+            let yellowFruitShapeMiddlePoint = CGPoint(x: yellowFruitShape.bounds.midX, y: yellowFruitShape.bounds.midY)
             
             for pose in poses {
-                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: drawPathMiddlePoint, pastStatus: pastHandStatus)
+                let handStatus = pose.drawWireframeToContext(cgContext, applying: pointTransform, point: yellowFruitShapeMiddlePoint, pastStatus: pastHandStatus)
                 switch handStatus {
                 case .possible:
                     break
@@ -451,7 +448,7 @@ extension ViewController {
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
 //                            SoundManager.shared.playSFX()
-                                self.gameStatusUpdateFunction(middlePoint: drawPathMiddlePoint)
+                                self.gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
                             }
                     }
                 case .invalid:
@@ -474,14 +471,14 @@ extension ViewController {
             labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
-            changePosition(layer: layer, path: drawPath)
+            changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addOpacityChangeAnimation(duration: duration)
             updateScore()
             updateDuration()
             gameStart = true
         } else if gameOver == false {
             drawParticle(centerPoint: middlePoint)
-            changePosition(layer: layer, path: drawPath)
+            changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addOpacityChangeAnimation(duration: duration)
             updateScore()
             updateDuration()
