@@ -13,8 +13,10 @@ typealias Frame = CMSampleBuffer
 typealias FramePublisher = AnyPublisher<Frame, Never>
 
 protocol VideoCaptureDelegate: AnyObject {
+    
     func videoCapture(_ videoCapture: VideoCapture,
                       didCreate framePublisher: FramePublisher)
+    
 }
 
 class VideoCapture: NSObject {
@@ -99,15 +101,18 @@ class VideoCapture: NSObject {
 }
 
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
+    
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput frame: Frame,
                        from connection: AVCaptureConnection) {
 
         framePublisher?.send(frame)
     }
+    
 }
 
 extension VideoCapture {
+    
     private func createVideoFramePublisher() {
         guard let videoDataOutput = configureCaptureSession() else { return }
 
@@ -197,4 +202,5 @@ extension VideoCapture {
 
         return true
     }
+    
 }

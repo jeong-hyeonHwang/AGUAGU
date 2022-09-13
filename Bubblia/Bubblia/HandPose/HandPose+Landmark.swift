@@ -9,6 +9,7 @@ import UIKit
 import Vision
 
 extension HandPose {
+    
     typealias JointName = VNHumanHandPoseObservation.JointName
 
     struct Landmark {

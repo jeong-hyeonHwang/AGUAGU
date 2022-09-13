@@ -86,10 +86,6 @@ class ViewController: UIViewController {
         videoCapture.cameraPermissionCheck(vc: self)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-     
     @objc func gameIsOver() {
         if gameStart == true {
             gameOver = true
@@ -412,13 +408,16 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: VideoCaptureDelegate {
+    
     func videoCapture(_ videoCapture: VideoCapture,
                       didCreate framePublisher: FramePublisher) {
         videoProcessingChain.upstreamFramePublisher = framePublisher
     }
+    
 }
 
 extension ViewController: VideoProcessingChainDelegate {
+    
     func videoProcessingChain(_ chain: VideoProcessingChain,
                               didDetect poses: [HandPose]?,
                               in frame: CGImage) {
@@ -426,9 +425,11 @@ extension ViewController: VideoProcessingChainDelegate {
             self.drawPoses(poses, onto: frame)
         }
     }
+    
 }
 
 extension ViewController {
+    
     private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
         let renderFormat = UIGraphicsImageRendererFormat()
         renderFormat.scale = 1.0
@@ -497,5 +498,6 @@ extension ViewController {
             addParticleFadeInOutAnimation()
         }
     }
+    
 }
 

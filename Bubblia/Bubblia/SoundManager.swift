@@ -8,6 +8,7 @@
 import AVFoundation
 
 class SoundManager {
+    
     static var shared = SoundManager()
     private var bgmPlayer = AVAudioPlayer()
     private var sfxPlayer = AVAudioPlayer()
@@ -48,4 +49,5 @@ class SoundManager {
         }
         sfxPlayer.play()
     }
+    
 }
