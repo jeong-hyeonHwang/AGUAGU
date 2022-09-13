@@ -278,8 +278,6 @@ class ViewController: UIViewController {
             let currentOpacity = self.layer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
                 self.setUIGameOver()
-            } else {
-                print(">>> GOGOGO!!! <<<")
             }
         })
         
@@ -295,14 +293,10 @@ class ViewController: UIViewController {
     }
     
     func setUIGameOver() {
-        print("-----GAME OVER-----")
         gameOver = true
         layer.isHidden = true
         
         labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
-            
-            print(self.highScore)
-            print(self.scoreInt)
             if self.highScore < self.scoreInt {
                 self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
                     self.checkHighScore()
@@ -353,17 +347,14 @@ class ViewController: UIViewController {
     func updateDuration() {
         if duration != durationMinLimitNum {
             duration -= durationMinusValue
-            print("CURRENT DURATION IS \(duration)")
         } else {
             patienceCount += 1
-            print("BE PATIENT \(patienceCount)")
             if patienceCount == patientLimitNum {
                 patienceCount = 0
                 if patientLimitNum != 50 {
                     patientLimitNum += patientPlusValue
                 }
                 duration = durationMaxLimitNum
-                print("PATIENT IS OVER")
             }
         }
     }
@@ -396,9 +387,6 @@ class ViewController: UIViewController {
         if highScore < scoreInt {
             setHighScore(value: scoreInt)
             highScore = scoreInt
-            print("### HIGHSCORE \(highScore) ###")
-        } else {
-            print(">>> SAME HIGHSCORE <<<")
         }
     }
     
@@ -494,7 +482,6 @@ extension ViewController {
             updateDuration()
             gameStart = true
         } else if gameOver == false {
-            print(":::PINCH:::")
             drawParticle(centerPoint: middlePoint)
             changePosition(layer: layer, path: drawPath)
             addOpacityChangeAnimation(duration: duration)

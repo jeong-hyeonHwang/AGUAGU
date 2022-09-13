@@ -57,7 +57,6 @@ class VideoCapture: NSObject {
         videoCaptureQueue.async {
                             switch vc.isAuth {
                             case .success:
-                                //self.session.startRunning()
                                 break
                             // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
                             case .notAuthorized:
