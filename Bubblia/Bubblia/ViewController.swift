@@ -290,7 +290,7 @@ extension ViewController {
         particleShapeLayer.path = particleShape.cgPath
     }
     
-    private func changePosition(layer: CAShapeLayer, path: UIBezierPath) {
+    private func changeFruitPosition(layer: CAShapeLayer, path: UIBezierPath) {
         layer.opacity = 0
         
         let randomX = CGFloat.random(in: 100...width-100)
@@ -304,7 +304,7 @@ extension ViewController {
         layer.opacity = 1
     }
     
-    private func addOpacityChangeAnimation(duration: CGFloat) {
+    private func addYellowFruitOpacityAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
         CATransaction.setCompletionBlock({
@@ -344,7 +344,7 @@ extension ViewController {
         })
     }
     
-    private func addParticleFadeInOutAnimation() {
+    private func addParticleBlinkAnimation() {
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             let animation = CABasicAnimation(keyPath: "opacity")
@@ -426,10 +426,10 @@ extension ViewController {
     private func gameRestart() {
         labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
         labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+        changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
+        addYellowFruitOpacityAnimation(duration: duration)
         returnToDefaultScore()
         returnToDefaultDuration()
-        changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
-        addOpacityChangeAnimation(duration: duration)
         
         yellowFruitShapeLayer.isHidden = false
         gameOver = false
@@ -493,19 +493,19 @@ extension ViewController {
             labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: highScoreValueLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
-            changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
-            addOpacityChangeAnimation(duration: duration)
+            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
+            addYellowFruitOpacityAnimation(duration: duration)
             updateScore()
             updateDuration()
             gameStart = true
         } else if gameOver == false {
             drawParticle(centerPoint: middlePoint)
-            changePosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
-            addOpacityChangeAnimation(duration: duration)
+            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
+            addYellowFruitOpacityAnimation(duration: duration)
             updateScore()
             updateDuration()
             drawParticle(centerPoint: middlePoint)
-            addParticleFadeInOutAnimation()
+            addParticleBlinkAnimation()
         }
     }
     
