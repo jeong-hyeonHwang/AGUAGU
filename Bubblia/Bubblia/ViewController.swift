@@ -218,6 +218,31 @@ class ViewController: UIViewController {
                     isAuth = .notAuthorized
         }
     }
+}
+
+extension ViewController: VideoCaptureDelegate {
+    
+    func videoCapture(_ videoCapture: VideoCapture,
+                      didCreate framePublisher: FramePublisher) {
+        videoProcessingChain.upstreamFramePublisher = framePublisher
+    }
+    
+}
+
+extension ViewController: VideoProcessingChainDelegate {
+    
+    func videoProcessingChain(_ chain: VideoProcessingChain,
+                              didDetect poses: [HandPose]?,
+                              in frame: CGImage) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.drawPoses(poses, onto: frame)
+        }
+    }
+    
+}
+
+/// ViewController Extension for Alert
+extension ViewController {
     
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
@@ -230,6 +255,11 @@ class ViewController: UIViewController {
             
             self.present(alertController, animated: true, completion: nil)
     }
+    
+}
+
+/// ViewController Extension for Game UI & Value Update
+extension ViewController {
     
     private func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
@@ -404,26 +434,6 @@ class ViewController: UIViewController {
         yellowFruitShapeLayer.isHidden = false
         gameOver = false
         gameCanRestart = false
-    }
-}
-
-extension ViewController: VideoCaptureDelegate {
-    
-    func videoCapture(_ videoCapture: VideoCapture,
-                      didCreate framePublisher: FramePublisher) {
-        videoProcessingChain.upstreamFramePublisher = framePublisher
-    }
-    
-}
-
-extension ViewController: VideoProcessingChainDelegate {
-    
-    func videoProcessingChain(_ chain: VideoProcessingChain,
-                              didDetect poses: [HandPose]?,
-                              in frame: CGImage) {
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.drawPoses(poses, onto: frame)
-        }
     }
     
 }
