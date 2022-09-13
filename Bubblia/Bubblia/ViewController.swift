@@ -270,7 +270,7 @@ class ViewController: UIViewController {
         layer.opacity = 1
     }
     
-    func addOpacityChangeAnimation(duration: CGFloat) {
+    private func addOpacityChangeAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
         CATransaction.setCompletionBlock({
@@ -292,7 +292,7 @@ class ViewController: UIViewController {
         CATransaction.commit()
     }
     
-    func setUIGameOver() {
+    private func setUIGameOver() {
         gameOver = true
         layer.isHidden = true
         
@@ -310,7 +310,7 @@ class ViewController: UIViewController {
         })
     }
     
-    func addParticleFadeInOutAnimation() {
+    private func addParticleFadeInOutAnimation() {
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             let animation = CABasicAnimation(keyPath: "opacity")
@@ -332,17 +332,18 @@ class ViewController: UIViewController {
         
         CATransaction.commit()
     }
-    func updateScore() {
+    
+    private func updateScore() {
         scoreInt += 1
         scoreLabelTextAnimation()
     }
     
-    func returnToDefaultScore() {
+    private func returnToDefaultScore() {
         scoreInt = 1
         scoreLabelTextAnimation()
     }
     
-    func updateDuration() {
+    private func updateDuration() {
         if duration != durationMinLimitNum {
             duration -= durationMinusValue
         } else {
@@ -357,13 +358,13 @@ class ViewController: UIViewController {
         }
     }
     
-    func returnToDefaultDuration() {
+    private func returnToDefaultDuration() {
         duration = durationMaxLimitNum
         patienceCount = 0
         patientLimitNum = patientPlusValue
     }
     
-    func scoreLabelTextAnimation() {
+    private func scoreLabelTextAnimation() {
         UIView.transition(with: scoreLabel,
                           duration: 0.15,
                           options: .transitionFlipFromLeft,
@@ -372,7 +373,7 @@ class ViewController: UIViewController {
         }, completion: nil)
     }
     
-    func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: @escaping (Bool) -> Void) {
+    private func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: @escaping (Bool) -> Void) {
         UIView.transition(with: target,
                           duration: duration,
                           options: .transitionCrossDissolve,
@@ -381,14 +382,14 @@ class ViewController: UIViewController {
         }, completion: completion)
     }
     
-    func checkHighScore() {
+    private func checkHighScore() {
         if highScore < scoreInt {
             setHighScore(value: scoreInt)
             highScore = scoreInt
         }
     }
     
-    func gameRestart() {
+    private func gameRestart() {
         labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
         labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
         returnToDefaultScore()
@@ -436,7 +437,6 @@ extension ViewController {
 
             let pointTransform = CGAffineTransform(scaleX: frameSize.width,
                                                    y: frameSize.height)
-
             
             guard let poses = poses else { return }
 
@@ -469,7 +469,7 @@ extension ViewController {
         DispatchQueue.main.async { self.cameraView.image = frameWithPosesRendering }
     }
     
-    func gameStatusUpdateFunction(middlePoint: CGPoint) {
+    private func gameStatusUpdateFunction(middlePoint: CGPoint) {
         if gameStart == false {
             labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
             labelOpacityAnimation(target: highScoreLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
