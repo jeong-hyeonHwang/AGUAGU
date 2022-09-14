@@ -46,6 +46,7 @@ final class ViewController: UIViewController {
     private let durationMaxLimitNum: CGFloat = 3
     private var patienceCount: Int = 0
     private var patientLimitNum = 10
+    private var patientMaxLimitNum = 50
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
@@ -370,7 +371,7 @@ extension ViewController {
             patienceCount += 1
             if patienceCount == patientLimitNum {
                 patienceCount = 0
-                if patientLimitNum != 50 {
+                if patientLimitNum != patientMaxLimitNum {
                     patientLimitNum += patientPlusValue
                 }
                 duration = durationMaxLimitNum
