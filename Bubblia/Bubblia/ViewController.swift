@@ -81,7 +81,7 @@ final class ViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        SoundManager.shared.playBGM()
+//        SoundManager.shared.playBGM()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -455,7 +455,7 @@ extension ViewController {
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
-                            SoundManager.shared.playSFX()
+//                            SoundManager.shared.playSFX()
                                 self.gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
                             }
                     }
