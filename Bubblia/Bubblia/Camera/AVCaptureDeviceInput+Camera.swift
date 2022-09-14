@@ -8,7 +8,6 @@
 import AVFoundation
 
 extension AVCaptureDeviceInput {
-    
     static func createCameraInput(frameRate: Double) -> AVCaptureDeviceInput? {
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: AVMediaType.video,
@@ -27,5 +26,4 @@ extension AVCaptureDeviceInput {
             return nil
         }
     }
-    
 }

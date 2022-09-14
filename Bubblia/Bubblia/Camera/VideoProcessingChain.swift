@@ -10,15 +10,12 @@ import Combine
 import CoreImage
 
 protocol VideoProcessingChainDelegate: AnyObject {
-    
     func videoProcessingChain(_ chain: VideoProcessingChain,
                               didDetect poses: [HandPose]?,
                               in frame: CGImage)
-    
 }
 
 struct VideoProcessingChain {
-    
     weak var delegate: VideoProcessingChainDelegate?
 
     var upstreamFramePublisher: AnyPublisher<Frame, Never>! {
@@ -28,11 +25,9 @@ struct VideoProcessingChain {
     private var frameProcessingChain: AnyCancellable?
 
     private let humanHandPoseRequest = VNDetectHumanHandPoseRequest()
-    
 }
 
 extension VideoProcessingChain {
-    
     private mutating func buildProcessingChain() {
         guard upstreamFramePublisher != nil else { return }
 
@@ -41,19 +36,15 @@ extension VideoProcessingChain {
             .sink(receiveValue: findPosesInFrame(_:))
 
     }
-    
 }
 
 extension VideoProcessingChain {
-    
     func setOneHandDetection() {
         humanHandPoseRequest.maximumHandCount = 1
     }
-    
 }
 
 extension VideoProcessingChain {
-    
     private func imageFromFrame(_ buffer: Frame) -> CGImage? {
 
         guard let imageBuffer = buffer.imageBuffer else {

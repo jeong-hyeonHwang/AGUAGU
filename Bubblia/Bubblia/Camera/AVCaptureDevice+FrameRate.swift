@@ -8,7 +8,6 @@
 import AVFoundation
 
 extension AVCaptureDevice {
-    
     func configureFrameRate(_ frameRate: Double) -> Bool {
         do { try lockForConfiguration() } catch {
             print("`AVCaptureDevice` wasn't unable to lock: \(error)")

@@ -33,6 +33,8 @@ final class ViewController: UIViewController {
     private var highScoreValueLabel = UILabel()
     private var gameOverLabel = UILabel()
     
+    private let opacityAnimDuration: CGFloat = 0.25
+    
     private let accentColor: UIColor = .accentColor ?? .yellow
     
     private var scoreInt: Int = 0
@@ -44,6 +46,7 @@ final class ViewController: UIViewController {
     private let durationMaxLimitNum: CGFloat = 3
     private var patienceCount: Int = 0
     private var patientLimitNum = 10
+    private var patientMaxLimitNum = 50
     private let patientPlusValue: Int = 10
     
     private var circleRadius: CGFloat = 60
@@ -99,10 +102,10 @@ final class ViewController: UIViewController {
         view.addSubview(cameraView)
         cameraView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cameraView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+            cameraView.topAnchor.constraint(equalTo: view.topAnchor),
+            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -131,21 +134,14 @@ final class ViewController: UIViewController {
             highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        highScoreNoticeLabel.text = "HIGHSCORE"
-        highScoreNoticeLabel.textAlignment = .center
-        highScoreNoticeLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-        highScoreNoticeLabel.textColor = accentColor
+        labelSetting(label: highScoreNoticeLabel, text: "HIGHSCORE", fontSize: 24, weight: .regular)
         highScoreNoticeLabel.alpha = 0
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
-        highScore = getHighScore()
-        scoreLabel.text = highScore == 0 ? "" : "\(highScore)"
-        scoreLabel.textAlignment = .center
-        scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
-        scoreLabel.textColor = accentColor
+        labelSetting(label: scoreLabel, text: "", fontSize: 60, weight: .regular)
         scoreLabel.alpha = 0
         
         view.addSubview(highScoreValueLabel)
@@ -157,24 +153,20 @@ final class ViewController: UIViewController {
             highScoreValueLabel.widthAnchor.constraint(equalToConstant: width)
         ])
 
-        highScoreValueLabel.text = highScore == 0 ? "" : "\(highScore)"
-        highScoreValueLabel.textAlignment = .center
-        highScoreValueLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        highScoreValueLabel.textColor = accentColor
+        highScore = getHighScore()
+        let highScoreText = highScore == 0 ? "" : "\(highScore)"
+        labelSetting(label: highScoreValueLabel, text: highScoreText, fontSize: 48, weight: .medium)
         
         view.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor, constant: 0),
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor),
             nameLabel.heightAnchor.constraint(equalToConstant: 88),
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "AGUAGU"
-        nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
-        nameLabel.textColor = accentColor
+        labelSetting(label: nameLabel, text: "AGUAGU", fontSize: 64, weight: .bold)
         
         view.addSubview(gameOverLabel)
         gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -185,11 +177,15 @@ final class ViewController: UIViewController {
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        gameOverLabel.text = "GAME OVER"
-        gameOverLabel.textAlignment = .center
-        gameOverLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
-        gameOverLabel.textColor = accentColor
+        labelSetting(label: gameOverLabel, text: "GAME OVER", fontSize: 36, weight: .semibold)
         gameOverLabel.alpha = 0
+    }
+    
+    private func labelSetting(label: UILabel, text: String, fontSize: CGFloat, weight: UIFont.Weight) {
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+        label.textColor = accentColor
     }
     
     private func setShapeLayer() {
@@ -221,16 +217,13 @@ final class ViewController: UIViewController {
 }
 
 extension ViewController: VideoCaptureDelegate {
-    
     func videoCapture(_ videoCapture: VideoCapture,
                       didCreate framePublisher: FramePublisher) {
         videoProcessingChain.upstreamFramePublisher = framePublisher
     }
-    
 }
 
 extension ViewController: VideoProcessingChainDelegate {
-    
     func videoProcessingChain(_ chain: VideoProcessingChain,
                               didDetect poses: [HandPose]?,
                               in frame: CGImage) {
@@ -238,29 +231,23 @@ extension ViewController: VideoProcessingChainDelegate {
             self.drawPoses(poses, onto: frame)
         }
     }
-    
 }
 
 /// ViewController Extension for Alert
 extension ViewController {
-    
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
                                                     message: message,
                                                     preferredStyle: .alert)
-            
             actions.forEach {
                 alertController.addAction($0)
             }
-            
             self.present(alertController, animated: true, completion: nil)
     }
-    
 }
 
 /// ViewController Extension for Game UI & Value Update
 extension ViewController {
-    
     private func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
         let startYDistance: CGFloat = 18
@@ -270,9 +257,10 @@ extension ViewController {
         
         particleShape.removeAllPoints()
 
+        var xDistance: CGFloat = 0
+        var yDistance: CGFloat = 0
+        
         for i in 0..<6 {
-            var xDistance: CGFloat = 0
-            var yDistance: CGFloat = 0
             if i < 3 {
                 xDistance = startXDistance + xValue * CGFloat(i)
                 yDistance = startYDistance + yValue * CGFloat(i)
@@ -307,9 +295,9 @@ extension ViewController {
     private func addYellowFruitOpacityAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
-        CATransaction.setCompletionBlock({
+        CATransaction.setCompletionBlock({ [self] in
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
-            let currentOpacity = self.yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
+            let currentOpacity = yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
                 self.setUIGameOver()
             }
@@ -330,14 +318,14 @@ extension ViewController {
         gameOver = true
         yellowFruitShapeLayer.isHidden = true
         
-        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
-            if self.highScore < self.scoreInt {
-                self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+        labelOpacityAnimation(target: gameOverLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: { [self] _ in
+            if highScore < scoreInt {
+                labelOpacityAnimation(target: highScoreNoticeLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: { _ in
                     self.checkHighScore()
                 })
             }
             
-            self.yellowFruitShape.removeAllPoints()
+            yellowFruitShape.removeAllPoints()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 self.gameCanRestart = true
             })
@@ -346,14 +334,14 @@ extension ViewController {
     
     private func addParticleBlinkAnimation() {
         CATransaction.begin()
-        CATransaction.setCompletionBlock({
+        CATransaction.setCompletionBlock({ [self] in
             let animation = CABasicAnimation(keyPath: "opacity")
-            animation.fromValue = self.particleShapeLayer.opacity
+            animation.fromValue = particleShapeLayer.opacity
             animation.toValue = 0
-            animation.duration = 3
+            animation.duration = 0.1
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
-            self.particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
+            particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
         })
         
         let animation = CABasicAnimation(keyPath: "opacity")
@@ -362,7 +350,7 @@ extension ViewController {
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
-        self.particleShapeLayer.add(animation, forKey: "ParticleFadeOut")
+        particleShapeLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
     }
@@ -384,7 +372,7 @@ extension ViewController {
             patienceCount += 1
             if patienceCount == patientLimitNum {
                 patienceCount = 0
-                if patientLimitNum != 50 {
+                if patientLimitNum != patientMaxLimitNum {
                     patientLimitNum += patientPlusValue
                 }
                 duration = durationMaxLimitNum
@@ -407,7 +395,7 @@ extension ViewController {
         }, completion: nil)
     }
     
-    private func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: @escaping (Bool) -> Void) {
+    private func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: ((Bool) -> Void)? = nil) {
         UIView.transition(with: target,
                           duration: duration,
                           options: .transitionCrossDissolve,
@@ -424,8 +412,8 @@ extension ViewController {
     }
     
     private func gameRestart() {
-        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-        labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+        labelOpacityAnimation(target: gameOverLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+        labelOpacityAnimation(target: highScoreNoticeLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
         changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
         addYellowFruitOpacityAnimation(duration: duration)
         returnToDefaultScore()
@@ -435,11 +423,9 @@ extension ViewController {
         gameOver = false
         gameCanRestart = false
     }
-    
 }
 
 extension ViewController {
-    
     private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
         let renderFormat = UIGraphicsImageRendererFormat()
         renderFormat.scale = 1.0
@@ -476,7 +462,6 @@ extension ViewController {
                 case .invalid:
                     if gameCanRestart == true && pastHandStatus == .possible {
                         DispatchQueue.main.async {
-                            
                             self.gameRestart()
                         }
                     }
@@ -490,9 +475,9 @@ extension ViewController {
     
     private func gameStatusUpdateFunction(middlePoint: CGPoint) {
         if gameStart == false {
-            labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-            labelOpacityAnimation(target: highScoreValueLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-            labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+            labelOpacityAnimation(target: nameLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: highScoreValueLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: scoreLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: nil)
             changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addYellowFruitOpacityAnimation(duration: duration)
             updateScore()
@@ -508,6 +493,5 @@ extension ViewController {
             addParticleBlinkAnimation()
         }
     }
-    
 }
 
