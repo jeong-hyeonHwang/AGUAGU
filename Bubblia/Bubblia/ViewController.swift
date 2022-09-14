@@ -33,6 +33,8 @@ final class ViewController: UIViewController {
     private var highScoreValueLabel = UILabel()
     private var gameOverLabel = UILabel()
     
+    private let opacityAnimDuration: CGFloat = 0.25
+    
     private let accentColor: UIColor = .accentColor ?? .yellow
     
     private var scoreInt: Int = 0
@@ -291,9 +293,9 @@ extension ViewController {
     private func addYellowFruitOpacityAnimation(duration: CGFloat) {
         // https://ios-development.tistory.com/937
         CATransaction.begin()
-        CATransaction.setCompletionBlock({
+        CATransaction.setCompletionBlock({ [self] in
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
-            let currentOpacity = self.yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
+            let currentOpacity = yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
                 self.setUIGameOver()
             }
@@ -314,14 +316,14 @@ extension ViewController {
         gameOver = true
         yellowFruitShapeLayer.isHidden = true
         
-        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
-            if self.highScore < self.scoreInt {
-                self.labelOpacityAnimation(target: self.highScoreNoticeLabel, duration: 0.25, targetOpacity: 1, completion: { _ in
+        labelOpacityAnimation(target: gameOverLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: { [self] _ in
+            if highScore < scoreInt {
+                labelOpacityAnimation(target: highScoreNoticeLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: { _ in
                     self.checkHighScore()
                 })
             }
             
-            self.yellowFruitShape.removeAllPoints()
+            yellowFruitShape.removeAllPoints()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 self.gameCanRestart = true
             })
@@ -330,14 +332,14 @@ extension ViewController {
     
     private func addParticleBlinkAnimation() {
         CATransaction.begin()
-        CATransaction.setCompletionBlock({
+        CATransaction.setCompletionBlock({ [self] in
             let animation = CABasicAnimation(keyPath: "opacity")
-            animation.fromValue = self.particleShapeLayer.opacity
+            animation.fromValue = particleShapeLayer.opacity
             animation.toValue = 0
             animation.duration = 3
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
-            self.particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
+            particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
         })
         
         let animation = CABasicAnimation(keyPath: "opacity")
@@ -346,7 +348,7 @@ extension ViewController {
         animation.duration = 0.1
         animation.autoreverses = true
         animation.repeatCount = 2
-        self.particleShapeLayer.add(animation, forKey: "ParticleFadeOut")
+        particleShapeLayer.add(animation, forKey: "ParticleFadeOut")
         
         CATransaction.commit()
     }
@@ -391,7 +393,7 @@ extension ViewController {
         }, completion: nil)
     }
     
-    private func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: @escaping (Bool) -> Void) {
+    private func labelOpacityAnimation(target: UILabel, duration: CGFloat, targetOpacity: CGFloat, completion: ((Bool) -> Void)? = nil) {
         UIView.transition(with: target,
                           duration: duration,
                           options: .transitionCrossDissolve,
@@ -408,8 +410,8 @@ extension ViewController {
     }
     
     private func gameRestart() {
-        labelOpacityAnimation(target: gameOverLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-        labelOpacityAnimation(target: highScoreNoticeLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
+        labelOpacityAnimation(target: gameOverLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+        labelOpacityAnimation(target: highScoreNoticeLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
         changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
         addYellowFruitOpacityAnimation(duration: duration)
         returnToDefaultScore()
@@ -458,7 +460,6 @@ extension ViewController {
                 case .invalid:
                     if gameCanRestart == true && pastHandStatus == .possible {
                         DispatchQueue.main.async {
-                            
                             self.gameRestart()
                         }
                     }
@@ -472,9 +473,9 @@ extension ViewController {
     
     private func gameStatusUpdateFunction(middlePoint: CGPoint) {
         if gameStart == false {
-            labelOpacityAnimation(target: nameLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-            labelOpacityAnimation(target: highScoreValueLabel, duration: 0.25, targetOpacity: 0, completion: { _ in })
-            labelOpacityAnimation(target: scoreLabel, duration: 0.25, targetOpacity: 1, completion: { _ in })
+            labelOpacityAnimation(target: nameLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: highScoreValueLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: scoreLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: nil)
             changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addYellowFruitOpacityAnimation(duration: duration)
             updateScore()
