@@ -214,16 +214,13 @@ final class ViewController: UIViewController {
 }
 
 extension ViewController: VideoCaptureDelegate {
-    
     func videoCapture(_ videoCapture: VideoCapture,
                       didCreate framePublisher: FramePublisher) {
         videoProcessingChain.upstreamFramePublisher = framePublisher
     }
-    
 }
 
 extension ViewController: VideoProcessingChainDelegate {
-    
     func videoProcessingChain(_ chain: VideoProcessingChain,
                               didDetect poses: [HandPose]?,
                               in frame: CGImage) {
@@ -231,29 +228,23 @@ extension ViewController: VideoProcessingChainDelegate {
             self.drawPoses(poses, onto: frame)
         }
     }
-    
 }
 
 /// ViewController Extension for Alert
 extension ViewController {
-    
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
                                                     message: message,
                                                     preferredStyle: .alert)
-            
             actions.forEach {
                 alertController.addAction($0)
             }
-            
             self.present(alertController, animated: true, completion: nil)
     }
-    
 }
 
 /// ViewController Extension for Game UI & Value Update
 extension ViewController {
-    
     private func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
         let startYDistance: CGFloat = 18
@@ -428,11 +419,9 @@ extension ViewController {
         gameOver = false
         gameCanRestart = false
     }
-    
 }
 
 extension ViewController {
-    
     private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
         let renderFormat = UIGraphicsImageRendererFormat()
         renderFormat.scale = 1.0
@@ -501,6 +490,5 @@ extension ViewController {
             addParticleBlinkAnimation()
         }
     }
-    
 }
 

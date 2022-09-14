@@ -8,7 +8,6 @@
 import AVFoundation
 
 extension AVCaptureVideoDataOutput {
-    
     static func withPixelFormatType(_ pixelFormatType: OSType) -> AVCaptureVideoDataOutput {
         let videoDataOutput = AVCaptureVideoDataOutput()
         let validPixelTypes = videoDataOutput.availableVideoPixelFormatTypes
@@ -34,6 +33,5 @@ extension AVCaptureVideoDataOutput {
 
         return videoDataOutput
     }
-    
 }
 
