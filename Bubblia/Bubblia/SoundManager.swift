@@ -8,6 +8,7 @@
 import AVFoundation
 
 class SoundManager {
+    
     static var shared = SoundManager()
     private var bgmPlayer = AVAudioPlayer()
     private var sfxPlayer = AVAudioPlayer()
@@ -44,8 +45,9 @@ class SoundManager {
             sfxPlayer.numberOfLoops = 1
             sfxPlayer.prepareToPlay()
         } catch {
-            print("BGM CAN'T PLAY")
+            print("SFX CAN'T PLAY")
         }
         sfxPlayer.play()
     }
+    
 }

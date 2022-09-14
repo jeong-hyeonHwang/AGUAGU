@@ -15,11 +15,9 @@
 		3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54CD28BC902A00FFE870 /* Bubblia.xcdatamodeld */; };
 		3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D028BC902C00FFE870 /* Assets.xcassets */; };
 		3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */; };
-		3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54DF28BD031C00FFE870 /* Constants.swift */; };
 		3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */; };
-		3A7104B728D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A7104B528D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 */; };
-		3A7104B828D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A7104B628D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 */; };
 		3A7104BA28D0B7BE00D84C9F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104B928D0B7BE00D84C9F /* SoundManager.swift */; };
+		3A7104BC28D0F15800D84C9F /* SessionSetupResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */; };
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
 		3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC73328BF2BB100FBD13E /* InfoPlist.strings */; };
 		3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */; };
@@ -44,11 +42,9 @@
 		3A4A54D028BC902C00FFE870 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A4A54D328BC902C00FFE870 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3A4A54D528BC902C00FFE870 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3A4A54DF28BD031C00FFE870 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultSetting.swift; sourceTree = "<group>"; };
-		3A7104B528D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_AGUAGUBGM.mp3; sourceTree = "<group>"; };
-		3A7104B628D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_AGUAGUSFX.mp3; sourceTree = "<group>"; };
 		3A7104B928D0B7BE00D84C9F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetupResult.swift; sourceTree = "<group>"; };
 		3A7CC72B28BF28FF00FBD13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72D28BF2A4F00FBD13E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72E28BF2A5600FBD13E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -101,10 +97,10 @@
 				3A7CC7A628CA28A500FBD13E /* HandPose */,
 				3A4A54C428BC902A00FFE870 /* AppDelegate.swift */,
 				3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */,
-				3A4A54DF28BD031C00FFE870 /* Constants.swift */,
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
-				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
 				3A7104B928D0B7BE00D84C9F /* SoundManager.swift */,
+				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
+				3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
 				3A4A54CA28BC902A00FFE870 /* Main.storyboard */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
@@ -119,8 +115,6 @@
 		3A7104B428D0AFED00D84C9F /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				3A7104B628D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 */,
-				3A7104B528D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -226,11 +220,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */,
-				3A7104B728D0AFF500D84C9F /* UGAUGA_AGUAGUBGM.mp3 in Resources */,
 				3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */,
 				3A4A54CC28BC902A00FFE870 /* Main.storyboard in Resources */,
 				3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */,
-				3A7104B828D0AFF500D84C9F /* AGUAGU_AGUAGUSFX.mp3 in Resources */,
 				3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,6 +237,7 @@
 				3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */,
 				3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
+				3A7104BC28D0F15800D84C9F /* SessionSetupResult.swift in Sources */,
 				3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */,
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
 				3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */,
@@ -253,7 +246,6 @@
 				3A7CC7B128CA2F2F00FBD13E /* AVCaptureDeviceInput+Camera.swift in Sources */,
 				3A4A54C528BC902A00FFE870 /* AppDelegate.swift in Sources */,
 				3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */,
-				3A4A54E028BD031C00FFE870 /* Constants.swift in Sources */,
 				3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */,
 				3A4A54C728BC902A00FFE870 /* SceneDelegate.swift in Sources */,
 				3A7CC7B528CA31AB00FBD13E /* VideoProcessingChain.swift in Sources */,
