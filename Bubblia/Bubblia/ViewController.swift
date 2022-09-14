@@ -257,9 +257,10 @@ extension ViewController {
         
         particleShape.removeAllPoints()
 
+        var xDistance: CGFloat = 0
+        var yDistance: CGFloat = 0
+        
         for i in 0..<6 {
-            var xDistance: CGFloat = 0
-            var yDistance: CGFloat = 0
             if i < 3 {
                 xDistance = startXDistance + xValue * CGFloat(i)
                 yDistance = startYDistance + yValue * CGFloat(i)
@@ -337,7 +338,7 @@ extension ViewController {
             let animation = CABasicAnimation(keyPath: "opacity")
             animation.fromValue = particleShapeLayer.opacity
             animation.toValue = 0
-            animation.duration = 3
+            animation.duration = 0.1
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
             particleShapeLayer.add(animation, forKey: "ParticleFadeIn")
