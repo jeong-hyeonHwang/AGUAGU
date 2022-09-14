@@ -99,10 +99,10 @@ final class ViewController: UIViewController {
         view.addSubview(cameraView)
         cameraView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cameraView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+            cameraView.topAnchor.constraint(equalTo: view.topAnchor),
+            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cameraView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -131,21 +131,14 @@ final class ViewController: UIViewController {
             highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        highScoreNoticeLabel.text = "HIGHSCORE"
-        highScoreNoticeLabel.textAlignment = .center
-        highScoreNoticeLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-        highScoreNoticeLabel.textColor = accentColor
+        labelSetting(label: highScoreNoticeLabel, text: "HIGHSCORE", fontSize: 24, weight: .regular)
         highScoreNoticeLabel.alpha = 0
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
-        highScore = getHighScore()
-        scoreLabel.text = highScore == 0 ? "" : "\(highScore)"
-        scoreLabel.textAlignment = .center
-        scoreLabel.font = UIFont.systemFont(ofSize: 60, weight: .regular)
-        scoreLabel.textColor = accentColor
+        labelSetting(label: scoreLabel, text: "", fontSize: 60, weight: .regular)
         scoreLabel.alpha = 0
         
         view.addSubview(highScoreValueLabel)
@@ -157,24 +150,20 @@ final class ViewController: UIViewController {
             highScoreValueLabel.widthAnchor.constraint(equalToConstant: width)
         ])
 
-        highScoreValueLabel.text = highScore == 0 ? "" : "\(highScore)"
-        highScoreValueLabel.textAlignment = .center
-        highScoreValueLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        highScoreValueLabel.textColor = accentColor
+        highScore = getHighScore()
+        let highScoreText = highScore == 0 ? "" : "\(highScore)"
+        labelSetting(label: highScoreValueLabel, text: highScoreText, fontSize: 48, weight: .medium)
         
         view.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor, constant: 0),
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor),
             nameLabel.heightAnchor.constraint(equalToConstant: 88),
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.text = "AGUAGU"
-        nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 64, weight: .bold)
-        nameLabel.textColor = accentColor
+        labelSetting(label: nameLabel, text: "AGUAGU", fontSize: 64, weight: .bold)
         
         view.addSubview(gameOverLabel)
         gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -185,11 +174,15 @@ final class ViewController: UIViewController {
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        gameOverLabel.text = "GAME OVER"
-        gameOverLabel.textAlignment = .center
-        gameOverLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
-        gameOverLabel.textColor = accentColor
+        labelSetting(label: gameOverLabel, text: "GAME OVER", fontSize: 36, weight: .semibold)
         gameOverLabel.alpha = 0
+    }
+    
+    private func labelSetting(label: UILabel, text: String, fontSize: CGFloat, weight: UIFont.Weight) {
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+        label.textColor = accentColor
     }
     
     private func setShapeLayer() {
