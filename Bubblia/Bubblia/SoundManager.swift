@@ -22,7 +22,7 @@ class SoundManager {
             print(error)
         }
         
-        let bgmSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "UGAUGA_AGUAGUBGM", ofType: "mp3")!)
+        let bgmSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "UGAUGA_BGM3", ofType: "mp3")!)
         do {
             bgmPlayer = try AVAudioPlayer(contentsOf: bgmSource as URL)
             bgmPlayer.numberOfLoops = -1
@@ -37,11 +37,11 @@ class SoundManager {
     }
     
     func playSFX() {
-        let sfxSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "AGUAGU_AGUAGUSFX", ofType: "mp3")!)
+        let index = Int.random(in: 1...2)
+        let sfxSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "AGUAGU_SFX\(index)", ofType: "mp3")!)
         do {
             sfxPlayer = try AVAudioPlayer(contentsOf: sfxSource as URL)
-            sfxPlayer.volume = 0.6
-            sfxPlayer.numberOfLoops = 1
+            sfxPlayer.volume = 1.0
             sfxPlayer.prepareToPlay()
         } catch {
             print("SFX CAN'T PLAY")
