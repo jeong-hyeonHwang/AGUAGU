@@ -10,7 +10,8 @@ import AVFoundation
 class SoundManager {
     static var shared = SoundManager()
     private var bgmPlayer = AVAudioPlayer()
-    private var sfxPlayer = AVAudioPlayer()
+    private var sfxEatPlayer = AVAudioPlayer()
+    private var sfxGameOverPlayer = AVAudioPlayer()
     
     init() {
         do {
@@ -22,30 +23,54 @@ class SoundManager {
             print(error)
         }
         
-        let bgmSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "UGAUGA_AGUAGUBGM", ofType: "mp3")!)
+        bgmPlayer = playerPrepare(source: "UGAUGA_BGM3", loop: true, volume: 0.5)
+        let index = Int.random(in: 1...2)
+        sfxEatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 0.7)
+        sfxGameOverPlayer = playerPrepare(source: "AGUAGU_GAMEOVER2", loop: false, volume: 1.0)
+    }
+    
+    func playerPrepare(source: String, loop: Bool, volume: Float) -> AVAudioPlayer {
+        
+        var player = AVAudioPlayer()
+        
+        let soundSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: source, ofType: "mp3")!)
         do {
-            bgmPlayer = try AVAudioPlayer(contentsOf: bgmSource as URL)
-            bgmPlayer.numberOfLoops = -1
-            bgmPlayer.prepareToPlay()
+            player = try AVAudioPlayer(contentsOf: soundSource as URL)
+            if loop {
+                player.numberOfLoops = -1
+            }
+            player.volume = volume
+            player.prepareToPlay()
         } catch {
-            print("BGM CAN'T PLAY")
+            print("SOUND CAN'T PLAY")
         }
+        
+        return player
     }
     
     func playBGM() {
         bgmPlayer.play()
     }
     
-    func playSFX() {
-        let sfxSource = NSURL(fileURLWithPath: Bundle.main.path(forResource: "AGUAGU_AGUAGUSFX", ofType: "mp3")!)
-        do {
-            sfxPlayer = try AVAudioPlayer(contentsOf: sfxSource as URL)
-            sfxPlayer.volume = 0.6
-            sfxPlayer.numberOfLoops = 1
-            sfxPlayer.prepareToPlay()
-        } catch {
-            print("SFX CAN'T PLAY")
-        }
-        sfxPlayer.play()
+    func pauseBGM() {
+        bgmPlayer.stop()
+    }
+    
+    func changeBGMVolume(volume: Float, duration: CGFloat) {
+        bgmPlayer.setVolume(volume, fadeDuration: duration)
+    }
+    
+    func prepareSFX_Eat() {
+        let index = Int.random(in: 1...2)
+        sfxEatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 1.0)
+    }
+    
+    func playSFX_Eat() {
+        prepareSFX_Eat()
+        sfxEatPlayer.play()
+    }
+    
+    func playSFX_GameOver() {
+        sfxGameOverPlayer.play()
     }
 }

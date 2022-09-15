@@ -16,6 +16,12 @@
 		3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D028BC902C00FFE870 /* Assets.xcassets */; };
 		3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */; };
 		3A4A54E228BD312300FFE870 /* UserDefaultSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */; };
+		3A51F5DE28D2535D008DF412 /* AGUAGU_SFX1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5DC28D2535D008DF412 /* AGUAGU_SFX1.mp3 */; };
+		3A51F5DF28D2535D008DF412 /* AGUAGU_SFX2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5DD28D2535D008DF412 /* AGUAGU_SFX2.mp3 */; };
+		3A51F5E228D25362008DF412 /* UGAUGA_BGM2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E028D25362008DF412 /* UGAUGA_BGM2.mp3 */; };
+		3A51F5E328D25362008DF412 /* UGAUGA_BGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E128D25362008DF412 /* UGAUGA_BGM.mp3 */; };
+		3A51F5E528D258CB008DF412 /* UGAUGA_BGM3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E428D258CB008DF412 /* UGAUGA_BGM3.mp3 */; };
+		3A51F5E728D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E628D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 */; };
 		3A7104BA28D0B7BE00D84C9F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104B928D0B7BE00D84C9F /* SoundManager.swift */; };
 		3A7104BC28D0F15800D84C9F /* SessionSetupResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */; };
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
@@ -29,6 +35,7 @@
 		3A7CC7B528CA31AB00FBD13E /* VideoProcessingChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */; };
 		3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */; };
 		3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */; };
+		3A8EED5028D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A8EED4F28D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +50,12 @@
 		3A4A54D328BC902C00FFE870 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3A4A54D528BC902C00FFE870 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultSetting.swift; sourceTree = "<group>"; };
+		3A51F5DC28D2535D008DF412 /* AGUAGU_SFX1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_SFX1.mp3; sourceTree = "<group>"; };
+		3A51F5DD28D2535D008DF412 /* AGUAGU_SFX2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_SFX2.mp3; sourceTree = "<group>"; };
+		3A51F5E028D25362008DF412 /* UGAUGA_BGM2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_BGM2.mp3; sourceTree = "<group>"; };
+		3A51F5E128D25362008DF412 /* UGAUGA_BGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_BGM.mp3; sourceTree = "<group>"; };
+		3A51F5E428D258CB008DF412 /* UGAUGA_BGM3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_BGM3.mp3; sourceTree = "<group>"; };
+		3A51F5E628D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_GAMEOVER.mp3; sourceTree = "<group>"; };
 		3A7104B928D0B7BE00D84C9F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetupResult.swift; sourceTree = "<group>"; };
 		3A7CC72B28BF28FF00FBD13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -60,6 +73,7 @@
 		3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcessingChain.swift; sourceTree = "<group>"; };
 		3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseStatus.swift; sourceTree = "<group>"; };
 		3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+FrameRate.swift"; sourceTree = "<group>"; };
+		3A8EED4F28D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_GAMEOVER2.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +129,13 @@
 		3A7104B428D0AFED00D84C9F /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				3A51F5E128D25362008DF412 /* UGAUGA_BGM.mp3 */,
+				3A51F5E028D25362008DF412 /* UGAUGA_BGM2.mp3 */,
+				3A51F5E428D258CB008DF412 /* UGAUGA_BGM3.mp3 */,
+				3A51F5DC28D2535D008DF412 /* AGUAGU_SFX1.mp3 */,
+				3A51F5DD28D2535D008DF412 /* AGUAGU_SFX2.mp3 */,
+				3A51F5E628D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 */,
+				3A8EED4F28D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -219,11 +240,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A51F5E328D25362008DF412 /* UGAUGA_BGM.mp3 in Resources */,
+				3A51F5E528D258CB008DF412 /* UGAUGA_BGM3.mp3 in Resources */,
 				3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */,
+				3A51F5E728D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 in Resources */,
 				3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */,
 				3A4A54CC28BC902A00FFE870 /* Main.storyboard in Resources */,
+				3A51F5DF28D2535D008DF412 /* AGUAGU_SFX2.mp3 in Resources */,
 				3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */,
+				3A51F5DE28D2535D008DF412 /* AGUAGU_SFX1.mp3 in Resources */,
+				3A51F5E228D25362008DF412 /* UGAUGA_BGM2.mp3 in Resources */,
 				3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */,
+				3A8EED5028D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
