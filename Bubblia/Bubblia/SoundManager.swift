@@ -23,10 +23,10 @@ class SoundManager {
             print(error)
         }
         
-        bgmPlayer = playerPrepare(source: "UGAUGA_BGM3", loop: true, volume: 1.0)
+        bgmPlayer = playerPrepare(source: "UGAUGA_BGM3", loop: true, volume: 0.5)
         let index = Int.random(in: 1...2)
-        sfx_EatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 1.0)
-        sfx_GameOverPlayer = playerPrepare(source: "AGUAGU_SFX1", loop: false, volume: 1.0)
+        sfx_EatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 0.7)
+        sfx_GameOverPlayer = playerPrepare(source: "AGUAGU_GAMEOVER2", loop: false, volume: 1.0)
     }
     
     func playerPrepare(source: String, loop: Bool, volume: Float) -> AVAudioPlayer {
@@ -54,6 +54,10 @@ class SoundManager {
     
     func pauseBGM() {
         bgmPlayer.stop()
+    }
+    
+    func changeBGMVolume(volume: Float) {
+        bgmPlayer.setVolume(volume, fadeDuration: 0.5)
     }
     
     func prepareSFX_Eat() {
