@@ -64,7 +64,6 @@ struct HandPose {
             let centerLayerPoint = CGPoint(x: width * centerCGPoint.x, y: height * centerCGPoint.y)
             
             if distance < 0.06 {
-                ViewController.counter += 1
                 context.setFillColor(UIColor.green.cgColor)
                 context.setStrokeColor(UIColor.green.cgColor)
                 if centerLayerPoint.distance(from: point) < 45 && pastStatus == .possible

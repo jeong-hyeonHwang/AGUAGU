@@ -45,7 +45,6 @@ extension VideoProcessingChain {
 }
 
 extension VideoProcessingChain {
-    
     private func imageFromFrame(_ buffer: Frame) -> CGImage? {
 
         guard let imageBuffer = buffer.imageBuffer else {
