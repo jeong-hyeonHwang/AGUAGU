@@ -299,6 +299,7 @@ extension ViewController {
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
+                SoundManager.shared.playSFX_GameOver()
                 self.setUIGameOver()
             }
         })
@@ -455,7 +456,7 @@ extension ViewController {
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
                         DispatchQueue.main.async {
-                            SoundManager.shared.playSFX()
+                            SoundManager.shared.playSFX_Eat()
                                 self.gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
                             }
                     }
