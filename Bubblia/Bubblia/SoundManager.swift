@@ -56,8 +56,8 @@ class SoundManager {
         bgmPlayer.stop()
     }
     
-    func changeBGMVolume(volume: Float) {
-        bgmPlayer.setVolume(volume, fadeDuration: 0.5)
+    func changeBGMVolume(volume: Float, duration: CGFloat) {
+        bgmPlayer.setVolume(volume, fadeDuration: duration)
     }
     
     func prepareSFX_Eat() {
