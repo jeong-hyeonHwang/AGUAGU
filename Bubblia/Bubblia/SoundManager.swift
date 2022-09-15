@@ -10,8 +10,8 @@ import AVFoundation
 class SoundManager {
     static var shared = SoundManager()
     private var bgmPlayer = AVAudioPlayer()
-    private var sfx_EatPlayer = AVAudioPlayer()
-    private var sfx_GameOverPlayer = AVAudioPlayer()
+    private var sfxEatPlayer = AVAudioPlayer()
+    private var sfxGameOverPlayer = AVAudioPlayer()
     
     init() {
         do {
@@ -25,8 +25,8 @@ class SoundManager {
         
         bgmPlayer = playerPrepare(source: "UGAUGA_BGM3", loop: true, volume: 0.5)
         let index = Int.random(in: 1...2)
-        sfx_EatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 0.7)
-        sfx_GameOverPlayer = playerPrepare(source: "AGUAGU_GAMEOVER2", loop: false, volume: 1.0)
+        sfxEatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 0.7)
+        sfxGameOverPlayer = playerPrepare(source: "AGUAGU_GAMEOVER2", loop: false, volume: 1.0)
     }
     
     func playerPrepare(source: String, loop: Bool, volume: Float) -> AVAudioPlayer {
@@ -62,15 +62,15 @@ class SoundManager {
     
     func prepareSFX_Eat() {
         let index = Int.random(in: 1...2)
-        sfx_EatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 1.0)
+        sfxEatPlayer = playerPrepare(source: "AGUAGU_SFX\(index)", loop: false, volume: 1.0)
     }
     
     func playSFX_Eat() {
         prepareSFX_Eat()
-        sfx_EatPlayer.play()
+        sfxEatPlayer.play()
     }
     
     func playSFX_GameOver() {
-        sfx_GameOverPlayer.play()
+        sfxGameOverPlayer.play()
     }
 }
