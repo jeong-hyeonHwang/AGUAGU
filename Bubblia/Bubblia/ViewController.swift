@@ -300,7 +300,7 @@ extension ViewController {
             let currentOpacity = yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
                 SoundManager.shared.playSFX_GameOver()
-                SoundManager.shared.changeBGMVolume(volume: 0.2)
+                SoundManager.shared.changeBGMVolume(volume: 0.2, duration: 0.3)
                 self.setUIGameOver()
             }
         })
@@ -425,7 +425,7 @@ extension ViewController {
         gameOver = false
         gameCanRestart = false
         
-        SoundManager.shared.changeBGMVolume(volume: 0.5)
+        SoundManager.shared.changeBGMVolume(volume: 0.5, duration: 0.5)
     }
 }
 
