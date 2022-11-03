@@ -1,5 +1,9 @@
 # AGUAGU
-"아구아구가 노란색 열매를 아구아구!"
+![AGUAGU_2900](https://user-images.githubusercontent.com/96641477/199755300-46e36e01-4176-4d07-aa01-380fac68938e.png)
+---
+### Available On App Store: [Link](https://apps.apple.com/us/app/aguagu/id1642786388)
+
+> "아구아구가 노란색 열매를 아구아구!"
 
 ## Concept Character
 
@@ -11,7 +15,7 @@
 
 <br/>아구아구가 노란색 열매를 먹으면?<br/>**아구아구아구아구**...
 
-## How to Play
+## 🎡 How to Play
 |Keynote|Description|
 |:---:|:---:|
 |<img width="400" alt="NC2_Presentation 005_@JeonghyeonHwang" src="https://user-images.githubusercontent.com/96641477/188481548-f8b304ac-6297-498c-93ef-bf5a3782c891.png">|**노란색 열매를 챱챱!**|
@@ -25,18 +29,21 @@
 |:---:|:---:|:---:|
 |![](https://user-images.githubusercontent.com/96641477/188490798-3882c941-5b53-447b-bf2e-3e181796bcb4.mp4)|![](https://user-images.githubusercontent.com/96641477/188490780-0fbd88a9-c972-4df3-911b-950530be3d35.mov)|![](https://user-images.githubusercontent.com/96641477/188490823-b8857e42-4f79-44a4-99ca-2437c5f7029c.mp4)|
 
-## Tech Skill
-- **AVFoundation**
-- **CoreGraphics**
-- **UIKit**
-- **Vision**
+## 🛠 Tech Skill
+|Tech|Description|
+|:---:|:---|
+|**AVFoundation**|사운드 효과 추가 및 영상 처리를 위해 사용|
+|**Combine**|영상 처리 시 들고오는 프레임 단위로 들고오는 이미지로부터 '손'을 감지하기 위해 사용|
+|**CoreGraphics**|게임의 메인 캐릭터 및 열매를 그리기 위해 사용|
+|**UIKit**|기본적인 게임 로직 작성을 위해 사용|
+|**Vision**|사용자의 손 감지를 위해 사용|
 
-## FROM NOW ON...
-- 앱의 몰입도를 높일 수 있는 사운드 효과 추가
-- 게임 난이도 밸런스 패치
-- 손 감지 정확도를 높이기 위한 코드 Refactoring
-
-## THANKS TO
+## 📽 Other Skill
+|Skill|Description|
+|:---:|:---|
+|**Concept Design**|손을 사용하여 '먹는다'는 이미지의 표현을 위해 공룡을 메인 캐릭터로 직접 제작|
+|**Design**|원색 계열의 Polygon을 사용하여 사용자의 시선이 분산되지 않도록 절제된 디자인을 반영하며 코드로 제작|
+|**Sound**|캐릭터가 화면을 돌아다니는 모습과 열매를 먹는 소리를 표현하기 위해 직접 제작|
 
 ## Reference
 - [Detecting Hand Poses with Vision](https://developer.apple.com/documentation/vision/detecting_hand_poses_with_vision)
