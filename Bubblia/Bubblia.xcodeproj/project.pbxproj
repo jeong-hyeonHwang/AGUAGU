@@ -39,6 +39,7 @@
 		3AEB3D4E291AD07700A989FF /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB3D4D291AD07700A989FF /* UIFont+.swift */; };
 		3AEB3D51291AD3B300A989FF /* VideoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB3D50291AD3B300A989FF /* VideoCaptureDelegate.swift */; };
 		3AEB3D53291AD3FC00A989FF /* VideoProcessingChainDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB3D52291AD3FC00A989FF /* VideoProcessingChainDelegate.swift */; };
+		3AEB3D55291AD69900A989FF /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB3D54291AD69900A989FF /* Particle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		3AEB3D4D291AD07700A989FF /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		3AEB3D50291AD3B300A989FF /* VideoCaptureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureDelegate.swift; sourceTree = "<group>"; };
 		3AEB3D52291AD3FC00A989FF /* VideoProcessingChainDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcessingChainDelegate.swift; sourceTree = "<group>"; };
+		3AEB3D54291AD69900A989FF /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,8 +114,9 @@
 		3A4A54C328BC902A00FFE870 /* Bubblia */ = {
 			isa = PBXGroup;
 			children = (
-				3AEB3D4F291AD39800A989FF /* Protocols */,
 				3A7104B428D0AFED00D84C9F /* Sounds */,
+				3AEB3D56291AD6A700A989FF /* Model */,
+				3AEB3D4F291AD39800A989FF /* Protocols */,
 				3A7CC7AB28CA2B5A00FBD13E /* Camera */,
 				3A7CC7A628CA28A500FBD13E /* HandPose */,
 				3A4A54C428BC902A00FFE870 /* AppDelegate.swift */,
@@ -195,6 +198,14 @@
 				3AEB3D52291AD3FC00A989FF /* VideoProcessingChainDelegate.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		3AEB3D56291AD6A700A989FF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3AEB3D54291AD69900A989FF /* Particle.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,6 +294,7 @@
 				3AEB3D4E291AD07700A989FF /* UIFont+.swift in Sources */,
 				3AEB3D51291AD3B300A989FF /* VideoCaptureDelegate.swift in Sources */,
 				3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */,
+				3AEB3D55291AD69900A989FF /* Particle.swift in Sources */,
 				3AEB3D53291AD3FC00A989FF /* VideoProcessingChainDelegate.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
 				3A7104BC28D0F15800D84C9F /* CameraSessionSetupStatus.swift in Sources */,
