@@ -102,10 +102,7 @@ struct HandPose {
         let scale = ratio >= max ? max : (ratio * (max - min)) + min
         return scale
     }
-}
-
-extension HandPose {
-
+    
     static func areaEstimateOfLandmarks(_ landmarks: [Landmark]) -> CGFloat {
         let xCoordinates = landmarks.map { $0.location.x }
         let yCoordinates = landmarks.map { $0.location.y }
