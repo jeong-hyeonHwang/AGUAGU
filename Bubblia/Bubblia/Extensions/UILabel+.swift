@@ -8,10 +8,10 @@
 import UIKit
 
 extension UILabel {
-    func labelSetting(text: String, fontSize: CGFloat, weight: UIFont.Weight, isTransparent: Bool) {
+    func labelSetting(text: String, font: UIFont, isTransparent: Bool) {
         self.text = text
         self.textAlignment = .center
-        self.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+        self.font = font
         self.textColor = .accentColor
         self.alpha = isTransparent ? 0 : 1
     }
