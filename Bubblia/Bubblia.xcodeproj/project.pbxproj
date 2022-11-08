@@ -11,7 +11,6 @@
 		3A4A54C528BC902A00FFE870 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54C428BC902A00FFE870 /* AppDelegate.swift */; };
 		3A4A54C728BC902A00FFE870 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */; };
 		3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54C828BC902A00FFE870 /* ViewController.swift */; };
-		3A4A54CC28BC902A00FFE870 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54CA28BC902A00FFE870 /* Main.storyboard */; };
 		3A4A54CF28BC902A00FFE870 /* Bubblia.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A4A54CD28BC902A00FFE870 /* Bubblia.xcdatamodeld */; };
 		3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D028BC902C00FFE870 /* Assets.xcassets */; };
 		3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */; };
@@ -44,7 +43,6 @@
 		3A4A54C428BC902A00FFE870 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3A4A54C628BC902A00FFE870 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3A4A54C828BC902A00FFE870 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3A4A54CB28BC902A00FFE870 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3A4A54CE28BC902A00FFE870 /* Bubblia.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Bubblia.xcdatamodel; sourceTree = "<group>"; };
 		3A4A54D028BC902C00FFE870 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A4A54D328BC902C00FFE870 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
 				3A7104BB28D0F15800D84C9F /* SessionSetupResult.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
-				3A4A54CA28BC902A00FFE870 /* Main.storyboard */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
 				3A4A54D528BC902C00FFE870 /* Info.plist */,
 				3A4A54CD28BC902A00FFE870 /* Bubblia.xcdatamodeld */,
@@ -245,7 +242,6 @@
 				3A4A54D428BC902C00FFE870 /* LaunchScreen.storyboard in Resources */,
 				3A51F5E728D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 in Resources */,
 				3A4A54D128BC902C00FFE870 /* Assets.xcassets in Resources */,
-				3A4A54CC28BC902A00FFE870 /* Main.storyboard in Resources */,
 				3A51F5DF28D2535D008DF412 /* AGUAGU_SFX2.mp3 in Resources */,
 				3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */,
 				3A51F5DE28D2535D008DF412 /* AGUAGU_SFX1.mp3 in Resources */,
@@ -285,14 +281,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3A4A54CA28BC902A00FFE870 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A4A54CB28BC902A00FFE870 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -454,7 +442,6 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Permissions are required to use the camera for hand detection.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -487,7 +474,6 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Permissions are required to use the camera for hand detection.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
