@@ -125,8 +125,12 @@ final class ViewController: UIViewController {
     }
     
     private func setUILabel() {
-        view.addSubview(highScoreNoticeLabel)
-        highScoreNoticeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        [highScoreNoticeLabel, highScoreValueLabel, nameLabel, gameOverLabel].forEach({
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        })
+        
         NSLayoutConstraint.activate([
             highScoreNoticeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             highScoreNoticeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
@@ -144,8 +148,6 @@ final class ViewController: UIViewController {
         labelSetting(label: scoreLabel, text: "", fontSize: 60, weight: .regular)
         scoreLabel.alpha = 0
         
-        view.addSubview(highScoreValueLabel)
-        highScoreValueLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             highScoreValueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             highScoreValueLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -height * 0.12),
@@ -157,8 +159,6 @@ final class ViewController: UIViewController {
         let highScoreText = highScore == 0 ? "" : "\(highScore)"
         labelSetting(label: highScoreValueLabel, text: highScoreText, fontSize: 48, weight: .medium)
         
-        view.addSubview(nameLabel)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             nameLabel.bottomAnchor.constraint(equalTo: highScoreValueLabel.topAnchor),
@@ -167,9 +167,6 @@ final class ViewController: UIViewController {
         ])
         
         labelSetting(label: nameLabel, text: "AGUAGU", fontSize: 64, weight: .bold)
-        
-        view.addSubview(gameOverLabel)
-        gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 60),
