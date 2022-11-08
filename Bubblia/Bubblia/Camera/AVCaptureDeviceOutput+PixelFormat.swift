@@ -13,19 +13,7 @@ extension AVCaptureVideoDataOutput {
         let validPixelTypes = videoDataOutput.availableVideoPixelFormatTypes
 
         guard validPixelTypes.contains(pixelFormatType) else {
-            var errorMessage = "`AVCaptureVideoDataOutput` doesn't support "
-            errorMessage += "pixel format type: \(pixelFormatType)\n"
-            errorMessage += "Please use one of these instead:\n"
-
-            for (index, pixelType) in validPixelTypes.enumerated() {
-                var subscriptString = " availableVideoPixelFormatTypes"
-                subscriptString += "[\(index)]"
-                subscriptString += String(format: " (0x%08x)\n", pixelType)
-
-                errorMessage += subscriptString
-            }
-
-            fatalError(errorMessage)
+            fatalError("`AVCaptureVideoDataOutput` doesn't support ")
         }
 
         let pixelTypeKey = String(kCVPixelBufferPixelFormatTypeKey)
