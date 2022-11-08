@@ -35,6 +35,7 @@
 		3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */; };
 		3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */; };
 		3A8EED5028D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A8EED4F28D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 */; };
+		3AEB3D4C291AC5A000A989FF /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB3D4B291AC5A000A989FF /* UILabel+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		3A7CC7B628CA334F00FBD13E /* HandPoseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandPoseStatus.swift; sourceTree = "<group>"; };
 		3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+FrameRate.swift"; sourceTree = "<group>"; };
 		3A8EED4F28D33F5F0027A325 /* AGUAGU_GAMEOVER2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_GAMEOVER2.mp3; sourceTree = "<group>"; };
+		3AEB3D4B291AC5A000A989FF /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 			children = (
 				3A144B3428BDFE78001DB6F0 /* UIColor+.swift */,
 				3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */,
+				3AEB3D4B291AC5A000A989FF /* UILabel+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AEB3D4C291AC5A000A989FF /* UILabel+.swift in Sources */,
 				3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */,
 				3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,

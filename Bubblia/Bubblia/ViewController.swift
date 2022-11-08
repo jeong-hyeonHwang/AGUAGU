@@ -138,14 +138,14 @@ final class ViewController: UIViewController {
             highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        labelSetting(label: highScoreNoticeLabel, text: "HIGHSCORE", fontSize: 24, weight: .regular)
+        highScoreNoticeLabel.labelSetting(text: "HIGHSCORE", fontSize: 24, weight: .regular)
         highScoreNoticeLabel.alpha = 0
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
-        labelSetting(label: scoreLabel, text: "", fontSize: 60, weight: .regular)
+        scoreLabel.labelSetting(text: "", fontSize: 60, weight: .regular)
         scoreLabel.alpha = 0
         
         NSLayoutConstraint.activate([
@@ -157,7 +157,7 @@ final class ViewController: UIViewController {
 
         highScore = getHighScore()
         let highScoreText = highScore == 0 ? "" : "\(highScore)"
-        labelSetting(label: highScoreValueLabel, text: highScoreText, fontSize: 48, weight: .medium)
+        highScoreValueLabel.labelSetting(text: highScoreText, fontSize: 48, weight: .medium)
         
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -166,7 +166,7 @@ final class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        labelSetting(label: nameLabel, text: "AGUAGU", fontSize: 64, weight: .bold)
+        nameLabel.labelSetting(text: "AGUAGU", fontSize: 64, weight: .bold)
         NSLayoutConstraint.activate([
             gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 60),
@@ -174,15 +174,8 @@ final class ViewController: UIViewController {
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        labelSetting(label: gameOverLabel, text: "GAME OVER", fontSize: 36, weight: .semibold)
+        gameOverLabel.labelSetting(text: "GAME OVER", fontSize: 36, weight: .semibold)
         gameOverLabel.alpha = 0
-    }
-    
-    private func labelSetting(label: UILabel, text: String, fontSize: CGFloat, weight: UIFont.Weight) {
-        label.text = text
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
-        label.textColor = accentColor
     }
     
     private func setShapeLayer() {
