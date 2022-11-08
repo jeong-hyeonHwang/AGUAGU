@@ -58,6 +58,7 @@ final class ViewController: UIViewController {
     
     private var pastHandStatus: HandPoseStatus = .possible
     
+    private let soundManager: SoundManager = SoundManager()
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -82,7 +83,7 @@ final class ViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(gameIsOver), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-        SoundManager.shared.playBGM()
+        soundManager.playBGM()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -287,8 +288,8 @@ extension ViewController {
             // https://stackoverflow.com/questions/20244933/get-current-caanimation-transform-value
             let currentOpacity = yellowFruitShapeLayer.presentation()?.value(forKeyPath: "opacity") ?? 0.0
             if (currentOpacity as! Double) <= 0.001 {
-                SoundManager.shared.playSFX_GameOver()
-                SoundManager.shared.changeBGMVolume(volume: 0.2, duration: 0.3)
+                soundManager.playSFX_GameOver()
+                soundManager.changeBGMVolume(volume: 0.2, duration: 0.3)
                 self.setUIGameOver()
             }
         })
@@ -413,7 +414,7 @@ extension ViewController {
         gameOver = false
         gameCanRestart = false
         
-        SoundManager.shared.changeBGMVolume(volume: 0.5, duration: 0.5)
+        soundManager.changeBGMVolume(volume: 0.5, duration: 0.5)
     }
 }
 
@@ -446,10 +447,10 @@ extension ViewController {
                     break
                 case .pinched:
                     if gameOver == false && pastHandStatus == .possible {
-                        DispatchQueue.main.async {
-                            SoundManager.shared.playSFX_Eat()
-                                self.gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
-                            }
+                        DispatchQueue.main.async { [self] in
+                            soundManager.playSFX_Eat()
+                            gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
+                        }
                     }
                 case .invalid:
                     if gameCanRestart == true && pastHandStatus == .possible {
