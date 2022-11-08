@@ -53,7 +53,7 @@ class VideoCapture: NSObject {
     
     func cameraPermissionCheck(vc: ViewController) {
         videoCaptureQueue.async {
-            switch vc.isAuth {
+            switch vc.isCameraSessionAuth {
             case .success:
                 break
                 // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다

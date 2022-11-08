@@ -11,7 +11,7 @@ import Vision
 
 final class ViewController: UIViewController {
     
-    var isAuth: SessionSetupResult! = .success
+    var isCameraSessionAuth: SessionSetupStatus! = .success
     
     private var cameraView = UIImageView()
     
@@ -207,11 +207,11 @@ final class ViewController: UIViewController {
                 case .notDetermined:
                     AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                         if !granted {
-                            self.isAuth = .notAuthorized
+                            self.isCameraSessionAuth = .notAuthorized
                         }
                     })
                 default:
-                    isAuth = .notAuthorized
+                    isCameraSessionAuth = .notAuthorized
         }
     }
 }
