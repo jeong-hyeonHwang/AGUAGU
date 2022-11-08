@@ -18,7 +18,7 @@ protocol VideoProcessingChainDelegate: AnyObject {
 struct VideoProcessingChain {
     weak var delegate: VideoProcessingChainDelegate?
 
-    var upstreamFramePublisher: AnyPublisher<Frame, Never>! {
+    var upstreamFramePublisher: AnyPublisher<CMSampleBuffer, Never>! {
         didSet { buildProcessingChain() }
     }
     
@@ -45,7 +45,7 @@ extension VideoProcessingChain {
 }
 
 extension VideoProcessingChain {
-    private func imageFromFrame(_ buffer: Frame) -> CGImage? {
+    private func imageFromFrame(_ buffer: CMSampleBuffer) -> CGImage? {
 
         guard let imageBuffer = buffer.imageBuffer else {
             print("The frame doesn't have an underlying image buffer.")

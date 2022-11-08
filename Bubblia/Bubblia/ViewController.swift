@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import Vision
+import Combine
 
 final class ViewController: UIViewController {
     
@@ -205,7 +206,7 @@ final class ViewController: UIViewController {
 
 extension ViewController: VideoCaptureDelegate {
     func videoCapture(_ videoCapture: VideoCapture,
-                      didCreate framePublisher: FramePublisher) {
+                      didCreate framePublisher: AnyPublisher<CMSampleBuffer, Never>) {
         videoProcessingChain.upstreamFramePublisher = framePublisher
     }
 }
