@@ -9,12 +9,6 @@ import Vision
 import Combine
 import CoreImage
 
-protocol VideoProcessingChainDelegate: AnyObject {
-    func videoProcessingChain(_ chain: VideoProcessingChain,
-                              didDetect poses: [HandPose]?,
-                              in frame: CGImage)
-}
-
 struct VideoProcessingChain {
     weak var delegate: VideoProcessingChainDelegate?
 

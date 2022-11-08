@@ -9,11 +9,6 @@ import UIKit
 import Combine
 import AVFoundation
 
-protocol VideoCaptureDelegate: AnyObject {
-    func videoCapture(_ videoCapture: VideoCapture,
-                      didCreate framePublisher: AnyPublisher<CMSampleBuffer, Never>)
-}
-
 class VideoCapture: NSObject {
     weak var delegate: VideoCaptureDelegate! {
         didSet { createVideoFramePublisher() }
