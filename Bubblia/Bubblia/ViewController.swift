@@ -222,7 +222,7 @@ extension ViewController: VideoProcessingChainDelegate {
     }
 }
 
-/// ViewController Extension for Alert
+// MARK: ViewController Extension for Alert
 extension ViewController {
     func alert(title: String, message: String, actions: [UIAlertAction]) {
             let alertController = UIAlertController(title: title,
@@ -235,7 +235,7 @@ extension ViewController {
     }
 }
 
-/// ViewController Extension for Game UI & Value Update
+/// ViewController Extension for Game UI Update
 extension ViewController {
     private func drawParticle(centerPoint: CGPoint) {
         let startXDistance: CGFloat = 55
@@ -346,37 +346,6 @@ extension ViewController {
         CATransaction.commit()
     }
     
-    private func updateScore() {
-        scoreInt += 1
-        scoreLabelTextAnimation()
-    }
-    
-    private func returnToDefaultScore() {
-        scoreInt = 1
-        scoreLabelTextAnimation()
-    }
-    
-    private func updateDuration() {
-        if duration != durationMinLimitNum {
-            duration -= durationMinusValue
-        } else {
-            patienceCount += 1
-            if patienceCount == patientLimitNum {
-                patienceCount = 0
-                if patientLimitNum != patientMaxLimitNum {
-                    patientLimitNum += patientPlusValue
-                }
-                duration = durationMaxLimitNum
-            }
-        }
-    }
-    
-    private func returnToDefaultDuration() {
-        duration = durationMaxLimitNum
-        patienceCount = 0
-        patientLimitNum = patientPlusValue
-    }
-    
     private func scoreLabelTextAnimation() {
         UIView.transition(with: scoreLabel,
                           duration: 0.15,
@@ -395,12 +364,7 @@ extension ViewController {
         }, completion: completion)
     }
     
-    private func checkHighScore() {
-        if highScore < scoreInt {
-            setHighScore(value: scoreInt)
-            highScore = scoreInt
-        }
-    }
+    
     
     private func gameRestart() {
         labelOpacityAnimation(target: gameOverLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
@@ -416,9 +380,28 @@ extension ViewController {
         
         soundManager.changeBGMVolume(volume: 0.5, duration: 0.5)
     }
-}
-
-extension ViewController {
+    
+    private func gameStatusUpdateFunction(middlePoint: CGPoint) {
+        if !gameStart {
+            labelOpacityAnimation(target: nameLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: highScoreValueLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
+            labelOpacityAnimation(target: scoreLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: nil)
+            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
+            addYellowFruitOpacityAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            gameStart = true
+        } else if !gameOver {
+            drawParticle(centerPoint: middlePoint)
+            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
+            addYellowFruitOpacityAnimation(duration: duration)
+            updateScore()
+            updateDuration()
+            drawParticle(centerPoint: middlePoint)
+            addParticleBlinkAnimation()
+        }
+    }
+    
     private func drawPoses(_ poses: [HandPose]?, onto frame: CGImage) {
         let renderFormat = UIGraphicsImageRendererFormat()
         renderFormat.scale = 1.0
@@ -465,25 +448,45 @@ extension ViewController {
         
         DispatchQueue.main.async { self.cameraView.image = frameWithPosesRendering }
     }
+}
+
+// MARK: ViewController Extension for Game Value Update
+extension ViewController {
+    private func updateScore() {
+        scoreInt += 1
+        scoreLabelTextAnimation()
+    }
     
-    private func gameStatusUpdateFunction(middlePoint: CGPoint) {
-        if !gameStart {
-            labelOpacityAnimation(target: nameLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
-            labelOpacityAnimation(target: highScoreValueLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
-            labelOpacityAnimation(target: scoreLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: nil)
-            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
-            addYellowFruitOpacityAnimation(duration: duration)
-            updateScore()
-            updateDuration()
-            gameStart = true
-        } else if !gameOver {
-            drawParticle(centerPoint: middlePoint)
-            changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
-            addYellowFruitOpacityAnimation(duration: duration)
-            updateScore()
-            updateDuration()
-            drawParticle(centerPoint: middlePoint)
-            addParticleBlinkAnimation()
+    private func returnToDefaultScore() {
+        scoreInt = 1
+        scoreLabelTextAnimation()
+    }
+    
+    private func updateDuration() {
+        if duration != durationMinLimitNum {
+            duration -= durationMinusValue
+        } else {
+            patienceCount += 1
+            if patienceCount == patientLimitNum {
+                patienceCount = 0
+                if patientLimitNum != patientMaxLimitNum {
+                    patientLimitNum += patientPlusValue
+                }
+                duration = durationMaxLimitNum
+            }
+        }
+    }
+    
+    private func returnToDefaultDuration() {
+        duration = durationMaxLimitNum
+        patienceCount = 0
+        patientLimitNum = patientPlusValue
+    }
+    
+    private func checkHighScore() {
+        if highScore < scoreInt {
+            setHighScore(value: scoreInt)
+            highScore = scoreInt
         }
     }
 }
