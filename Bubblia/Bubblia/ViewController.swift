@@ -138,15 +138,13 @@ final class ViewController: UIViewController {
             highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        highScoreNoticeLabel.labelSetting(text: "HIGHSCORE", fontSize: 24, weight: .regular)
-        highScoreNoticeLabel.alpha = 0
+        highScoreNoticeLabel.labelSetting(text: "HIGHSCORE", fontSize: 24, weight: .regular, isTransparent: true)
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
-        scoreLabel.labelSetting(text: "", fontSize: 60, weight: .regular)
-        scoreLabel.alpha = 0
+        scoreLabel.labelSetting(text: "", fontSize: 60, weight: .regular, isTransparent: true)
         
         NSLayoutConstraint.activate([
             highScoreValueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -157,7 +155,7 @@ final class ViewController: UIViewController {
 
         highScore = getHighScore()
         let highScoreText = highScore == 0 ? "" : "\(highScore)"
-        highScoreValueLabel.labelSetting(text: highScoreText, fontSize: 48, weight: .medium)
+        highScoreValueLabel.labelSetting(text: highScoreText, fontSize: 48, weight: .medium, isTransparent: false)
         
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -166,7 +164,7 @@ final class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.labelSetting(text: "AGUAGU", fontSize: 64, weight: .bold)
+        nameLabel.labelSetting(text: "AGUAGU", fontSize: 64, weight: .bold, isTransparent: false)
         NSLayoutConstraint.activate([
             gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 60),
@@ -174,8 +172,7 @@ final class ViewController: UIViewController {
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        gameOverLabel.labelSetting(text: "GAME OVER", fontSize: 36, weight: .semibold)
-        gameOverLabel.alpha = 0
+        gameOverLabel.labelSetting(text: "GAME OVER", fontSize: 36, weight: .semibold, isTransparent: true)
     }
     
     private func setShapeLayer() {
