@@ -22,7 +22,7 @@
 		3A51F5E528D258CB008DF412 /* UGAUGA_BGM3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E428D258CB008DF412 /* UGAUGA_BGM3.mp3 */; };
 		3A51F5E728D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A51F5E628D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 */; };
 		3A7104BA28D0B7BE00D84C9F /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104B928D0B7BE00D84C9F /* SoundManager.swift */; };
-		3A7104BC28D0F15800D84C9F /* SessionSetupStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104BB28D0F15800D84C9F /* SessionSetupStatus.swift */; };
+		3A7104BC28D0F15800D84C9F /* CameraSessionSetupStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7104BB28D0F15800D84C9F /* CameraSessionSetupStatus.swift */; };
 		3A7CC72A28BF28FF00FBD13E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC72C28BF28FF00FBD13E /* Localizable.strings */; };
 		3A7CC73128BF2BB100FBD13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7CC73328BF2BB100FBD13E /* InfoPlist.strings */; };
 		3A7CC7A328CA23D200FBD13E /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7CC7A228CA23D200FBD13E /* CGPoint+.swift */; };
@@ -55,7 +55,7 @@
 		3A51F5E428D258CB008DF412 /* UGAUGA_BGM3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UGAUGA_BGM3.mp3; sourceTree = "<group>"; };
 		3A51F5E628D33C4A008DF412 /* AGUAGU_GAMEOVER.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AGUAGU_GAMEOVER.mp3; sourceTree = "<group>"; };
 		3A7104B928D0B7BE00D84C9F /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		3A7104BB28D0F15800D84C9F /* SessionSetupStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetupStatus.swift; sourceTree = "<group>"; };
+		3A7104BB28D0F15800D84C9F /* CameraSessionSetupStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSessionSetupStatus.swift; sourceTree = "<group>"; };
 		3A7CC72B28BF28FF00FBD13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72D28BF2A4F00FBD13E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3A7CC72E28BF2A5600FBD13E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -112,7 +112,6 @@
 				3A4A54C828BC902A00FFE870 /* ViewController.swift */,
 				3A7104B928D0B7BE00D84C9F /* SoundManager.swift */,
 				3A4A54E128BD312300FFE870 /* UserDefaultSetting.swift */,
-				3A7104BB28D0F15800D84C9F /* SessionSetupStatus.swift */,
 				3A7CC7A128CA23A900FBD13E /* Extensions */,
 				3A4A54D228BC902C00FFE870 /* LaunchScreen.storyboard */,
 				3A4A54D528BC902C00FFE870 /* Info.plist */,
@@ -173,6 +172,7 @@
 				3A7CC7B228CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift */,
 				3A7CC7B428CA31AB00FBD13E /* VideoProcessingChain.swift */,
 				3A7CC7B828CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift */,
+				3A7104BB28D0F15800D84C9F /* CameraSessionSetupStatus.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -261,7 +261,7 @@
 				3A7CC7B328CA2F9400FBD13E /* AVCaptureDeviceOutput+PixelFormat.swift in Sources */,
 				3A7CC7B928CA350C00FBD13E /* AVCaptureDevice+FrameRate.swift in Sources */,
 				3A7CC7A828CA28B400FBD13E /* HandPose.swift in Sources */,
-				3A7104BC28D0F15800D84C9F /* SessionSetupStatus.swift in Sources */,
+				3A7104BC28D0F15800D84C9F /* CameraSessionSetupStatus.swift in Sources */,
 				3A7CC7AA28CA298600FBD13E /* HandPose+Landmark.swift in Sources */,
 				3A4A54C928BC902A00FFE870 /* ViewController.swift in Sources */,
 				3A7CC7B728CA334F00FBD13E /* HandPoseStatus.swift in Sources */,

@@ -11,7 +11,7 @@ import Vision
 
 final class ViewController: UIViewController {
     
-    var isCameraSessionAuth: SessionSetupStatus! = .success
+    var isCameraSessionAuth: CameraSessionSetupStatus! = .success
     
     private var cameraView = UIImageView()
     
