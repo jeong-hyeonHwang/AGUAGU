@@ -51,7 +51,7 @@ struct HandPose {
         if landmarks.count == 2 {
             let thumbPoint = landmarks[0].location
             let middlePoint = landmarks[1].location
-            let distance = CGPointDistance(from: thumbPoint, to: middlePoint)
+            let distance = thumbPoint.CGPointDistance(to: middlePoint)
             
             
             let thumbMiddleCenterPoint = CGPoint.midPoint(p1: thumbPoint, p2: middlePoint)
