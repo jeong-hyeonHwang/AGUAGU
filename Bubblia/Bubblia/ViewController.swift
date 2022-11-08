@@ -140,13 +140,13 @@ final class ViewController: UIViewController {
             highScoreNoticeLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        highScoreNoticeLabel.labelSetting(text: "HIGHSCORE", fontSize: 24, weight: .regular, isTransparent: true)
+        highScoreNoticeLabel.labelSetting(text: "HIGHSCORE", font: .highScoreNoticeLabelFont, isTransparent: true)
         
         view.addSubview(scoreLabel)
         scoreLabel.frame = CGRect(x: 0, y: height/2 - 75, width: width, height: 150)
         scoreLabel.center = CGPoint(x: width/2, y: height/2)
         
-        scoreLabel.labelSetting(text: "", fontSize: 60, weight: .regular, isTransparent: true)
+        scoreLabel.labelSetting(text: "", font: .scoreLabelFont, isTransparent: true)
         
         NSLayoutConstraint.activate([
             highScoreValueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -157,7 +157,7 @@ final class ViewController: UIViewController {
 
         highScore = getHighScore()
         let highScoreText = highScore == 0 ? "" : "\(highScore)"
-        highScoreValueLabel.labelSetting(text: highScoreText, fontSize: 48, weight: .medium, isTransparent: false)
+        highScoreValueLabel.labelSetting(text: highScoreText, font: .highScoreValueLabelFont, isTransparent: false)
         
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -166,7 +166,7 @@ final class ViewController: UIViewController {
             nameLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        nameLabel.labelSetting(text: "AGUAGU", fontSize: 64, weight: .bold, isTransparent: false)
+        nameLabel.labelSetting(text: "AGUAGU", font: .nameLabelFont, isTransparent: false)
         NSLayoutConstraint.activate([
             gameOverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gameOverLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 60),
@@ -174,7 +174,7 @@ final class ViewController: UIViewController {
             gameOverLabel.widthAnchor.constraint(equalToConstant: width)
         ])
         
-        gameOverLabel.labelSetting(text: "GAME OVER", fontSize: 36, weight: .semibold, isTransparent: true)
+        gameOverLabel.labelSetting(text: "GAME OVER", font: .gameOverLabelFont, isTransparent: true)
     }
     
     private func setShapeLayer() {
@@ -238,31 +238,25 @@ extension ViewController {
 /// ViewController Extension for Game UI Update
 extension ViewController {
     private func drawParticle(centerPoint: CGPoint) {
-        let startXDistance: CGFloat = 55
-        let startYDistance: CGFloat = 18
-        let xValue: CGFloat = 12
-        let yValue: CGFloat = 5
-        let radius: CGFloat = 3
+        let particle = Particle()
         
         particleShape.removeAllPoints()
 
-        var xDistance: CGFloat = 0
-        var yDistance: CGFloat = 0
-        
+        var currentDistance: CGPoint = CGPoint(x: 0, y: 0)
         for i in 0..<6 {
             if i < 3 {
-                xDistance = startXDistance + xValue * CGFloat(i)
-                yDistance = startYDistance + yValue * CGFloat(i)
+                currentDistance.x = particle.startDistancePoint.x + particle.calculateXYValue.x * CGFloat(i)
+                currentDistance.y = particle.startDistancePoint.y + particle.calculateXYValue.y * CGFloat(i)
             } else {
-                xDistance = -startXDistance - xValue * CGFloat(i%3)
-                yDistance = -startYDistance - yValue * CGFloat(i%3)
+                currentDistance.x = -particle.startDistancePoint.x - particle.calculateXYValue.x * CGFloat(i%3)
+                currentDistance.y = -particle.startDistancePoint.y - particle.calculateXYValue.y * CGFloat(i%3)
             }
-            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance))
-            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y - yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y))
-            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-            particleShape.move(to: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance))
-            particleShape.addArc(withCenter: CGPoint(x: centerPoint.x - xDistance, y: centerPoint.y + yDistance), radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            
+            let centerPoints = particle.threeParticleCenterPoints(centerPoint: centerPoint, distance: currentDistance)
+            for index in 0..<3 {
+                particleShape.move(to: centerPoints[index])
+                particleShape.addArc(withCenter: centerPoints[index], radius: particle.radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+            }
         }
         particleShapeLayer.path = particleShape.cgPath
     }
