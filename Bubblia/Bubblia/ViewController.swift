@@ -92,7 +92,7 @@ final class ViewController: UIViewController {
     }
     
     @objc func gameIsOver() {
-        if gameStart == true {
+        if gameStart {
             gameOver = true
             setUIGameOver()
         }
@@ -446,14 +446,14 @@ extension ViewController {
                 case .possible:
                     break
                 case .pinched:
-                    if gameOver == false && pastHandStatus == .possible {
+                    if !gameOver && pastHandStatus == .possible {
                         DispatchQueue.main.async { [self] in
                             soundManager.playSFX_Eat()
                             gameStatusUpdateFunction(middlePoint: yellowFruitShapeMiddlePoint)
                         }
                     }
                 case .invalid:
-                    if gameCanRestart == true && pastHandStatus == .possible {
+                    if gameCanRestart && pastHandStatus == .possible {
                         DispatchQueue.main.async {
                             self.gameRestart()
                         }
@@ -467,7 +467,7 @@ extension ViewController {
     }
     
     private func gameStatusUpdateFunction(middlePoint: CGPoint) {
-        if gameStart == false {
+        if !gameStart {
             labelOpacityAnimation(target: nameLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
             labelOpacityAnimation(target: highScoreValueLabel, duration: opacityAnimDuration, targetOpacity: 0, completion: nil)
             labelOpacityAnimation(target: scoreLabel, duration: opacityAnimDuration, targetOpacity: 1, completion: nil)
@@ -476,7 +476,7 @@ extension ViewController {
             updateScore()
             updateDuration()
             gameStart = true
-        } else if gameOver == false {
+        } else if !gameOver {
             drawParticle(centerPoint: middlePoint)
             changeFruitPosition(layer: yellowFruitShapeLayer, path: yellowFruitShape)
             addYellowFruitOpacityAnimation(duration: duration)
