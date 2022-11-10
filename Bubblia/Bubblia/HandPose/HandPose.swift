@@ -51,7 +51,7 @@ struct HandPose {
         if landmarks.count == 2 {
             let thumbPoint = landmarks[0].location
             let middlePoint = landmarks[1].location
-            let distance = CGPointDistance(from: thumbPoint, to: middlePoint)
+            let distance = thumbPoint.CGPointDistance(to: middlePoint)
             
             
             let thumbMiddleCenterPoint = CGPoint.midPoint(p1: thumbPoint, p2: middlePoint)
@@ -102,10 +102,7 @@ struct HandPose {
         let scale = ratio >= max ? max : (ratio * (max - min)) + min
         return scale
     }
-}
-
-extension HandPose {
-
+    
     static func areaEstimateOfLandmarks(_ landmarks: [Landmark]) -> CGFloat {
         let xCoordinates = landmarks.map { $0.location.x }
         let yCoordinates = landmarks.map { $0.location.y }

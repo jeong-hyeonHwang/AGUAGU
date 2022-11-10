@@ -9,14 +9,6 @@ import UIKit
 import Combine
 import AVFoundation
 
-typealias Frame = CMSampleBuffer
-typealias FramePublisher = AnyPublisher<Frame, Never>
-
-protocol VideoCaptureDelegate: AnyObject {
-    func videoCapture(_ videoCapture: VideoCapture,
-                      didCreate framePublisher: FramePublisher)
-}
-
 class VideoCapture: NSObject {
     weak var delegate: VideoCaptureDelegate! {
         didSet { createVideoFramePublisher() }
@@ -36,7 +28,7 @@ class VideoCapture: NSObject {
     
     private let captureSession = AVCaptureSession()
     
-    private var framePublisher: PassthroughSubject<Frame, Never>?
+    private var framePublisher: PassthroughSubject<CMSampleBuffer, Never>?
     
     private let videoCaptureQueue = DispatchQueue(label: "Video Capture Queue",
                                                   qos: .userInitiated)
@@ -53,7 +45,7 @@ class VideoCapture: NSObject {
     
     func cameraPermissionCheck(vc: ViewController) {
         videoCaptureQueue.async {
-            switch vc.isAuth {
+            switch vc.isCameraSessionAuth {
             case .success:
                 break
                 // 카메라 접근 권한이 없는 경우에는 카메라 접근이 불가능하다는 Alert를 띄워줍니다
@@ -97,7 +89,7 @@ class VideoCapture: NSObject {
 
 extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput,
-                       didOutput frame: Frame,
+                       didOutput frame: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
         
         framePublisher?.send(frame)
@@ -108,7 +100,7 @@ extension VideoCapture {
     private func createVideoFramePublisher() {
         guard let videoDataOutput = configureCaptureSession() else { return }
         
-        let passthroughSubject = PassthroughSubject<Frame, Never>()
+        let passthroughSubject = PassthroughSubject<CMSampleBuffer, Never>()
         
         framePublisher = passthroughSubject
         

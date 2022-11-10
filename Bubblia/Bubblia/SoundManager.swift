@@ -8,7 +8,6 @@
 import AVFoundation
 
 class SoundManager {
-    static var shared = SoundManager()
     private var bgmPlayer = AVAudioPlayer()
     private var sfxEatPlayer = AVAudioPlayer()
     private var sfxGameOverPlayer = AVAudioPlayer()
