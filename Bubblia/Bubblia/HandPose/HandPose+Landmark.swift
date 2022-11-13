@@ -19,6 +19,14 @@ extension HandPose {
         let name: JointName
         
         let location: CGPoint
+
+        let num4: CGFloat = 120
+        let num3: CGFloat = 90
+        let num2: CGFloat = 60
+        let num1: CGFloat = 30
+        
+        let radius: CGFloat = 20
+        let diameter = radius * 2
         
         init?(_ point: VNRecognizedPoint) {
             guard point.confidence >= HandPose.Landmark.threshold else {
@@ -32,16 +40,8 @@ extension HandPose {
         func drawToContext(_ context: CGContext,
                            applying transform: CGAffineTransform? = nil,
                            at scale: CGFloat = 1.0, landmarkIndex: Int) {
-
-            let origin = location.applying(transform ?? .identity)
-
-            let num4: CGFloat = 120
-            let num3: CGFloat = 90
-            let num2: CGFloat = 60
-            let num1: CGFloat = 30
             
-            let radius: CGFloat = 20
-            let diameter = radius * 2
+            let origin = location.applying(transform ?? .identity)
             
             context.move(to: CGPoint(x: origin.x, y: origin.y))
             
