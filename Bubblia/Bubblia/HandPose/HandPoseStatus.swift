@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HandPoseStatus: Int, CaseIterable {
+enum HandPoseStatus: Int {
     case possible
     case pinched
     case invalid
